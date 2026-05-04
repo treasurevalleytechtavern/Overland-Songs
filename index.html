@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css?v=20260419-compact-mobile-footer">
+    <link rel="stylesheet" href="styles.css?v=20260504-genre-subgenres">
   </head>
   <body>
     <header class="site-header" aria-label="Overland Bar site navigation">
@@ -131,7 +131,7 @@
           <div class="browse-group browse-genre">
             <p class="browse-label">Genre</p>
             <div class="browse-buttons">
-              <button class="browse-button" type="button" data-clear-field="categories">All</button>
+              <button class="browse-button is-active" type="button" data-clear-field="genre" aria-pressed="true">All</button>
               <button class="browse-button" type="button" data-search="rock" data-field="categories" data-matcher="categoryBucket">Rock</button>
               <button class="browse-button" type="button" data-search="pop" data-field="categories" data-matcher="categoryBucket">Pop</button>
               <button class="browse-button" type="button" data-search="country" data-field="categories" data-matcher="categoryBucket">Country</button>
@@ -142,6 +142,10 @@
               <button class="browse-button" type="button" data-search="metal" data-field="categories" data-matcher="categoryBucket">Metal</button>
               <button class="browse-button" type="button" data-search="punk-emo-ska" data-field="categories" data-matcher="categoryBucket">Punk / Emo / Ska</button>
               <button class="browse-button" type="button" data-search="hip-hop-rap" data-field="categories" data-matcher="categoryBucket">Hip-Hop / Rap</button>
+            </div>
+            <div class="subgenre-panel" id="subgenre-panel" hidden>
+              <p class="browse-label">Sub-genre</p>
+              <div class="browse-buttons subgenre-buttons" id="subgenre-buttons"></div>
             </div>
           </div>
 
@@ -185,6 +189,6 @@
       <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260504-decade-buttons"></script>
+    <script src="app.js?v=20260504-genre-subgenres"></script>
   </body>
 </html>

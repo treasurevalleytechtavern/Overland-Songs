@@ -365,6 +365,14 @@ button:hover {
   gap: 8px;
 }
 
+.subgenre-panel {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 209, 42, 0.2);
+}
+
 .browse-button {
   min-height: 36px;
   border-color: rgba(49, 232, 255, 0.48);
@@ -414,6 +422,10 @@ button:hover {
 
 .browse-genre .browse-button.is-active {
   background: rgba(255, 209, 42, 0.2);
+}
+
+.subgenre-button {
+  font-size: 0.82rem;
 }
 
 .browse-social {

@@ -2,14 +2,16 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260419-derived-decades";
-const songCsvUrl = "songs.csv?v=20260419-derived-decades";
+const songIndexUrl = "songs.index.json?v=20260504-genre-subgenres";
+const songCsvUrl = "songs.csv?v=20260504-genre-subgenres";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
 const clearButton = document.querySelector("#clear-search");
-const browseButtons = document.querySelectorAll(".browse-button");
+let browseButtons = document.querySelectorAll(".browse-button");
 const filterSummary = document.querySelector("#filter-summary");
+const subgenrePanel = document.querySelector("#subgenre-panel");
+const subgenreButtons = document.querySelector("#subgenre-buttons");
 const resultsSection = document.querySelector("#results-section");
 const resultsBody = document.querySelector("#song-results");
 const resultCount = document.querySelector("#result-count");
@@ -48,6 +50,7 @@ updateHeaderScrollState();
 
 const filterFieldLabels = {
   categories: "Genre",
+  categoryDetail: "Sub-genre",
   decade: "Decade",
   originalVocal: "Original vocal",
   socialSinging: "Social singing"
@@ -359,6 +362,16 @@ function categoryBucketMatches(song, categoryTerms) {
   );
 }
 
+function getActiveGenreFilter() {
+  return activeFilters.find((filter) => filter.field === "categories") || null;
+}
+
+function clearGenreFilters() {
+  activeFilters = activeFilters.filter((filter) =>
+    filter.field !== "categories" && filter.field !== "categoryDetail"
+  );
+}
+
 function getFilterLabel(fieldName) {
   return filterFieldLabels[fieldName] || fieldName;
 }
@@ -366,6 +379,10 @@ function getFilterLabel(fieldName) {
 function songMatchesFilter(song, filter) {
   if (filter.matcher === "categoryBucket") {
     return categoryBucketMatches(song, filter.categoryTerms || []);
+  }
+
+  if (filter.matcher === "categoryExact") {
+    return categoryBucketMatches(song, [normalize(filter.value)]);
   }
 
   return fieldMatchesQuery(song, filter.field, tokenize(filter.value));
@@ -393,11 +410,25 @@ function updateFilterSummary() {
 }
 
 function updateBrowseButtonStates() {
+  const activeGenre = getActiveGenreFilter();
+
+  if (subgenrePanel && subgenreButtons) {
+    subgenrePanel.hidden = !activeGenre;
+    renderSubgenreButtons(activeGenre);
+  }
+
+  browseButtons = document.querySelectorAll(".browse-button");
   browseButtons.forEach((button) => {
     let isActive = false;
 
     if (button.dataset.clearField) {
-      isActive = !activeFilters.some((filter) => filter.field === button.dataset.clearField);
+      if (button.dataset.clearField === "genre") {
+        isActive = !activeFilters.some((filter) =>
+          filter.field === "categories" || filter.field === "categoryDetail"
+        );
+      } else {
+        isActive = !activeFilters.some((filter) => filter.field === button.dataset.clearField);
+      }
     } else {
       isActive = activeFilters.some((filter) =>
         filter.field === button.dataset.field && filter.value === button.dataset.search
@@ -409,13 +440,40 @@ function updateBrowseButtonStates() {
   });
 }
 
+function renderSubgenreButtons(activeGenre) {
+  if (!subgenreButtons) {
+    return;
+  }
+
+  const genre = HIGH_LEVEL_GENRES.find((item) => item.slug === activeGenre?.value);
+
+  if (!genre) {
+    subgenreButtons.innerHTML = "";
+    return;
+  }
+
+  subgenreButtons.innerHTML = genre.categories.map((category) => `
+    <button
+      class="browse-button subgenre-button"
+      type="button"
+      data-search="${escapeHtml(category)}"
+      data-field="categoryDetail"
+      data-matcher="categoryExact"
+    >${escapeHtml(category)}</button>
+  `).join("");
+}
+
 function setFilterFromButton(button) {
   const clearField = button.dataset.clearField || "";
   const field = button.dataset.field || "";
   const value = button.dataset.search || "";
 
   if (clearField) {
-    activeFilters = activeFilters.filter((filter) => filter.field !== clearField);
+    if (clearField === "genre") {
+      clearGenreFilters();
+    } else {
+      activeFilters = activeFilters.filter((filter) => filter.field !== clearField);
+    }
     updateFilterSummary();
     updateBrowseButtonStates();
     return;
@@ -434,6 +492,10 @@ function setFilterFromButton(button) {
     activeFilters = activeFilters.filter((filter) =>
       !(filter.field === "socialSinging" && normalize(filter.value).replace(/\s/g, "") === "duets")
     );
+  }
+
+  if (field === "categories") {
+    activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
   }
 
   const existingIndex = activeFilters.findIndex((filter) => filter.field === field);
@@ -1181,6 +1243,7 @@ function setPreparedSongs(nextSongs) {
   diceButtons.forEach((button) => {
     button.disabled = songs.length === 0;
   });
+  updateBrowseButtonStates();
   hideSearchResults();
 }
 
@@ -1237,12 +1300,14 @@ searchInput.addEventListener("input", () => {
   searchTimer = window.setTimeout(render, 80);
 });
 
-browseButtons.forEach((button) => {
-  button.addEventListener("click", () => {
+document.addEventListener("click", (event) => {
+  const button = event.target.closest(".browse-button");
+
+  if (button) {
     setFilterFromButton(button);
     window.clearTimeout(searchTimer);
     render();
-  });
+  }
 });
 
 searchInput.addEventListener("search", () => {
