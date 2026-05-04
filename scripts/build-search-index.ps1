@@ -137,6 +137,7 @@ foreach ($row in $rows) {
   $year = Get-Field $row @("year")
   $originalVocal = Get-Field $row @("original_vocal")
   $themeTags = Get-Field $row @("theme_tags")
+  $themeLabels = Get-Field $row @("theme_labels")
   $rankingScore = Get-Field $row @("popularity score", "popularity")
 
   if ([string]::IsNullOrWhiteSpace($decade)) {
@@ -189,7 +190,8 @@ foreach ($row in $rows) {
     $year.Trim(),
     $socialSinging.Trim(),
     (Get-RankingScore $rankingScore),
-    $themeTags.Trim()
+    $themeTags.Trim(),
+    $themeLabels.Trim()
   ))
 }
 
