@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-section-chips";
-const songCsvUrl = "songs.csv?v=20260504-theme-section-chips";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-section-chips";
+const songIndexUrl = "songs.index.json?v=20260504-theme-url-filter";
+const songCsvUrl = "songs.csv?v=20260504-theme-url-filter";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-url-filter";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -49,6 +49,7 @@ let currentSearchMatches = [];
 let currentSearchQuery = "";
 let visibleResultCount = maxRenderedRows;
 let currentUsedTypoMatching = false;
+let themesLoaded = [];
 
 const diceButtons = [topDiceButton, diceButton].filter(Boolean);
 diceButtons.forEach((button) => {
@@ -1795,6 +1796,48 @@ function setThemeLabelFilter(label) {
   renderThemeLabelButtons();
 }
 
+function getThemeBySlug(slug) {
+  const normalizedSlug = normalize(slug);
+
+  return window.overlandThemes?.[slug]
+    || themesLoaded.find((theme) => normalize(theme.slug) === normalizedSlug)
+    || null;
+}
+
+function getQueryValue(params, names) {
+  for (const name of names) {
+    const value = params.get(name);
+
+    if (value) {
+      return value.trim();
+    }
+  }
+
+  return "";
+}
+
+function applyUrlFilters() {
+  const params = new URLSearchParams(window.location.search);
+  const themeSlug = getQueryValue(params, ["theme", "theme_slug", "themeSlug"]);
+  const themeLabel = getQueryValue(params, ["themeLabel", "theme_label", "subtheme", "sub_theme"]);
+
+  if (!themeSlug) {
+    return;
+  }
+
+  const theme = getThemeBySlug(themeSlug);
+
+  if (!theme) {
+    return;
+  }
+
+  applyThemeFilter(theme);
+
+  if (themeLabel) {
+    setThemeLabelFilter(themeLabel);
+  }
+}
+
 function renderThemeButton(button, theme) {
   button.textContent = "";
   button.setAttribute("aria-label", theme.buttonLabel);
@@ -1876,12 +1919,16 @@ async function loadThemeDays() {
     }
 
     const themes = parseThemeDays(await response.text());
+    themesLoaded = themes;
     window.overlandThemes = Object.fromEntries(themes.map((theme) => [theme.slug, theme]));
     renderThemeDays(themes);
+    return themes;
   } catch {
+    themesLoaded = [];
     if (themeSection) {
       themeSection.hidden = true;
     }
+    return [];
   }
 }
 
@@ -1920,7 +1967,7 @@ async function loadInitialSongs() {
     if (response.ok) {
       await waitForPaint();
       setPreparedSongs(hydrateIndexedSongs(await response.json()));
-      return;
+      return songs;
     }
 
     response = await fetch(songCsvUrl);
@@ -1934,6 +1981,7 @@ async function loadInitialSongs() {
     }
 
     setSongs(parseCsv(await response.text()));
+    return songs;
   } catch {
     songs = [];
     diceButtons.forEach((button) => {
@@ -1946,6 +1994,7 @@ async function loadInitialSongs() {
     emptyState.textContent = "Song list unavailable. Check songs.csv.";
     emptyState.hidden = false;
     resultCount.textContent = "0 songs";
+    return [];
   }
 }
 
@@ -2032,5 +2081,12 @@ diceButtons.forEach((button) => {
   button.addEventListener("click", renderDiceSuggestions);
 });
 
-loadInitialSongs();
-loadThemeDays();
+async function initializePage() {
+  await Promise.all([
+    loadInitialSongs(),
+    loadThemeDays()
+  ]);
+  applyUrlFilters();
+}
+
+initializePage();
