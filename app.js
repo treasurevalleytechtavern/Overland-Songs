@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-labels";
-const songCsvUrl = "songs.csv?v=20260504-theme-labels";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-days";
+const songIndexUrl = "songs.index.json?v=20260504-theme-top10";
+const songCsvUrl = "songs.csv?v=20260504-theme-top10";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-top10";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -36,6 +36,8 @@ const themeButton = document.querySelector("#theme-button");
 const themeClearButton = document.querySelector("#theme-clear-button");
 const upcomingThemes = document.querySelector("#upcoming-themes");
 const upcomingThemeList = document.querySelector("#upcoming-theme-list");
+const topSongsPanel = document.querySelector("#top-songs-panel");
+const topSongsBody = document.querySelector("#top-songs-results");
 
 let songs = [];
 let searchTimer = 0;
@@ -1049,6 +1051,43 @@ function renderSongRows(songList, query = "") {
   }).join("");
 }
 
+function getTopSongs(limit = 10) {
+  const tieBreakers = new Map();
+
+  return songs
+    .filter((song) => getRankingScore(song) > 0)
+    .map((song) => {
+      const key = `${song.title}\u0000${song.artist}`;
+
+      if (!tieBreakers.has(key)) {
+        tieBreakers.set(key, Math.random());
+      }
+
+      return {
+        song,
+        tieBreaker: tieBreakers.get(key)
+      };
+    })
+    .sort((a, b) =>
+      getRankingScore(b.song) - getRankingScore(a.song)
+      || a.tieBreaker - b.tieBreaker
+      || a.song.title.localeCompare(b.song.title)
+      || a.song.artist.localeCompare(b.song.artist)
+    )
+    .slice(0, limit)
+    .map((item) => item.song);
+}
+
+function renderTopSongs() {
+  if (!topSongsPanel || !topSongsBody) {
+    return;
+  }
+
+  const topSongs = getTopSongs(10);
+  topSongsPanel.hidden = topSongs.length === 0;
+  topSongsBody.innerHTML = renderSongRows(topSongs);
+}
+
 function renderVisibleSearchResults(matchCount, usedTypoMatching) {
   currentUsedTypoMatching = usedTypoMatching;
   const visibleMatches = currentSearchMatches.slice(0, visibleResultCount);
@@ -1366,13 +1405,137 @@ function parseCsvRecords(csvText) {
 }
 
 function parseDateOnly(value) {
-  const match = String(value || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  const rawValue = String(value || "").trim();
+  const isoMatch = rawValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  const slashMatch = rawValue.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
 
-  if (!match) {
+  if (isoMatch) {
+    return new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+  }
+
+  if (slashMatch) {
+    return new Date(Number(slashMatch[3]), Number(slashMatch[1]) - 1, Number(slashMatch[2]));
+  }
+
+  return null;
+}
+
+function getRecordValue(record, ...keys) {
+  for (const key of keys) {
+    const normalizedKey = normalize(key);
+
+    if (Object.prototype.hasOwnProperty.call(record, normalizedKey)) {
+      return record[normalizedKey];
+    }
+  }
+
+  return "";
+}
+
+function getRecordNumber(record, ...keys) {
+  const value = Number(getRecordValue(record, ...keys));
+
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return value;
+}
+
+function getThemeRecordValue(record, key) {
+  return getRecordValue(record, key, key.split("_").join(" "));
+}
+
+function getThemeRecordDate(record, key) {
+  return parseDateOnly(getThemeRecordValue(record, key));
+}
+
+function getThemeRecordActive(record) {
+  return isThemeActive(getThemeRecordValue(record, "active"));
+}
+
+function getThemeRecordNumber(record, key) {
+  const normalizedKey = key.split("_").join(" ");
+  const value = getRecordNumber(record, key, normalizedKey);
+
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+
+  return value;
+}
+
+function getThemeRecordText(record, key) {
+  return getThemeRecordValue(record, key);
+}
+
+function getThemeRecordFilterType(record) {
+  return getThemeRecordText(record, "filter_type");
+}
+
+function getThemeRecordFilterValue(record) {
+  return getThemeRecordText(record, "filter_value") || getThemeRecordText(record, "theme_slug");
+}
+
+function getThemeRecordDisplayOrder(record) {
+  return getThemeRecordNumber(record, "display_order");
+}
+
+function getThemeRecordImageFilename(record) {
+  return getThemeRecordText(record, "image_filename");
+}
+
+function getThemeRecordAltText(record) {
+  return getThemeRecordText(record, "alt_text") || getThemeRecordText(record, "theme_name");
+}
+
+function getThemeRecordButtonLabel(record) {
+  const themeName = getThemeRecordText(record, "theme_name");
+
+  return getThemeRecordText(record, "button_label") || `View ${themeName} Songs`;
+}
+
+function getThemeRecordDescription(record) {
+  return getThemeRecordText(record, "description");
+}
+
+function getThemeRecordName(record) {
+  return getThemeRecordText(record, "theme_name");
+}
+
+function getThemeRecordSlug(record) {
+  return getThemeRecordText(record, "theme_slug");
+}
+
+function getThemeRecordEndDate(record, eventDate) {
+  return getThemeRecordDate(record, "end_date") || eventDate;
+}
+
+function getThemeRecordEventDate(record) {
+  return getThemeRecordDate(record, "event_date");
+}
+
+function parseThemeRecord(record) {
+  const eventDate = getThemeRecordEventDate(record);
+  const themeName = getThemeRecordName(record);
+
+  if (!getThemeRecordActive(record)) {
     return null;
   }
 
-  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return {
+    slug: getThemeRecordSlug(record),
+    name: themeName,
+    eventDate,
+    endDate: getThemeRecordEndDate(record, eventDate),
+    buttonLabel: getThemeRecordButtonLabel(record),
+    description: getThemeRecordDescription(record),
+    imageFilename: getThemeRecordImageFilename(record),
+    altText: getThemeRecordAltText(record),
+    filterType: getThemeRecordFilterType(record),
+    filterValue: getThemeRecordFilterValue(record),
+    displayOrder: getThemeRecordDisplayOrder(record)
+  };
 }
 
 function getTodayLocalDate() {
@@ -1394,25 +1557,8 @@ function isThemeActive(value) {
 
 function parseThemeDays(csvText) {
   return parseCsvRecords(csvText)
-    .filter((record) => isThemeActive(record.active))
-    .map((record) => {
-      const eventDate = parseDateOnly(record.event_date);
-      const endDate = parseDateOnly(record.end_date) || eventDate;
-
-      return {
-        slug: record.theme_slug,
-        name: record.theme_name,
-        eventDate,
-        endDate,
-        buttonLabel: record.button_label || `View ${record.theme_name} Songs`,
-        description: record.description,
-        imageFilename: record.image_filename,
-        altText: record.alt_text || record.theme_name,
-        filterType: record.filter_type,
-        filterValue: record.filter_value || record.theme_slug,
-        displayOrder: Number(record.display_order) || 0
-      };
-    })
+    .map(parseThemeRecord)
+    .filter(Boolean)
     .filter((theme) => theme.slug && theme.name && theme.eventDate && theme.endDate);
 }
 
@@ -1558,6 +1704,7 @@ function setPreparedSongs(nextSongs) {
   diceButtons.forEach((button) => {
     button.disabled = songs.length === 0;
   });
+  renderTopSongs();
   updateBrowseButtonStates();
   hideSearchResults();
 }
