@@ -136,8 +136,8 @@ foreach ($row in $rows) {
   $decade = Get-Field $row @("decade")
   $year = Get-Field $row @("year")
   $originalVocal = Get-Field $row @("original_vocal")
-  $themeTags = Get-Field $row @("theme_tags")
-  $themeLabels = Get-Field $row @("theme_labels")
+  $themeTags = Get-Field $row @("theme_tags", "theme_tag", "theme")
+  $themeLabels = Get-Field $row @("theme_labels", "theme_label", "sub_theme", "subtheme", "sub_theme_label")
   $rankingScore = Get-Field $row @("popularity score", "popularity")
 
   if ([string]::IsNullOrWhiteSpace($decade)) {

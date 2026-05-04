@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-top10";
-const songCsvUrl = "songs.csv?v=20260504-theme-top10";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-top10";
+const songIndexUrl = "songs.index.json?v=20260504-theme-button-tags";
+const songCsvUrl = "songs.csv?v=20260504-theme-button-tags";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-button-tags";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -284,10 +284,12 @@ function getThemeLabelForSong(song, slug) {
     return "";
   }
 
-  return String(song.themeLabels || "")
+  const labels = String(song.themeLabels || "")
     .split(";")
     .map((item) => item.trim())
-    .filter(Boolean)
+    .filter(Boolean);
+
+  const exactThemeLabel = labels
     .map((item) => {
       const separatorIndex = item.search(/[:=|]/);
 
@@ -302,6 +304,16 @@ function getThemeLabelForSong(song, slug) {
     })
     .find((item) => item && item.slug === slug)
     ?.label || "";
+
+  if (exactThemeLabel) {
+    return exactThemeLabel;
+  }
+
+  if (songHasThemeTag(song, slug)) {
+    return labels.find((item) => item.search(/[:=|]/) === -1) || "";
+  }
+
+  return "";
 }
 
 function waitForPaint() {
@@ -1291,6 +1303,12 @@ function render() {
   renderSimilarSongs(matchCount > 0 && matchCount < 5 ? currentSearchMatches : [], query, queryTerms);
 }
 
+function getHeaderIndex(headers, names) {
+  return names
+    .map((name) => headers.indexOf(normalize(name)))
+    .find((index) => index !== -1) ?? -1;
+}
+
 function parseCsv(csvText) {
   const rows = [];
   let current = "";
@@ -1337,8 +1355,8 @@ function parseCsv(csvText) {
   const decadeIndex = headers.indexOf("decade");
   const yearIndex = headers.indexOf("year");
   const originalVocalIndex = headers.indexOf("original vocal");
-  const themeTagsIndex = headers.indexOf("theme tags");
-  const themeLabelsIndex = headers.indexOf("theme labels");
+  const themeTagsIndex = getHeaderIndex(headers, ["theme tags", "theme tag", "theme"]);
+  const themeLabelsIndex = getHeaderIndex(headers, ["theme labels", "theme label", "sub theme", "subtheme", "sub theme label"]);
   const rankingScoreIndex = headers.includes("popularity score")
     ? headers.indexOf("popularity score")
     : headers.indexOf("popularity");
@@ -1613,15 +1631,21 @@ function clearThemeFilter() {
 
 function renderThemeButton(button, theme) {
   button.textContent = "";
+  button.setAttribute("aria-label", theme.buttonLabel);
 
   if (theme.imageFilename) {
     const image = document.createElement("img");
+    const label = document.createElement("span");
+
     image.src = `/assets/theme-buttons/${theme.imageFilename}`;
     image.alt = theme.altText;
     image.addEventListener("error", () => {
       button.textContent = theme.buttonLabel;
     }, { once: true });
+    label.className = "theme-button-label";
+    label.textContent = theme.buttonLabel;
     button.append(image);
+    button.append(label);
   } else {
     button.textContent = theme.buttonLabel;
   }
