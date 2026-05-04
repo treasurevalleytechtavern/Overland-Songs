@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-button-tags";
-const songCsvUrl = "songs.csv?v=20260504-theme-button-tags";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-button-tags";
+const songIndexUrl = "songs.index.json?v=20260504-theme-section-chips";
+const songCsvUrl = "songs.csv?v=20260504-theme-section-chips";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-section-chips";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -34,6 +34,8 @@ const themeDate = document.querySelector("#theme-date");
 const themeDescription = document.querySelector("#theme-description");
 const themeButton = document.querySelector("#theme-button");
 const themeClearButton = document.querySelector("#theme-clear-button");
+const themeLabelPanel = document.querySelector("#theme-label-panel");
+const themeLabelButtons = document.querySelector("#theme-label-buttons");
 const upcomingThemes = document.querySelector("#upcoming-themes");
 const upcomingThemeList = document.querySelector("#upcoming-theme-list");
 const topSongsPanel = document.querySelector("#top-songs-panel");
@@ -66,7 +68,8 @@ const filterFieldLabels = {
   decade: "Decade",
   originalVocal: "Original vocal",
   socialSinging: "Social singing",
-  themeTags: "Theme"
+  themeTags: "Theme",
+  themeLabel: "Theme label"
 };
 
 const HIGH_LEVEL_GENRES = [
@@ -316,6 +319,85 @@ function getThemeLabelForSong(song, slug) {
   return "";
 }
 
+function getActiveThemeLabelFilter() {
+  return activeFilters.find((filter) => filter.matcher === "themeLabel") || null;
+}
+
+function songMatchesThemeLabel(song, label) {
+  const activeThemeSlug = getActiveThemeSlug();
+
+  return Boolean(activeThemeSlug)
+    && normalize(getThemeLabelForSong(song, activeThemeSlug)) === normalize(label);
+}
+
+function getThemeLabelTone(label) {
+  const toneCount = 6;
+  const text = normalize(label);
+  let hash = 0;
+
+  for (let index = 0; index < text.length; index += 1) {
+    hash = (hash + text.charCodeAt(index) * (index + 1)) % toneCount;
+  }
+
+  return String(hash + 1);
+}
+
+function getThemeLabelsForSlug(slug) {
+  const labels = new Map();
+
+  songs.forEach((song) => {
+    if (!songHasThemeTag(song, slug)) {
+      return;
+    }
+
+    const label = getThemeLabelForSong(song, slug);
+
+    if (!label) {
+      return;
+    }
+
+    labels.set(label, (labels.get(label) || 0) + 1);
+  });
+
+  return Array.from(labels.entries())
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([label, count]) => ({ label, count }));
+}
+
+function renderThemeLabelButtons() {
+  if (!themeLabelPanel || !themeLabelButtons) {
+    return;
+  }
+
+  const activeThemeSlug = getActiveThemeSlug();
+
+  if (!activeThemeSlug) {
+    themeLabelPanel.hidden = true;
+    themeLabelButtons.innerHTML = "";
+    return;
+  }
+
+  const activeLabel = getActiveThemeLabelFilter()?.value || "";
+  const labels = getThemeLabelsForSlug(activeThemeSlug);
+
+  themeLabelPanel.hidden = labels.length === 0;
+  themeLabelButtons.innerHTML = labels.map(({ label, count }) => {
+    const isActive = normalize(label) === normalize(activeLabel);
+
+    return `
+      <button
+        class="song-theme-label theme-filter-chip song-theme-label-${getThemeLabelTone(label)}${isActive ? " is-active" : ""}"
+        type="button"
+        data-theme-label="${escapeHtml(label)}"
+        aria-pressed="${isActive ? "true" : "false"}"
+      >
+        ${escapeHtml(label)}
+        <span class="theme-chip-count">${count.toLocaleString()}</span>
+      </button>
+    `;
+  }).join("");
+}
+
 function waitForPaint() {
   return new Promise((resolve) => {
     window.requestAnimationFrame(resolve);
@@ -444,6 +526,10 @@ function getFilterLabel(fieldName) {
 function songMatchesFilter(song, filter) {
   if (filter.matcher === "themeTag") {
     return songHasThemeTag(song, filter.value);
+  }
+
+  if (filter.matcher === "themeLabel") {
+    return songMatchesThemeLabel(song, filter.value);
   }
 
   if (filter.matcher === "categoryBucket") {
@@ -601,6 +687,7 @@ function clearFilters() {
   updateFilterSummary();
   updateBrowseButtonStates();
   updateThemeClearButton();
+  renderThemeLabelButtons();
 }
 
 function termMatchesText(term, text, tokens) {
@@ -1042,7 +1129,7 @@ function renderSongRows(songList, query = "") {
   return songList.map((song) => {
     const themeLabel = getThemeLabelForSong(song, activeThemeSlug);
     const themeLabelMarkup = themeLabel
-      ? `<span class="song-theme-label">${escapeHtml(themeLabel)}</span>`
+      ? `<button class="song-theme-label song-theme-label-${getThemeLabelTone(themeLabel)}" type="button" data-theme-label="${escapeHtml(themeLabel)}">${escapeHtml(themeLabel)}</button>`
       : "";
 
     return `
@@ -1061,6 +1148,54 @@ function renderSongRows(songList, query = "") {
     </tr>
   `;
   }).join("");
+}
+
+function mixThemeLabelGroups(sortedSongs) {
+  const activeThemeSlug = getActiveThemeSlug();
+
+  if (!activeThemeSlug || getActiveThemeLabelFilter()) {
+    return sortedSongs;
+  }
+
+  const groups = new Map();
+
+  sortedSongs.forEach((song) => {
+    const label = getThemeLabelForSong(song, activeThemeSlug) || "Other picks";
+
+    if (!groups.has(label)) {
+      groups.set(label, []);
+    }
+
+    groups.get(label).push(song);
+  });
+
+  if (groups.size <= 1) {
+    return sortedSongs;
+  }
+
+  const shuffledGroups = Array.from(groups.values())
+    .map((group) => ({ group, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((item) => item.group);
+  const mixedSongs = [];
+  let cursor = 0;
+
+  while (mixedSongs.length < sortedSongs.length) {
+    const group = shuffledGroups[cursor % shuffledGroups.length];
+    const song = group.shift();
+
+    if (song) {
+      mixedSongs.push(song);
+    }
+
+    cursor += 1;
+
+    if (shuffledGroups.every((item) => item.length === 0)) {
+      break;
+    }
+  }
+
+  return mixedSongs;
 }
 
 function getTopSongs(limit = 10) {
@@ -1295,9 +1430,9 @@ function render() {
 
   currentSearchQuery = query;
   visibleResultCount = maxRenderedRows;
-  currentSearchMatches = rankedMatches
+  currentSearchMatches = mixThemeLabelGroups(rankedMatches
     .sort((a, b) => a.rank - b.rank || getRankingScore(b.song) - getRankingScore(a.song) || a.song.title.localeCompare(b.song.title) || a.song.artist.localeCompare(b.song.artist))
-    .map((match) => match.song);
+    .map((match) => match.song));
 
   renderVisibleSearchResults(matchCount, usedTypoMatching);
   renderSimilarSongs(matchCount > 0 && matchCount < 5 ? currentSearchMatches : [], query, queryTerms);
@@ -1612,21 +1747,52 @@ function applyThemeFilter(theme) {
     return;
   }
 
-  activeFilters = activeFilters.filter((item) => item.field !== "themeTags");
+  activeFilters = activeFilters.filter((item) =>
+    item.field !== "themeTags" && item.field !== "themeLabel"
+  );
   activeFilters.push(filter);
   updateFilterSummary();
   updateBrowseButtonStates();
   updateThemeClearButton();
   render();
+  renderThemeLabelButtons();
   resultsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function clearThemeFilter() {
-  activeFilters = activeFilters.filter((filter) => filter.field !== "themeTags");
+  activeFilters = activeFilters.filter((filter) =>
+    filter.field !== "themeTags" && filter.field !== "themeLabel"
+  );
   updateFilterSummary();
   updateBrowseButtonStates();
   updateThemeClearButton();
   render();
+  renderThemeLabelButtons();
+}
+
+function setThemeLabelFilter(label) {
+  if (!getActiveThemeSlug() || !label) {
+    return;
+  }
+
+  const existingFilter = getActiveThemeLabelFilter();
+
+  activeFilters = activeFilters.filter((filter) => filter.field !== "themeLabel");
+
+  if (!existingFilter || normalize(existingFilter.value) !== normalize(label)) {
+    activeFilters.push({
+      field: "themeLabel",
+      value: label,
+      label,
+      matcher: "themeLabel"
+    });
+  }
+
+  updateFilterSummary();
+  updateBrowseButtonStates();
+  updateThemeClearButton();
+  render();
+  renderThemeLabelButtons();
 }
 
 function renderThemeButton(button, theme) {
@@ -1698,6 +1864,7 @@ function renderThemeDays(themes) {
   themeButton.dataset.themeSlug = primaryTheme.slug;
   renderThemeButton(themeButton, primaryTheme);
   renderUpcomingThemes(themes, primaryTheme);
+  renderThemeLabelButtons();
 }
 
 async function loadThemeDays() {
@@ -1731,6 +1898,7 @@ function setPreparedSongs(nextSongs) {
   renderTopSongs();
   updateBrowseButtonStates();
   hideSearchResults();
+  renderThemeLabelButtons();
 }
 
 function renderDiceSuggestions() {
@@ -1803,6 +1971,12 @@ document.addEventListener("click", (event) => {
     if (theme) {
       applyThemeFilter(theme);
     }
+  }
+
+  const themeLabelButton = event.target.closest(".song-theme-label");
+
+  if (themeLabelButton) {
+    setThemeLabelFilter(themeLabelButton.dataset.themeLabel || themeLabelButton.textContent.trim());
   }
 });
 

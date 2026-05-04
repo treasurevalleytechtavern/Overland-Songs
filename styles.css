@@ -220,7 +220,7 @@ form {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
-  padding: 22px max(18px, calc((100vw - 1120px) / 2));
+  padding: 22px max(18px, calc((100vw - 1120px) / 2)) 30px;
   border-bottom: 1px solid rgba(255, 209, 42, 0.24);
   background:
     linear-gradient(90deg, rgba(255, 209, 42, 0.08), rgba(49, 232, 255, 0.06)),
@@ -267,9 +267,12 @@ form {
 
 .theme-button {
   position: relative;
+  width: min(360px, 34vw);
+  min-width: 250px;
   min-height: 108px;
   padding: 8px;
   overflow: hidden;
+  white-space: normal;
   box-shadow:
     0 0 18px rgba(255, 209, 42, 0.2),
     0 0 30px rgba(49, 232, 255, 0.12);
@@ -298,6 +301,8 @@ form {
   font-size: 0.86rem;
   line-height: 1.15;
   text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
   text-shadow:
     0 0 10px rgba(255, 209, 42, 0.7),
     0 0 14px rgba(49, 232, 255, 0.38);
@@ -309,6 +314,45 @@ form {
   min-height: 36px;
   padding: 0 12px;
   font-size: 0.78rem;
+}
+
+.theme-label-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 9px;
+  padding-top: 6px;
+}
+
+.theme-label-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.theme-filter-chip {
+  gap: 7px;
+  min-height: 32px;
+  padding: 5px 9px;
+}
+
+.theme-filter-chip.is-active {
+  color: var(--white);
+  outline: 2px solid rgba(255, 255, 255, 0.28);
+  outline-offset: 2px;
+}
+
+.theme-chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  min-height: 20px;
+  border-radius: 999px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.13);
+  color: var(--white);
+  font-size: 0.68rem;
+  line-height: 1;
 }
 
 .upcoming-themes {
@@ -670,7 +714,7 @@ button:hover {
 .popular-band {
   display: grid;
   gap: 30px;
-  padding: 0 max(18px, calc((100vw - 1120px) / 2)) 48px;
+  padding: 22px max(18px, calc((100vw - 1120px) / 2)) 48px;
 }
 
 .popular-heading h2 {
@@ -899,6 +943,7 @@ td:first-child {
 .song-theme-label {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 22px;
   border: 1px solid rgba(255, 209, 42, 0.52);
   border-radius: 8px;
@@ -908,7 +953,52 @@ td:first-child {
   font-size: 0.74rem;
   font-weight: 700;
   line-height: 1.2;
+  text-transform: none;
+  white-space: normal;
+  box-shadow: 0 0 12px rgba(255, 209, 42, 0.14);
   text-shadow: 0 0 10px rgba(255, 209, 42, 0.24);
+}
+
+.song-theme-label:hover,
+.song-theme-label:focus-visible {
+  background: rgba(255, 209, 42, 0.22);
+  color: var(--white);
+}
+
+.song-theme-label-1 {
+  border-color: rgba(255, 209, 42, 0.58);
+  background: rgba(255, 209, 42, 0.13);
+  color: var(--gold);
+}
+
+.song-theme-label-2 {
+  border-color: rgba(49, 232, 255, 0.58);
+  background: rgba(49, 232, 255, 0.12);
+  color: var(--cyan);
+}
+
+.song-theme-label-3 {
+  border-color: rgba(255, 70, 98, 0.58);
+  background: rgba(255, 70, 98, 0.12);
+  color: #ff8fa0;
+}
+
+.song-theme-label-4 {
+  border-color: rgba(142, 255, 98, 0.52);
+  background: rgba(142, 255, 98, 0.1);
+  color: #b9ff9b;
+}
+
+.song-theme-label-5 {
+  border-color: rgba(206, 145, 255, 0.56);
+  background: rgba(206, 145, 255, 0.12);
+  color: #dcb8ff;
+}
+
+.song-theme-label-6 {
+  border-color: rgba(255, 151, 60, 0.56);
+  background: rgba(255, 151, 60, 0.12);
+  color: #ffbd7c;
 }
 
 .title-column {
@@ -1017,13 +1107,21 @@ mark {
 
   .theme-band {
     grid-template-columns: minmax(0, 1fr);
-    padding: 18px 14px;
+    padding: 18px 14px 26px;
   }
 
   .theme-actions,
   .theme-button,
   .theme-clear-button {
     width: 100%;
+  }
+
+  .theme-button {
+    min-width: 0;
+  }
+
+  .popular-band {
+    padding-top: 20px;
   }
 
   .upcoming-theme-item {
