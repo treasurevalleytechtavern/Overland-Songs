@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css?v=20260504-genre-subgenres">
+    <link rel="stylesheet" href="styles.css?v=20260504-theme-labels">
   </head>
   <body>
     <header class="site-header" aria-label="Overland Bar site navigation">
@@ -55,6 +55,23 @@
           <p class="filter-summary" id="filter-summary" aria-live="polite" hidden></p>
         </form>
 
+      </section>
+
+      <section class="theme-band" id="theme-section" aria-labelledby="theme-title" hidden>
+        <div class="theme-content">
+          <p class="eyebrow" id="theme-kicker">Theme Day</p>
+          <h2 id="theme-title">Tonight's Theme</h2>
+          <p class="theme-date" id="theme-date"></p>
+          <p class="theme-description" id="theme-description"></p>
+        </div>
+        <div class="theme-actions">
+          <button class="theme-button" id="theme-button" type="button"></button>
+          <button class="theme-clear-button" id="theme-clear-button" type="button" hidden>Clear Theme</button>
+        </div>
+        <div class="upcoming-themes" id="upcoming-themes" hidden>
+          <p class="browse-label">Upcoming Theme Days</p>
+          <div class="upcoming-theme-list" id="upcoming-theme-list"></div>
+        </div>
       </section>
 
       <section class="results-band" id="results-section" aria-labelledby="results-title" hidden>
@@ -189,6 +206,6 @@
       <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260504-genre-subgenres"></script>
+    <script src="app.js?v=20260504-theme-labels"></script>
   </body>
 </html>

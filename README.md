@@ -14,6 +14,18 @@ Jolene,Dolly Parton,1973,1970s,Female,Country,
 
 Optional hidden ranking column: `popularity` or `popularity score`. Use a number from 1 to 1000. Higher numbers break ties after normal search/filter relevance.
 
+Optional theme column: `theme_tags`. Use semicolon-separated theme slugs, such as `may-the-4th;movie-night`.
+
+Optional theme display-label column: `theme_labels`. Use semicolon-separated `theme_slug:Label` values, such as `may-the-4th:Space songs;may-the-4th:Dark side songs`. These labels only display when that matching theme filter is active.
+
+Theme day schedule file: `theme_days.csv` supports these headers:
+
+```csv
+theme_slug,theme_name,event_date,end_date,button_label,description,image_filename,alt_text,filter_type,filter_value,display_order,active
+```
+
+Use `filter_type` of `theme_tag` and a `filter_value` matching one of the song `theme_tags` slugs. Theme button images load from `/assets/theme-buttons/`.
+
 If a categories value contains commas, wrap that field in quotes.
 
 Update the public `songs.csv` file used by the site, then rebuild the search index. `data/songs.csv` is only a fallback copy for the app and should use the same public CSV structure if you keep it.
@@ -33,9 +45,11 @@ styles.css
 app.js
 songs.csv
 songs.index.json
+theme_days.csv
 .nojekyll
 assets/overland-bar-logo.png
 assets/good-times-karaoke.jpg
+assets/theme-buttons/
 scripts/build-search-index.ps1
 ```
 
@@ -72,6 +86,16 @@ If the JSON index is missing, it falls back to `songs.csv`, but that is slower f
 
 After updating `songs.csv`, rebuild the JSON index before pushing to GitHub:
 
+Easiest local option on Windows:
+
+```text
+Double-click Rebuild Karaoke Index.cmd
+```
+
+That opens a local-only tool where you can choose your songs CSV, optionally choose `theme_days.csv`, and click **Rebuild Index**. It updates `songs.index.json` and can copy the selected CSV files into the site folder for you.
+
+Command-line option:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build-search-index.ps1 -CsvPath songs.csv -IndexPath songs.index.json
 ```
@@ -82,6 +106,8 @@ Commit or upload both:
 songs.csv
 songs.index.json
 ```
+
+If you updated `theme_days.csv`, upload or commit that file too. The local rebuild tool creates backups in `.local-backups/` before it overwrites local site files.
 
 The JSON index precomputes normalized search fields, typo-match terms, and category search data so visitors do not have to build all of that in their browser.
 

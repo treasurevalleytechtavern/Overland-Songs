@@ -1,0 +1,2 @@
+theme_slug,theme_name,event_date,end_date,button_label,description,image_filename,alt_text,filter_type,filter_value,display_order,active
+may-the-4th,May the 4th Be With You,5/4/2026,5/4/2026,View May the 4th Songs,"Star Wars-inspired karaoke picks for rebels, rogues, space wizards and cantina regulars. ",may-the-4th.png,May the 4th Be With You karaoke theme button,theme_tag,may-the-4th,10,TRUE

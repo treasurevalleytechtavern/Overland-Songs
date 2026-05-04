@@ -2,8 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-genre-subgenres";
-const songCsvUrl = "songs.csv?v=20260504-genre-subgenres";
+const songIndexUrl = "songs.index.json?v=20260504-theme-labels";
+const songCsvUrl = "songs.csv?v=20260504-theme-labels";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-days";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -26,6 +27,15 @@ const diceButton = document.querySelector("#dice-button");
 const diceResults = document.querySelector("#dice-results");
 const diceFemaleResults = document.querySelector("#dice-female-results");
 const diceMaleResults = document.querySelector("#dice-male-results");
+const themeSection = document.querySelector("#theme-section");
+const themeKicker = document.querySelector("#theme-kicker");
+const themeTitle = document.querySelector("#theme-title");
+const themeDate = document.querySelector("#theme-date");
+const themeDescription = document.querySelector("#theme-description");
+const themeButton = document.querySelector("#theme-button");
+const themeClearButton = document.querySelector("#theme-clear-button");
+const upcomingThemes = document.querySelector("#upcoming-themes");
+const upcomingThemeList = document.querySelector("#upcoming-theme-list");
 
 let songs = [];
 let searchTimer = 0;
@@ -53,7 +63,8 @@ const filterFieldLabels = {
   categoryDetail: "Sub-genre",
   decade: "Decade",
   originalVocal: "Original vocal",
-  socialSinging: "Social singing"
+  socialSinging: "Social singing",
+  themeTags: "Theme"
 };
 
 const HIGH_LEVEL_GENRES = [
@@ -251,6 +262,46 @@ function tokenize(value) {
   return normalize(value).split(" ").filter(Boolean);
 }
 
+function getThemeTags(value) {
+  return String(value || "")
+    .split(";")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
+function songHasThemeTag(song, slug) {
+  return getThemeTags(song.themeTags).some((tag) => tag === slug);
+}
+
+function getActiveThemeSlug() {
+  return activeFilters.find((filter) => filter.matcher === "themeTag")?.value || "";
+}
+
+function getThemeLabelForSong(song, slug) {
+  if (!slug) {
+    return "";
+  }
+
+  return String(song.themeLabels || "")
+    .split(";")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => {
+      const separatorIndex = item.search(/[:=|]/);
+
+      if (separatorIndex === -1) {
+        return null;
+      }
+
+      return {
+        slug: item.slice(0, separatorIndex).trim(),
+        label: item.slice(separatorIndex + 1).trim()
+      };
+    })
+    .find((item) => item && item.slug === slug)
+    ?.label || "";
+}
+
 function waitForPaint() {
   return new Promise((resolve) => {
     window.requestAnimationFrame(resolve);
@@ -377,6 +428,10 @@ function getFilterLabel(fieldName) {
 }
 
 function songMatchesFilter(song, filter) {
+  if (filter.matcher === "themeTag") {
+    return songHasThemeTag(song, filter.value);
+  }
+
   if (filter.matcher === "categoryBucket") {
     return categoryBucketMatches(song, filter.categoryTerms || []);
   }
@@ -476,6 +531,7 @@ function setFilterFromButton(button) {
     }
     updateFilterSummary();
     updateBrowseButtonStates();
+    updateThemeClearButton();
     return;
   }
 
@@ -523,12 +579,14 @@ function setFilterFromButton(button) {
 
   updateFilterSummary();
   updateBrowseButtonStates();
+  updateThemeClearButton();
 }
 
 function clearFilters() {
   activeFilters = [];
   updateFilterSummary();
   updateBrowseButtonStates();
+  updateThemeClearButton();
 }
 
 function termMatchesText(term, text, tokens) {
@@ -628,6 +686,8 @@ function indexSongs(nextSongs) {
       const originalVocal = String(song.originalVocal || "").trim();
       const year = String(song.year || "").trim();
       const decade = String(song.decade || "").trim() || deriveDecadeFromYear(year);
+      const themeTags = String(song.themeTags || "").trim();
+      const themeLabels = String(song.themeLabels || "").trim();
       const rankingScore = parseRankingScore(song.rankingScore);
       const searchPieces = getSearchPieces({ title, artist, categories, socialSinging, decade, year, originalVocal });
       const searchText = normalize(searchPieces.join(" "));
@@ -650,6 +710,8 @@ function indexSongs(nextSongs) {
         decade,
         year,
         originalVocal,
+        themeTags,
+        themeLabels,
         rankingScore,
         searchText,
         compactFields,
@@ -688,6 +750,8 @@ function hydrateIndexedSongs(indexPayload) {
       const decade = String(row[8] || "").trim() || deriveDecadeFromYear(year);
       const socialSinging = String(row[11] || "").trim();
       const rankingScore = parseRankingScore(row[12]);
+      const themeTags = String(row[13] || "").trim();
+      const themeLabels = String(row[14] || "").trim();
       const searchPieces = getSearchPieces({ title, artist, categories, socialSinging, decade, year, originalVocal });
       const searchText = String(row[3] || normalize(searchPieces.join(" ")));
       const compactFields = compactFieldSource
@@ -705,6 +769,8 @@ function hydrateIndexedSongs(indexPayload) {
         decade,
         year,
         originalVocal,
+        themeTags,
+        themeLabels,
         rankingScore,
         searchText,
         compactFields,
@@ -957,12 +1023,30 @@ function getClosestYearDistance(song, referenceYears) {
 }
 
 function renderSongRows(songList, query = "") {
-  return songList.map((song) => `
+  const activeThemeSlug = getActiveThemeSlug();
+
+  return songList.map((song) => {
+    const themeLabel = getThemeLabelForSong(song, activeThemeSlug);
+    const themeLabelMarkup = themeLabel
+      ? `<span class="song-theme-label">${escapeHtml(themeLabel)}</span>`
+      : "";
+
+    return `
     <tr>
-      <td data-label="Title">${query ? highlight(song.title, query) : escapeHtml(song.title)}</td>
-      <td data-label="Artist">${query ? highlight(song.artist, query) : escapeHtml(song.artist)}</td>
+      <td data-label="Title">
+        <span class="song-cell-content">
+          <span>${query ? highlight(song.title, query) : escapeHtml(song.title)}</span>
+          ${themeLabelMarkup}
+        </span>
+      </td>
+      <td data-label="Artist">
+        <span class="song-cell-content">
+          <span>${query ? highlight(song.artist, query) : escapeHtml(song.artist)}</span>
+        </span>
+      </td>
     </tr>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function renderVisibleSearchResults(matchCount, usedTypoMatching) {
@@ -1214,6 +1298,8 @@ function parseCsv(csvText) {
   const decadeIndex = headers.indexOf("decade");
   const yearIndex = headers.indexOf("year");
   const originalVocalIndex = headers.indexOf("original vocal");
+  const themeTagsIndex = headers.indexOf("theme tags");
+  const themeLabelsIndex = headers.indexOf("theme labels");
   const rankingScoreIndex = headers.includes("popularity score")
     ? headers.indexOf("popularity score")
     : headers.indexOf("popularity");
@@ -1229,8 +1315,237 @@ function parseCsv(csvText) {
     decade: decadeIndex === -1 ? "" : items[decadeIndex] || "",
     year: yearIndex === -1 ? "" : items[yearIndex] || "",
     originalVocal: originalVocalIndex === -1 ? "" : items[originalVocalIndex] || "",
+    themeTags: themeTagsIndex === -1 ? "" : items[themeTagsIndex] || "",
+    themeLabels: themeLabelsIndex === -1 ? "" : items[themeLabelsIndex] || "",
     rankingScore: rankingScoreIndex === -1 ? "" : items[rankingScoreIndex] || ""
   }));
+}
+
+function parseCsvRecords(csvText) {
+  const rows = [];
+  let current = "";
+  let row = [];
+  let inQuotes = false;
+
+  for (let index = 0; index < csvText.length; index += 1) {
+    const char = csvText[index];
+    const next = csvText[index + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      current += '"';
+      index += 1;
+    } else if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === "," && !inQuotes) {
+      row.push(current);
+      current = "";
+    } else if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && next === "\n") {
+        index += 1;
+      }
+      row.push(current);
+      rows.push(row);
+      row = [];
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  if (current || row.length) {
+    row.push(current);
+    rows.push(row);
+  }
+
+  const nonEmptyRows = rows.filter((items) => items.some((item) => item.trim()));
+  const headers = (nonEmptyRows.shift() || []).map((item) => normalize(item));
+
+  return nonEmptyRows.map((items) => Object.fromEntries(
+    headers.map((header, index) => [header, String(items[index] || "").trim()])
+  ));
+}
+
+function parseDateOnly(value) {
+  const match = String(value || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (!match) {
+    return null;
+  }
+
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function getTodayLocalDate() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+}
+
+function formatThemeDate(date) {
+  return date.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  });
+}
+
+function isThemeActive(value) {
+  return ["true", "yes", "1", "active"].includes(normalize(value));
+}
+
+function parseThemeDays(csvText) {
+  return parseCsvRecords(csvText)
+    .filter((record) => isThemeActive(record.active))
+    .map((record) => {
+      const eventDate = parseDateOnly(record.event_date);
+      const endDate = parseDateOnly(record.end_date) || eventDate;
+
+      return {
+        slug: record.theme_slug,
+        name: record.theme_name,
+        eventDate,
+        endDate,
+        buttonLabel: record.button_label || `View ${record.theme_name} Songs`,
+        description: record.description,
+        imageFilename: record.image_filename,
+        altText: record.alt_text || record.theme_name,
+        filterType: record.filter_type,
+        filterValue: record.filter_value || record.theme_slug,
+        displayOrder: Number(record.display_order) || 0
+      };
+    })
+    .filter((theme) => theme.slug && theme.name && theme.eventDate && theme.endDate);
+}
+
+function sortThemes(a, b) {
+  return a.eventDate - b.eventDate || a.displayOrder - b.displayOrder || a.name.localeCompare(b.name);
+}
+
+function getThemeFilter(theme) {
+  if (theme.filterType !== "theme_tag") {
+    return null;
+  }
+
+  return {
+    field: "themeTags",
+    value: theme.filterValue,
+    label: theme.name,
+    matcher: "themeTag"
+  };
+}
+
+function updateThemeClearButton() {
+  if (!themeClearButton) {
+    return;
+  }
+
+  themeClearButton.hidden = !activeFilters.some((filter) => filter.field === "themeTags");
+}
+
+function applyThemeFilter(theme) {
+  const filter = getThemeFilter(theme);
+
+  if (!filter) {
+    return;
+  }
+
+  activeFilters = activeFilters.filter((item) => item.field !== "themeTags");
+  activeFilters.push(filter);
+  updateFilterSummary();
+  updateBrowseButtonStates();
+  updateThemeClearButton();
+  render();
+  resultsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function clearThemeFilter() {
+  activeFilters = activeFilters.filter((filter) => filter.field !== "themeTags");
+  updateFilterSummary();
+  updateBrowseButtonStates();
+  updateThemeClearButton();
+  render();
+}
+
+function renderThemeButton(button, theme) {
+  button.textContent = "";
+
+  if (theme.imageFilename) {
+    const image = document.createElement("img");
+    image.src = `/assets/theme-buttons/${theme.imageFilename}`;
+    image.alt = theme.altText;
+    image.addEventListener("error", () => {
+      button.textContent = theme.buttonLabel;
+    }, { once: true });
+    button.append(image);
+  } else {
+    button.textContent = theme.buttonLabel;
+  }
+}
+
+function renderUpcomingThemes(themes, primaryTheme) {
+  if (!upcomingThemes || !upcomingThemeList) {
+    return;
+  }
+
+  const upcoming = themes
+    .filter((theme) => theme.eventDate > getTodayLocalDate() && theme.slug !== primaryTheme.slug)
+    .sort(sortThemes)
+    .slice(0, 3);
+
+  upcomingThemes.hidden = upcoming.length === 0;
+  upcomingThemeList.innerHTML = upcoming.map((theme) => `
+    <div class="upcoming-theme-item">
+      <span>${escapeHtml(formatThemeDate(theme.eventDate))}</span>
+      <strong>${escapeHtml(theme.name)}</strong>
+      <button class="theme-mini-button" type="button" data-theme-slug="${escapeHtml(theme.slug)}">View Songs</button>
+    </div>
+  `).join("");
+}
+
+function renderThemeDays(themes) {
+  if (!themeSection || !themeButton || !themeTitle || !themeDate || !themeDescription || !themeKicker) {
+    return;
+  }
+
+  const today = getTodayLocalDate();
+  const currentThemes = themes
+    .filter((theme) => today >= theme.eventDate && today <= theme.endDate)
+    .sort((a, b) => a.displayOrder - b.displayOrder || sortThemes(a, b));
+  const futureThemes = themes
+    .filter((theme) => theme.eventDate > today)
+    .sort(sortThemes);
+  const primaryTheme = currentThemes[0] || futureThemes[0];
+
+  if (!primaryTheme) {
+    themeSection.hidden = true;
+    return;
+  }
+
+  themeSection.hidden = false;
+  themeKicker.textContent = currentThemes.length ? "Tonight's Theme" : "Next Theme Day";
+  themeTitle.textContent = `${themeKicker.textContent}: ${primaryTheme.name}`;
+  themeDate.textContent = formatThemeDate(primaryTheme.eventDate);
+  themeDescription.textContent = primaryTheme.description || "";
+  themeButton.dataset.themeSlug = primaryTheme.slug;
+  renderThemeButton(themeButton, primaryTheme);
+  renderUpcomingThemes(themes, primaryTheme);
+}
+
+async function loadThemeDays() {
+  try {
+    const response = await fetch(themeDaysUrl);
+
+    if (!response.ok) {
+      throw new Error("Theme days CSV was not available.");
+    }
+
+    const themes = parseThemeDays(await response.text());
+    window.overlandThemes = Object.fromEntries(themes.map((theme) => [theme.slug, theme]));
+    renderThemeDays(themes);
+  } catch {
+    if (themeSection) {
+      themeSection.hidden = true;
+    }
+  }
 }
 
 function setSongs(nextSongs) {
@@ -1308,7 +1623,31 @@ document.addEventListener("click", (event) => {
     window.clearTimeout(searchTimer);
     render();
   }
+
+  const themeMiniButton = event.target.closest(".theme-mini-button");
+
+  if (themeMiniButton) {
+    const theme = window.overlandThemes?.[themeMiniButton.dataset.themeSlug];
+
+    if (theme) {
+      applyThemeFilter(theme);
+    }
+  }
 });
+
+if (themeButton) {
+  themeButton.addEventListener("click", () => {
+    const theme = window.overlandThemes?.[themeButton.dataset.themeSlug];
+
+    if (theme) {
+      applyThemeFilter(theme);
+    }
+  });
+}
+
+if (themeClearButton) {
+  themeClearButton.addEventListener("click", clearThemeFilter);
+}
 
 searchInput.addEventListener("search", () => {
   render();
@@ -1349,3 +1688,4 @@ diceButtons.forEach((button) => {
 });
 
 loadInitialSongs();
+loadThemeDays();

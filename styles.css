@@ -215,6 +215,98 @@ form {
     url("assets/good-times-karaoke.jpg") right 7vw center / min(26vw, 250px) auto no-repeat;
 }
 
+.theme-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 22px max(18px, calc((100vw - 1120px) / 2));
+  border-bottom: 1px solid rgba(255, 209, 42, 0.24);
+  background:
+    linear-gradient(90deg, rgba(255, 209, 42, 0.08), rgba(49, 232, 255, 0.06)),
+    rgba(10, 10, 10, 0.96);
+}
+
+.theme-content {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.theme-content h2 {
+  font-size: 1.45rem;
+}
+
+.theme-date,
+.theme-description {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.theme-date {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.theme-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.theme-button,
+.theme-clear-button,
+.theme-mini-button {
+  border-color: rgba(255, 209, 42, 0.72);
+  background: rgba(255, 209, 42, 0.12);
+  box-shadow: 0 0 18px rgba(255, 209, 42, 0.16);
+}
+
+.theme-button img {
+  display: block;
+  max-width: min(260px, 72vw);
+  max-height: 84px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.theme-clear-button,
+.theme-mini-button {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+}
+
+.upcoming-themes {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 9px;
+  padding-top: 6px;
+}
+
+.upcoming-theme-list {
+  display: grid;
+  gap: 8px;
+}
+
+.upcoming-theme-item {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.35fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.upcoming-theme-item strong {
+  min-width: 0;
+  color: var(--white);
+  overflow-wrap: anywhere;
+}
+
 .brand-row,
 .summary-row,
 .search-row {
@@ -765,6 +857,29 @@ td:first-child {
   font-weight: 700;
 }
 
+.song-cell-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.song-theme-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border: 1px solid rgba(255, 209, 42, 0.52);
+  border-radius: 8px;
+  padding: 2px 7px;
+  background: rgba(255, 209, 42, 0.12);
+  color: var(--gold);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 0 10px rgba(255, 209, 42, 0.24);
+}
+
 .title-column {
   width: 56%;
 }
@@ -867,6 +982,22 @@ mark {
     background:
       linear-gradient(180deg, rgba(5, 5, 5, 0.9), rgba(5, 5, 5, 0.96)),
       url("assets/good-times-karaoke.jpg") right 18px top 18px / 112px auto no-repeat;
+  }
+
+  .theme-band {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px 14px;
+  }
+
+  .theme-actions,
+  .theme-button,
+  .theme-clear-button {
+    width: 100%;
+  }
+
+  .upcoming-theme-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
   }
 
   .brand-row {
