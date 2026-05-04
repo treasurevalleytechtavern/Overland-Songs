@@ -53,6 +53,187 @@ const filterFieldLabels = {
   socialSinging: "Social singing"
 };
 
+const HIGH_LEVEL_GENRES = [
+  {
+    label: "Rock",
+    slug: "rock",
+    categories: [
+      "Rock",
+      "Alternative Rock",
+      "Classic Rock",
+      "Hard Rock",
+      "Indie Rock",
+      "Pop Rock",
+      "Soft Rock",
+      "Country Rock",
+      "Blues Rock",
+      "Folk Rock",
+      "Southern Rock",
+      "Post-Grunge",
+      "Grunge",
+      "Progressive Rock",
+      "Psychedelic Rock",
+      "Britpop",
+      "Garage Rock",
+      "Glam Rock",
+      "Heartland Rock",
+      "Funk Rock",
+      "Power Pop",
+      "Yacht Rock",
+      "Roots Rock",
+      "Rock and Roll",
+      "Gothic Rock",
+      "Christian Rock",
+      "Latin Rock",
+      "New Wave",
+      "Post-Punk",
+      "Industrial Rock",
+      "Rap Rock",
+      "Punk Rock",
+      "Pop Punk",
+      "Ska Punk"
+    ]
+  },
+  {
+    label: "Pop",
+    slug: "pop",
+    categories: [
+      "Pop",
+      "Pop Rock",
+      "Country Pop",
+      "Dance-Pop",
+      "Adult Contemporary",
+      "Soft Rock",
+      "Teen Pop",
+      "Electropop",
+      "Indie Pop",
+      "Synth-Pop",
+      "Folk Pop",
+      "Art Pop",
+      "Baroque Pop",
+      "Power Pop",
+      "Boy Band",
+      "Dream Pop",
+      "Traditional Pop"
+    ]
+  },
+  {
+    label: "Country",
+    slug: "country",
+    categories: [
+      "Country",
+      "Country Pop",
+      "Country Rock",
+      "Alt-Country",
+      "Americana",
+      "Bluegrass",
+      "Southern Rock",
+      "Heartland Rock",
+      "Roots Rock",
+      "Country Rap"
+    ]
+  },
+  {
+    label: "Folk / Americana",
+    slug: "folk-americana",
+    categories: [
+      "Folk",
+      "Americana",
+      "Singer-Songwriter",
+      "Folk Rock",
+      "Folk Pop",
+      "Indie Folk",
+      "Alt-Country",
+      "Bluegrass",
+      "Roots Rock"
+    ]
+  },
+  {
+    label: "R&B / Soul / Funk",
+    slug: "rnb-soul-funk",
+    categories: [
+      "R&B",
+      "Soul",
+      "Funk",
+      "Motown",
+      "New Jack Swing",
+      "Gospel",
+      "Funk Rock"
+    ]
+  },
+  {
+    label: "Dance / Electronic",
+    slug: "dance-electronic",
+    categories: [
+      "Dance",
+      "Dance-Pop",
+      "Disco",
+      "Electronic",
+      "Electropop",
+      "Synth-Pop",
+      "EDM",
+      "Electro",
+      "Electro House",
+      "House",
+      "Eurodance",
+      "New Wave"
+    ]
+  },
+  {
+    label: "Blues",
+    slug: "blues",
+    categories: [
+      "Blues",
+      "Blues Rock"
+    ]
+  },
+  {
+    label: "Metal",
+    slug: "metal",
+    categories: [
+      "Metal",
+      "Heavy Metal",
+      "Alternative Metal",
+      "Glam Metal",
+      "Nu Metal",
+      "Metalcore",
+      "Industrial Rock"
+    ]
+  },
+  {
+    label: "Punk / Emo / Ska",
+    slug: "punk-emo-ska",
+    categories: [
+      "Punk",
+      "Punk Rock",
+      "Pop Punk",
+      "Emo",
+      "Ska",
+      "Ska Punk",
+      "Post-Punk",
+      "New Wave"
+    ]
+  },
+  {
+    label: "Hip-Hop / Rap",
+    slug: "hip-hop-rap",
+    categories: [
+      "Hip-Hop",
+      "Pop Rap",
+      "Rap Rock",
+      "Trap",
+      "Country Rap"
+    ]
+  }
+];
+
+const HIGH_LEVEL_GENRE_MAP = Object.fromEntries(
+  HIGH_LEVEL_GENRES.map((genre) => [
+    genre.slug,
+    genre.categories.map((category) => normalize(category))
+  ])
+);
+
 function normalize(value) {
   return String(value || "")
     .toLowerCase()
@@ -166,11 +347,27 @@ function fieldMatchesQuery(song, fieldName, queryTerms) {
   );
 }
 
+function categoryBucketMatches(song, categoryTerms) {
+  const categoryText = normalize(song.categories);
+  const categorySegments = String(song.categories || "")
+    .split("|")
+    .map((segment) => normalize(segment))
+    .filter(Boolean);
+
+  return categoryTerms.some((category) =>
+    categorySegments.includes(category) || categoryText.includes(category)
+  );
+}
+
 function getFilterLabel(fieldName) {
   return filterFieldLabels[fieldName] || fieldName;
 }
 
 function songMatchesFilter(song, filter) {
+  if (filter.matcher === "categoryBucket") {
+    return categoryBucketMatches(song, filter.categoryTerms || []);
+  }
+
   return fieldMatchesQuery(song, filter.field, tokenize(filter.value));
 }
 
@@ -197,9 +394,15 @@ function updateFilterSummary() {
 
 function updateBrowseButtonStates() {
   browseButtons.forEach((button) => {
-    const isActive = activeFilters.some((filter) =>
-      filter.field === button.dataset.field && filter.value === button.dataset.search
-    );
+    let isActive = false;
+
+    if (button.dataset.clearField) {
+      isActive = !activeFilters.some((filter) => filter.field === button.dataset.clearField);
+    } else {
+      isActive = activeFilters.some((filter) =>
+        filter.field === button.dataset.field && filter.value === button.dataset.search
+      );
+    }
 
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
@@ -207,8 +410,16 @@ function updateBrowseButtonStates() {
 }
 
 function setFilterFromButton(button) {
+  const clearField = button.dataset.clearField || "";
   const field = button.dataset.field || "";
   const value = button.dataset.search || "";
+
+  if (clearField) {
+    activeFilters = activeFilters.filter((filter) => filter.field !== clearField);
+    updateFilterSummary();
+    updateBrowseButtonStates();
+    return;
+  }
 
   if (!field || !value) {
     return;
@@ -231,9 +442,21 @@ function setFilterFromButton(button) {
   if (existing && existing.value === value) {
     activeFilters.splice(existingIndex, 1);
   } else if (existingIndex === -1) {
-    activeFilters.push({ field, value, label: button.textContent.trim() });
+    activeFilters.push({
+      field,
+      value,
+      label: button.textContent.trim(),
+      matcher: button.dataset.matcher || "",
+      categoryTerms: HIGH_LEVEL_GENRE_MAP[value] || []
+    });
   } else {
-    activeFilters[existingIndex] = { field, value, label: button.textContent.trim() };
+    activeFilters[existingIndex] = {
+      field,
+      value,
+      label: button.textContent.trim(),
+      matcher: button.dataset.matcher || "",
+      categoryTerms: HIGH_LEVEL_GENRE_MAP[value] || []
+    };
   }
 
   updateFilterSummary();

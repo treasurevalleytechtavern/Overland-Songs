@@ -109,11 +109,13 @@
           <div class="browse-group browse-decade">
             <p class="browse-label">Decade</p>
             <div class="browse-buttons">
+              <button class="browse-button" type="button" data-search="60s" data-field="decade">60s</button>
               <button class="browse-button" type="button" data-search="70s" data-field="decade">70s</button>
               <button class="browse-button" type="button" data-search="80s" data-field="decade">80s</button>
               <button class="browse-button" type="button" data-search="90s" data-field="decade">90s</button>
               <button class="browse-button" type="button" data-search="2000s" data-field="decade">2000s</button>
               <button class="browse-button" type="button" data-search="2010s" data-field="decade">2010s</button>
+              <button class="browse-button" type="button" data-search="2020s" data-field="decade">2020s</button>
             </div>
           </div>
 
@@ -129,16 +131,17 @@
           <div class="browse-group browse-genre">
             <p class="browse-label">Genre</p>
             <div class="browse-buttons">
-              <button class="browse-button" type="button" data-search="pop" data-field="categories">Pop</button>
-              <button class="browse-button" type="button" data-search="rock" data-field="categories">Rock</button>
-              <button class="browse-button" type="button" data-search="country" data-field="categories">Country</button>
-              <button class="browse-button" type="button" data-search="hip hop rap" data-field="categories">Hip-Hop / Rap</button>
-              <button class="browse-button" type="button" data-search="r b" data-field="categories">R&amp;B</button>
-              <button class="browse-button" type="button" data-search="soul" data-field="categories">Soul</button>
-              <button class="browse-button" type="button" data-search="alternative indie" data-field="categories">Alternative / Indie</button>
-              <button class="browse-button" type="button" data-search="emo pop punk" data-field="categories">Emo / Pop Punk</button>
-              <button class="browse-button" type="button" data-search="metal hard rock" data-field="categories">Metal / Hard Rock</button>
-              <button class="browse-button" type="button" data-search="folk" data-field="categories">Folk</button>
+              <button class="browse-button" type="button" data-clear-field="categories">All</button>
+              <button class="browse-button" type="button" data-search="rock" data-field="categories" data-matcher="categoryBucket">Rock</button>
+              <button class="browse-button" type="button" data-search="pop" data-field="categories" data-matcher="categoryBucket">Pop</button>
+              <button class="browse-button" type="button" data-search="country" data-field="categories" data-matcher="categoryBucket">Country</button>
+              <button class="browse-button" type="button" data-search="folk-americana" data-field="categories" data-matcher="categoryBucket">Folk / Americana</button>
+              <button class="browse-button" type="button" data-search="rnb-soul-funk" data-field="categories" data-matcher="categoryBucket">R&amp;B / Soul / Funk</button>
+              <button class="browse-button" type="button" data-search="dance-electronic" data-field="categories" data-matcher="categoryBucket">Dance / Electronic</button>
+              <button class="browse-button" type="button" data-search="blues" data-field="categories" data-matcher="categoryBucket">Blues</button>
+              <button class="browse-button" type="button" data-search="metal" data-field="categories" data-matcher="categoryBucket">Metal</button>
+              <button class="browse-button" type="button" data-search="punk-emo-ska" data-field="categories" data-matcher="categoryBucket">Punk / Emo / Ska</button>
+              <button class="browse-button" type="button" data-search="hip-hop-rap" data-field="categories" data-matcher="categoryBucket">Hip-Hop / Rap</button>
             </div>
           </div>
 
@@ -182,6 +185,6 @@
       <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260419-derived-decades"></script>
+    <script src="app.js?v=20260504-decade-buttons"></script>
   </body>
 </html>
