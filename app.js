@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-url-filter";
-const songCsvUrl = "songs.csv?v=20260504-theme-url-filter";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-url-filter";
+const songIndexUrl = "songs.index.json?v=20260504-theme-no-jump";
+const songCsvUrl = "songs.csv?v=20260504-theme-no-jump";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-no-jump";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -1757,7 +1757,6 @@ function applyThemeFilter(theme) {
   updateThemeClearButton();
   render();
   renderThemeLabelButtons();
-  resultsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function clearThemeFilter() {
