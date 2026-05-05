@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-no-jump";
-const songCsvUrl = "songs.csv?v=20260504-theme-no-jump";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-no-jump";
+const songIndexUrl = "songs.index.json?v=20260504-theme-2am";
+const songCsvUrl = "songs.csv?v=20260504-theme-2am";
+const themeDaysUrl = "theme_days.csv?v=20260504-theme-2am";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -1694,6 +1694,11 @@ function parseThemeRecord(record) {
 
 function getTodayLocalDate() {
   const now = new Date();
+
+  if (now.getHours() < 2) {
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  }
+
   return new Date(now.getFullYear(), now.getMonth(), now.getDate());
 }
 
