@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css?v=20260504-theme-section-chips">
+    <link rel="stylesheet" href="styles.css?v=20260510-preferred-genre-filters">
   </head>
   <body>
     <header class="site-header" aria-label="Overland Bar site navigation">
@@ -37,13 +37,13 @@
         </div>
 
         <form class="search-panel" id="song-search-form" role="search">
-          <label for="song-search">Search by title, artist, category, decade, or vocal</label>
+          <label for="song-search">Search by song, artist, or genre</label>
           <div class="search-row">
             <input
               id="song-search"
               type="search"
               autocomplete="off"
-              placeholder="Search by song, artist, category, decade, or vocal"
+              placeholder="Song, artist, or genre"
               aria-describedby="result-count"
             >
             <button id="clear-search" type="button">Clear</button>
@@ -52,8 +52,58 @@
               <span>Let Chance Decide</span>
             </button>
           </div>
-          <p class="filter-summary" id="filter-summary" aria-live="polite" hidden></p>
         </form>
+
+        <section class="browse-panel" aria-label="Filter songs">
+          <p class="filter-kicker">Filters</p>
+          <div class="filter-category-row" role="toolbar" aria-label="Filter categories">
+            <button class="filter-category-button" type="button" data-filter-section="genre" aria-expanded="false" aria-controls="genre-filter-group">Genre</button>
+            <button class="filter-category-button" type="button" data-filter-section="decade" aria-expanded="false" aria-controls="decade-filter-group">Decade</button>
+            <button class="filter-category-button" type="button" data-filter-section="vocal" aria-expanded="false" aria-controls="vocal-filter-group">Vocal</button>
+            <button class="filter-category-button" type="button" data-filter-section="social" aria-expanded="false" aria-controls="social-filter-group">Duets &amp; Groups</button>
+            <button class="clear-filters-button" id="clear-filters" type="button" hidden>Clear All</button>
+          </div>
+          <div class="filter-summary" id="filter-summary" aria-live="polite" hidden></div>
+
+          <div class="browse-group browse-genre" id="genre-filter-group" data-filter-group="genre" hidden>
+            <p class="browse-label">Genre</p>
+            <div class="browse-buttons" id="genre-buttons"></div>
+            <div class="subgenre-panel" id="subgenre-panel" hidden>
+              <p class="browse-label">Sub-genre</p>
+              <div class="browse-buttons subgenre-buttons" id="subgenre-buttons"></div>
+            </div>
+          </div>
+
+          <div class="browse-group browse-decade" id="decade-filter-group" data-filter-group="decade" hidden>
+            <p class="browse-label">Decade</p>
+            <div class="browse-buttons">
+              <button class="browse-button" type="button" data-search="60s" data-field="decade">60s</button>
+              <button class="browse-button" type="button" data-search="70s" data-field="decade">70s</button>
+              <button class="browse-button" type="button" data-search="80s" data-field="decade">80s</button>
+              <button class="browse-button" type="button" data-search="90s" data-field="decade">90s</button>
+              <button class="browse-button" type="button" data-search="2000s" data-field="decade">2000s</button>
+              <button class="browse-button" type="button" data-search="2010s" data-field="decade">2010s</button>
+              <button class="browse-button" type="button" data-search="2020s" data-field="decade">2020s</button>
+            </div>
+          </div>
+
+          <div class="browse-group browse-vocal" id="vocal-filter-group" data-filter-group="vocal" hidden>
+            <p class="browse-label">Vocal</p>
+            <div class="browse-buttons">
+              <button class="browse-button" type="button" data-search="male" data-field="originalVocal">Male</button>
+              <button class="browse-button" type="button" data-search="female" data-field="originalVocal">Female</button>
+              <button class="browse-button" type="button" data-search="mixed" data-field="originalVocal">Mixed</button>
+            </div>
+          </div>
+
+          <div class="browse-group browse-social" id="social-filter-group" data-filter-group="social" hidden>
+            <p class="browse-label">Duets &amp; Groups</p>
+            <div class="browse-buttons">
+              <button class="browse-button" type="button" data-search="duets" data-field="socialSinging">Duet</button>
+              <button class="browse-button" type="button" data-search="group song" data-field="socialSinging">Group Songs</button>
+            </div>
+          </div>
+        </section>
 
       </section>
 
@@ -121,64 +171,6 @@
           </div>
         </div>
 
-        <section class="browse-panel" aria-label="Browse songs">
-          <div class="browse-heading">
-            <p class="eyebrow">Browse</p>
-            <h2>Find something fast</h2>
-          </div>
-
-          <div class="browse-group browse-decade">
-            <p class="browse-label">Decade</p>
-            <div class="browse-buttons">
-              <button class="browse-button" type="button" data-search="60s" data-field="decade">60s</button>
-              <button class="browse-button" type="button" data-search="70s" data-field="decade">70s</button>
-              <button class="browse-button" type="button" data-search="80s" data-field="decade">80s</button>
-              <button class="browse-button" type="button" data-search="90s" data-field="decade">90s</button>
-              <button class="browse-button" type="button" data-search="2000s" data-field="decade">2000s</button>
-              <button class="browse-button" type="button" data-search="2010s" data-field="decade">2010s</button>
-              <button class="browse-button" type="button" data-search="2020s" data-field="decade">2020s</button>
-            </div>
-          </div>
-
-          <div class="browse-group browse-vocal">
-            <p class="browse-label">Original vocal</p>
-            <div class="browse-buttons">
-              <button class="browse-button" type="button" data-search="male" data-field="originalVocal">Male</button>
-              <button class="browse-button" type="button" data-search="female" data-field="originalVocal">Female</button>
-              <button class="browse-button" type="button" data-search="mixed" data-field="originalVocal">Mixed</button>
-            </div>
-          </div>
-
-          <div class="browse-group browse-genre">
-            <p class="browse-label">Genre</p>
-            <div class="browse-buttons">
-              <button class="browse-button is-active" type="button" data-clear-field="genre" aria-pressed="true">All</button>
-              <button class="browse-button" type="button" data-search="rock" data-field="categories" data-matcher="categoryBucket">Rock</button>
-              <button class="browse-button" type="button" data-search="pop" data-field="categories" data-matcher="categoryBucket">Pop</button>
-              <button class="browse-button" type="button" data-search="country" data-field="categories" data-matcher="categoryBucket">Country</button>
-              <button class="browse-button" type="button" data-search="folk-americana" data-field="categories" data-matcher="categoryBucket">Folk / Americana</button>
-              <button class="browse-button" type="button" data-search="rnb-soul-funk" data-field="categories" data-matcher="categoryBucket">R&amp;B / Soul / Funk</button>
-              <button class="browse-button" type="button" data-search="dance-electronic" data-field="categories" data-matcher="categoryBucket">Dance / Electronic</button>
-              <button class="browse-button" type="button" data-search="blues" data-field="categories" data-matcher="categoryBucket">Blues</button>
-              <button class="browse-button" type="button" data-search="metal" data-field="categories" data-matcher="categoryBucket">Metal</button>
-              <button class="browse-button" type="button" data-search="punk-emo-ska" data-field="categories" data-matcher="categoryBucket">Punk / Emo / Ska</button>
-              <button class="browse-button" type="button" data-search="hip-hop-rap" data-field="categories" data-matcher="categoryBucket">Hip-Hop / Rap</button>
-            </div>
-            <div class="subgenre-panel" id="subgenre-panel" hidden>
-              <p class="browse-label">Sub-genre</p>
-              <div class="browse-buttons subgenre-buttons" id="subgenre-buttons"></div>
-            </div>
-          </div>
-
-          <div class="browse-group browse-social">
-            <p class="browse-label">Social singing</p>
-            <div class="browse-buttons">
-              <button class="browse-button" type="button" data-search="duets" data-field="socialSinging">Duet</button>
-              <button class="browse-button" type="button" data-search="group song" data-field="socialSinging">Group Songs</button>
-            </div>
-          </div>
-        </section>
-
         <div class="popular-panel top-songs-panel" id="top-songs-panel" hidden>
           <div class="popular-heading">
             <p class="eyebrow">Crowd favorites</p>
@@ -223,11 +215,11 @@
     </main>
 
     <footer class="site-credit-footer">
-      <p class="catalogue-note">You're browsing a curated selection of songs. If your song isn't in our database, check with our KJ by the stage.</p>
+      <p class="catalogue-note">Search the online list. Deep cuts? Ask the KJ.</p>
       <p class="powered-by">Powered by <a href="https://treasurevalleytechtavern.com/">Treasure Valley Tech Tavern</a></p>
       <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260504-theme-2am"></script>
+    <script src="app.js?v=20260510-preferred-genre-filters"></script>
   </body>
 </html>

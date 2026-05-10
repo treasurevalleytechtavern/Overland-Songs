@@ -10,7 +10,11 @@ const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
 const clearButton = document.querySelector("#clear-search");
 let browseButtons = document.querySelectorAll(".browse-button");
+const filterCategoryButtons = document.querySelectorAll(".filter-category-button");
+const filterGroups = document.querySelectorAll("[data-filter-group]");
+const clearFiltersButton = document.querySelector("#clear-filters");
 const filterSummary = document.querySelector("#filter-summary");
+const genreButtons = document.querySelector("#genre-buttons");
 const subgenrePanel = document.querySelector("#subgenre-panel");
 const subgenreButtons = document.querySelector("#subgenre-buttons");
 const resultsSection = document.querySelector("#results-section");
@@ -45,6 +49,9 @@ let songs = [];
 let searchTimer = 0;
 let requestNavigationStarted = false;
 let activeFilters = [];
+let activeFilterSection = "";
+let genreShowAll = false;
+let visibleSubgenreCount = 8;
 let currentSearchMatches = [];
 let currentSearchQuery = "";
 let visibleResultCount = maxRenderedRows;
@@ -73,186 +80,21 @@ const filterFieldLabels = {
   themeLabel: "Theme label"
 };
 
-const HIGH_LEVEL_GENRES = [
-  {
-    label: "Rock",
-    slug: "rock",
-    categories: [
-      "Rock",
-      "Alternative Rock",
-      "Classic Rock",
-      "Hard Rock",
-      "Indie Rock",
-      "Pop Rock",
-      "Soft Rock",
-      "Country Rock",
-      "Blues Rock",
-      "Folk Rock",
-      "Southern Rock",
-      "Post-Grunge",
-      "Grunge",
-      "Progressive Rock",
-      "Psychedelic Rock",
-      "Britpop",
-      "Garage Rock",
-      "Glam Rock",
-      "Heartland Rock",
-      "Funk Rock",
-      "Power Pop",
-      "Yacht Rock",
-      "Roots Rock",
-      "Rock and Roll",
-      "Gothic Rock",
-      "Christian Rock",
-      "Latin Rock",
-      "New Wave",
-      "Post-Punk",
-      "Industrial Rock",
-      "Rap Rock",
-      "Punk Rock",
-      "Pop Punk",
-      "Ska Punk"
-    ]
-  },
-  {
-    label: "Pop",
-    slug: "pop",
-    categories: [
-      "Pop",
-      "Pop Rock",
-      "Country Pop",
-      "Dance-Pop",
-      "Adult Contemporary",
-      "Soft Rock",
-      "Teen Pop",
-      "Electropop",
-      "Indie Pop",
-      "Synth-Pop",
-      "Folk Pop",
-      "Art Pop",
-      "Baroque Pop",
-      "Power Pop",
-      "Boy Band",
-      "Dream Pop",
-      "Traditional Pop"
-    ]
-  },
-  {
-    label: "Country",
-    slug: "country",
-    categories: [
-      "Country",
-      "Country Pop",
-      "Country Rock",
-      "Alt-Country",
-      "Americana",
-      "Bluegrass",
-      "Southern Rock",
-      "Heartland Rock",
-      "Roots Rock",
-      "Country Rap"
-    ]
-  },
-  {
-    label: "Folk / Americana",
-    slug: "folk-americana",
-    categories: [
-      "Folk",
-      "Americana",
-      "Singer-Songwriter",
-      "Folk Rock",
-      "Folk Pop",
-      "Indie Folk",
-      "Alt-Country",
-      "Bluegrass",
-      "Roots Rock"
-    ]
-  },
-  {
-    label: "R&B / Soul / Funk",
-    slug: "rnb-soul-funk",
-    categories: [
-      "R&B",
-      "Soul",
-      "Funk",
-      "Motown",
-      "New Jack Swing",
-      "Gospel",
-      "Funk Rock"
-    ]
-  },
-  {
-    label: "Dance / Electronic",
-    slug: "dance-electronic",
-    categories: [
-      "Dance",
-      "Dance-Pop",
-      "Disco",
-      "Electronic",
-      "Electropop",
-      "Synth-Pop",
-      "EDM",
-      "Electro",
-      "Electro House",
-      "House",
-      "Eurodance",
-      "New Wave"
-    ]
-  },
-  {
-    label: "Blues",
-    slug: "blues",
-    categories: [
-      "Blues",
-      "Blues Rock"
-    ]
-  },
-  {
-    label: "Metal",
-    slug: "metal",
-    categories: [
-      "Metal",
-      "Heavy Metal",
-      "Alternative Metal",
-      "Glam Metal",
-      "Nu Metal",
-      "Metalcore",
-      "Industrial Rock"
-    ]
-  },
-  {
-    label: "Punk / Emo / Ska",
-    slug: "punk-emo-ska",
-    categories: [
-      "Punk",
-      "Punk Rock",
-      "Pop Punk",
-      "Emo",
-      "Ska",
-      "Ska Punk",
-      "Post-Punk",
-      "New Wave"
-    ]
-  },
-  {
-    label: "Hip-Hop / Rap",
-    slug: "hip-hop-rap",
-    categories: [
-      "Hip-Hop",
-      "Pop Rap",
-      "Rap Rock",
-      "Trap",
-      "Country Rap"
-    ]
-  }
-];
+const initialGenreOrder = [
+  "Pop",
+  "Country",
+  "Rock",
+  "Soul",
+  "Hip-Hop",
+  "Blues",
+  "Folk",
+  "Jazz",
+  "R&B",
+  "Latin"
+].map(normalize);
 
-const HIGH_LEVEL_GENRE_MAP = Object.fromEntries(
-  HIGH_LEVEL_GENRES.map((genre) => [
-    genre.slug,
-    genre.categories.map((category) => normalize(category))
-  ])
-);
+let genreOptions = [];
+let subgenreOptionsByPrimaryGenre = new Map();
 
 function normalize(value) {
   return String(value || "")
@@ -498,15 +340,115 @@ function fieldMatchesQuery(song, fieldName, queryTerms) {
   );
 }
 
-function categoryBucketMatches(song, categoryTerms) {
-  const categoryText = normalize(song.categories);
-  const categorySegments = String(song.categories || "")
-    .split("|")
-    .map((segment) => normalize(segment))
+function getCategoryValues(value) {
+  return String(value || "")
+    .split(/[|,]/)
+    .map((category) => category.trim())
     .filter(Boolean);
+}
 
-  return categoryTerms.some((category) =>
-    categorySegments.includes(category) || categoryText.includes(category)
+function getPrimaryGenre(song) {
+  return getCategoryValues(song.categories)[0] || "";
+}
+
+function getSubgenreValues(song) {
+  return getCategoryValues(song.categories).slice(1);
+}
+
+function primaryGenreMatches(song, value) {
+  return normalize(getPrimaryGenre(song)) === normalize(value);
+}
+
+function subgenreMatches(song, value) {
+  const target = normalize(value);
+
+  return getSubgenreValues(song).some((category) => normalize(category) === target);
+}
+
+function sortByCountThenLabel(entries) {
+  return entries.sort((a, b) => {
+    const countDifference = b.count - a.count;
+
+    if (countDifference !== 0) {
+      return countDifference;
+    }
+
+    return a.label.localeCompare(b.label);
+  });
+}
+
+function sortPrimaryGenreOptions(entries) {
+  const preferredGenres = [];
+  const remainingGenres = [];
+
+  entries.forEach((entry) => {
+    const preferredIndex = initialGenreOrder.indexOf(normalize(entry.label));
+
+    if (preferredIndex === -1) {
+      remainingGenres.push(entry);
+    } else {
+      preferredGenres.push({ ...entry, preferredIndex });
+    }
+  });
+
+  preferredGenres.sort((a, b) => a.preferredIndex - b.preferredIndex);
+  sortByCountThenLabel(remainingGenres);
+
+  return [
+    ...preferredGenres.map(({ preferredIndex, ...entry }) => entry),
+    ...remainingGenres
+  ];
+}
+
+function buildGenreOptions(songList) {
+  const primaryCounts = new Map();
+  const subgenreCountsByGenre = new Map();
+
+  songList.forEach((song) => {
+    const categoryValues = getCategoryValues(song.categories);
+    const primaryGenre = categoryValues[0] || "";
+
+    if (!primaryGenre) {
+      return;
+    }
+
+    const primaryKey = normalize(primaryGenre);
+    const primaryEntry = primaryCounts.get(primaryKey) || {
+      value: primaryGenre,
+      label: primaryGenre,
+      count: 0
+    };
+    primaryEntry.count += 1;
+    primaryCounts.set(primaryKey, primaryEntry);
+
+    if (!subgenreCountsByGenre.has(primaryKey)) {
+      subgenreCountsByGenre.set(primaryKey, new Map());
+    }
+
+    const subgenreCounts = subgenreCountsByGenre.get(primaryKey);
+    categoryValues.slice(1).forEach((subgenre) => {
+      const subgenreKey = normalize(subgenre);
+
+      if (!subgenreKey || subgenreKey === primaryKey) {
+        return;
+      }
+
+      const subgenreEntry = subgenreCounts.get(subgenreKey) || {
+        value: subgenre,
+        label: subgenre,
+        count: 0
+      };
+      subgenreEntry.count += 1;
+      subgenreCounts.set(subgenreKey, subgenreEntry);
+    });
+  });
+
+  genreOptions = sortPrimaryGenreOptions(Array.from(primaryCounts.values()));
+  subgenreOptionsByPrimaryGenre = new Map(
+    Array.from(subgenreCountsByGenre.entries()).map(([genreKey, subgenreCounts]) => [
+      genreKey,
+      sortByCountThenLabel(Array.from(subgenreCounts.values())).slice(0, 40)
+    ])
   );
 }
 
@@ -518,6 +460,7 @@ function clearGenreFilters() {
   activeFilters = activeFilters.filter((filter) =>
     filter.field !== "categories" && filter.field !== "categoryDetail"
   );
+  visibleSubgenreCount = 8;
 }
 
 function getFilterLabel(fieldName) {
@@ -533,12 +476,12 @@ function songMatchesFilter(song, filter) {
     return songMatchesThemeLabel(song, filter.value);
   }
 
-  if (filter.matcher === "categoryBucket") {
-    return categoryBucketMatches(song, filter.categoryTerms || []);
+  if (filter.matcher === "primaryGenre") {
+    return primaryGenreMatches(song, filter.value);
   }
 
-  if (filter.matcher === "categoryExact") {
-    return categoryBucketMatches(song, [normalize(filter.value)]);
+  if (filter.matcher === "subgenre") {
+    return subgenreMatches(song, filter.value);
   }
 
   return fieldMatchesQuery(song, filter.field, tokenize(filter.value));
@@ -555,21 +498,51 @@ function updateFilterSummary() {
 
   if (activeFilters.length === 0) {
     filterSummary.hidden = true;
-    filterSummary.textContent = "";
+    filterSummary.innerHTML = "";
+    if (clearFiltersButton) {
+      clearFiltersButton.hidden = true;
+    }
     return;
   }
 
-  filterSummary.textContent = activeFilters
-    .map((filter) => `${getFilterLabel(filter.field)}: ${filter.label}`)
-    .join("; ");
+  filterSummary.innerHTML = activeFilters
+    .map((filter) => `
+      <button
+        class="active-filter-chip"
+        type="button"
+        data-remove-field="${escapeHtml(filter.field)}"
+        data-remove-value="${escapeHtml(filter.value)}"
+        aria-label="Remove ${escapeHtml(filter.label)} filter"
+      >
+        <span>${escapeHtml(filter.label)}</span>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    `).join("");
   filterSummary.hidden = false;
+
+  if (clearFiltersButton) {
+    clearFiltersButton.hidden = false;
+  }
+}
+
+function updateFilterSectionVisibility() {
+  filterCategoryButtons.forEach((button) => {
+    const isOpen = button.dataset.filterSection === activeFilterSection;
+    button.classList.toggle("is-active", isOpen);
+    button.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  filterGroups.forEach((group) => {
+    group.hidden = group.dataset.filterGroup !== activeFilterSection;
+  });
 }
 
 function updateBrowseButtonStates() {
   const activeGenre = getActiveGenreFilter();
 
+  renderGenreButtons();
+
   if (subgenrePanel && subgenreButtons) {
-    subgenrePanel.hidden = !activeGenre;
     renderSubgenreButtons(activeGenre);
   }
 
@@ -594,6 +567,58 @@ function updateBrowseButtonStates() {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
+
+  filterCategoryButtons.forEach((button) => {
+    const section = button.dataset.filterSection;
+    const hasActiveFilter = activeFilters.some((filter) => {
+      if (section === "genre") {
+        return filter.field === "categories" || filter.field === "categoryDetail";
+      }
+
+      if (section === "vocal") {
+        return filter.field === "originalVocal";
+      }
+
+      if (section === "social") {
+        return filter.field === "socialSinging";
+      }
+
+      return filter.field === section;
+    });
+
+    button.classList.toggle("has-active-filter", hasActiveFilter);
+  });
+
+  updateFilterSectionVisibility();
+}
+
+function renderGenreButtons() {
+  if (!genreButtons) {
+    return;
+  }
+
+  const visibleGenres = genreShowAll ? genreOptions : genreOptions.slice(0, 10);
+  const moreButton = genreOptions.length > 10 && !genreShowAll
+    ? `
+      <button class="browse-button genre-more-button" type="button">
+        More Genres
+      </button>
+    `
+    : "";
+
+  genreButtons.innerHTML = [
+    `<button class="browse-button" type="button" data-clear-field="genre" aria-pressed="false">All</button>`,
+    ...visibleGenres.map((genre) => `
+      <button
+        class="browse-button"
+        type="button"
+        data-search="${escapeHtml(genre.value)}"
+        data-field="categories"
+        data-matcher="primaryGenre"
+      >${escapeHtml(genre.label)}</button>
+    `),
+    moreButton
+  ].join("");
 }
 
 function renderSubgenreButtons(activeGenre) {
@@ -601,22 +626,38 @@ function renderSubgenreButtons(activeGenre) {
     return;
   }
 
-  const genre = HIGH_LEVEL_GENRES.find((item) => item.slug === activeGenre?.value);
+  const subgenres = subgenreOptionsByPrimaryGenre.get(normalize(activeGenre?.value)) || [];
 
-  if (!genre) {
+  if (!activeGenre || activeFilterSection !== "genre" || subgenres.length === 0) {
+    if (subgenrePanel) {
+      subgenrePanel.hidden = true;
+    }
     subgenreButtons.innerHTML = "";
     return;
   }
 
-  subgenreButtons.innerHTML = genre.categories.map((category) => `
+  if (subgenrePanel) {
+    subgenrePanel.hidden = false;
+  }
+
+  const visibleSubgenres = subgenres.slice(0, visibleSubgenreCount);
+  const showMoreButton = visibleSubgenres.length < subgenres.length
+    ? `
+      <button class="browse-button subgenre-more-button" type="button">
+        Show More
+      </button>
+    `
+    : "";
+
+  subgenreButtons.innerHTML = visibleSubgenres.map((category) => `
     <button
       class="browse-button subgenre-button"
       type="button"
-      data-search="${escapeHtml(category)}"
+      data-search="${escapeHtml(category.value)}"
       data-field="categoryDetail"
-      data-matcher="categoryExact"
-    >${escapeHtml(category)}</button>
-  `).join("");
+      data-matcher="subgenre"
+    >${escapeHtml(category.label)}</button>
+  `).join("") + showMoreButton;
 }
 
 function setFilterFromButton(button) {
@@ -653,6 +694,7 @@ function setFilterFromButton(button) {
 
   if (field === "categories") {
     activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
+    visibleSubgenreCount = 8;
   }
 
   const existingIndex = activeFilters.findIndex((filter) => filter.field === field);
@@ -665,16 +707,14 @@ function setFilterFromButton(button) {
       field,
       value,
       label: button.textContent.trim(),
-      matcher: button.dataset.matcher || "",
-      categoryTerms: HIGH_LEVEL_GENRE_MAP[value] || []
+      matcher: button.dataset.matcher || ""
     });
   } else {
     activeFilters[existingIndex] = {
       field,
       value,
       label: button.textContent.trim(),
-      matcher: button.dataset.matcher || "",
-      categoryTerms: HIGH_LEVEL_GENRE_MAP[value] || []
+      matcher: button.dataset.matcher || ""
     };
   }
 
@@ -683,8 +723,31 @@ function setFilterFromButton(button) {
   updateThemeClearButton();
 }
 
+function removeFilter(field, value) {
+  if (!field) {
+    return;
+  }
+
+  activeFilters = activeFilters.filter((filter) =>
+    !(filter.field === field && (!value || filter.value === value))
+  );
+
+  if (field === "categories") {
+    activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
+    visibleSubgenreCount = 8;
+  }
+
+  updateFilterSummary();
+  updateBrowseButtonStates();
+  updateThemeClearButton();
+  renderThemeLabelButtons();
+}
+
 function clearFilters() {
   activeFilters = [];
+  activeFilterSection = "";
+  genreShowAll = false;
+  visibleSubgenreCount = 8;
   updateFilterSummary();
   updateBrowseButtonStates();
   updateThemeClearButton();
@@ -981,7 +1044,6 @@ function fuzzyRank(song, queryTerms) {
 }
 
 function renderRequestSong(query) {
-  const requestUrl = `${requestSongUrl}?song=${encodeURIComponent(query)}`;
   if (resultsSection) {
     resultsSection.hidden = false;
   }
@@ -996,8 +1058,7 @@ function renderRequestSong(query) {
     similarPanel.hidden = true;
   }
   emptyState.innerHTML = `
-    <span>No songs found for "${escapeHtml(query)}".</span>
-    <a class="request-song-button" href="${requestUrl}" target="_top">Request a song</a>
+    <span>No match here, but ask the KJ. We may have it in the full catalog.</span>
   `;
   emptyState.hidden = false;
   resultCount.textContent = "0 songs";
@@ -1943,6 +2004,7 @@ function setSongs(nextSongs) {
 
 function setPreparedSongs(nextSongs) {
   songs = nextSongs;
+  buildGenreOptions(songs);
   diceButtons.forEach((button) => {
     button.disabled = songs.length === 0;
   });
@@ -2008,6 +2070,40 @@ searchInput.addEventListener("input", () => {
 });
 
 document.addEventListener("click", (event) => {
+  const filterCategoryButton = event.target.closest(".filter-category-button");
+
+  if (filterCategoryButton) {
+    const section = filterCategoryButton.dataset.filterSection || "";
+    activeFilterSection = activeFilterSection === section ? "" : section;
+    updateBrowseButtonStates();
+    return;
+  }
+
+  const activeFilterChip = event.target.closest(".active-filter-chip");
+
+  if (activeFilterChip) {
+    removeFilter(activeFilterChip.dataset.removeField || "", activeFilterChip.dataset.removeValue || "");
+    window.clearTimeout(searchTimer);
+    render();
+    return;
+  }
+
+  const genreMoreButton = event.target.closest(".genre-more-button");
+
+  if (genreMoreButton) {
+    genreShowAll = true;
+    updateBrowseButtonStates();
+    return;
+  }
+
+  const subgenreMoreButton = event.target.closest(".subgenre-more-button");
+
+  if (subgenreMoreButton) {
+    visibleSubgenreCount = Math.min(40, visibleSubgenreCount + 8);
+    updateBrowseButtonStates();
+    return;
+  }
+
   const button = event.target.closest(".browse-button");
 
   if (button) {
@@ -2045,6 +2141,14 @@ if (themeButton) {
 
 if (themeClearButton) {
   themeClearButton.addEventListener("click", clearThemeFilter);
+}
+
+if (clearFiltersButton) {
+  clearFiltersButton.addEventListener("click", () => {
+    clearFilters();
+    window.clearTimeout(searchTimer);
+    render();
+  });
 }
 
 searchInput.addEventListener("search", () => {
