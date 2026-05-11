@@ -525,8 +525,6 @@ button:hover {
 .browse-group {
   display: grid;
   gap: 8px;
-  max-height: 34vh;
-  overflow-y: auto;
   border-left: 3px solid rgba(49, 232, 255, 0.44);
   padding-left: 10px;
   padding-right: 2px;
@@ -1026,6 +1024,23 @@ td:first-child {
   white-space: normal;
   box-shadow: 0 0 12px rgba(255, 209, 42, 0.14);
   text-shadow: 0 0 10px rgba(255, 209, 42, 0.24);
+}
+
+.song-version-tile {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border: 1px solid rgba(49, 232, 255, 0.58);
+  border-radius: 8px;
+  padding: 2px 7px;
+  background: rgba(49, 232, 255, 0.12);
+  color: var(--cyan);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: none;
+  white-space: normal;
+  box-shadow: 0 0 12px rgba(49, 232, 255, 0.12);
 }
 
 .song-theme-label:hover,

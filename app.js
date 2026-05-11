@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260504-theme-2am";
-const songCsvUrl = "songs.csv?v=20260504-theme-2am";
-const themeDaysUrl = "theme_days.csv?v=20260504-theme-2am";
+const songIndexUrl = "songs.index.json?v=20260510-vibes-version";
+const songCsvUrl = "songs.csv?v=20260510-vibes-version";
+const themeDaysUrl = "theme_days.csv?v=20260510-vibes-version";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -50,8 +50,8 @@ let searchTimer = 0;
 let requestNavigationStarted = false;
 let activeFilters = [];
 let activeFilterSection = "";
-let genreShowAll = false;
-let visibleSubgenreCount = 8;
+let visibleGenreCount = 10;
+let visibleSubgenreCount = 10;
 let currentSearchMatches = [];
 let currentSearchQuery = "";
 let visibleResultCount = maxRenderedRows;
@@ -76,6 +76,7 @@ const filterFieldLabels = {
   decade: "Decade",
   originalVocal: "Original vocal",
   socialSinging: "Social singing",
+  vibes: "Vibe",
   themeTags: "Theme",
   themeLabel: "Theme label"
 };
@@ -117,8 +118,21 @@ function getThemeTags(value) {
     .filter(Boolean);
 }
 
+function getTagValues(value) {
+  return String(value || "")
+    .split(/[|,;]/)
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
 function songHasThemeTag(song, slug) {
-  return getThemeTags(song.themeTags).some((tag) => tag === slug);
+  return getTagValues(song.themeTags).some((tag) => tag === slug);
+}
+
+function songHasVibeTag(song, vibe) {
+  const target = normalize(vibe);
+
+  return getTagValues(song.vibes).some((tag) => normalize(tag) === target);
 }
 
 function getActiveThemeSlug() {
@@ -313,11 +327,13 @@ function getSearchPieces(song) {
     song.artist,
     ...artistAliases,
     song.categories,
+    song.vibes,
     song.socialSinging,
     song.decade,
     ...decadeAliases,
     song.year,
-    song.originalVocal
+    song.originalVocal,
+    song.version
   ].filter(Boolean);
 }
 
@@ -460,7 +476,7 @@ function clearGenreFilters() {
   activeFilters = activeFilters.filter((filter) =>
     filter.field !== "categories" && filter.field !== "categoryDetail"
   );
-  visibleSubgenreCount = 8;
+  visibleSubgenreCount = 10;
 }
 
 function getFilterLabel(fieldName) {
@@ -470,6 +486,10 @@ function getFilterLabel(fieldName) {
 function songMatchesFilter(song, filter) {
   if (filter.matcher === "themeTag") {
     return songHasThemeTag(song, filter.value);
+  }
+
+  if (filter.matcher === "vibeTag") {
+    return songHasVibeTag(song, filter.value);
   }
 
   if (filter.matcher === "themeLabel") {
@@ -597,11 +617,12 @@ function renderGenreButtons() {
     return;
   }
 
-  const visibleGenres = genreShowAll ? genreOptions : genreOptions.slice(0, 10);
-  const moreButton = genreOptions.length > 10 && !genreShowAll
+  const visibleGenres = genreOptions.slice(0, visibleGenreCount);
+  const remainingGenreCount = Math.max(0, genreOptions.length - visibleGenres.length);
+  const moreButton = remainingGenreCount > 0
     ? `
       <button class="browse-button genre-more-button" type="button">
-        More Genres
+        Show More Genres
       </button>
     `
     : "";
@@ -694,7 +715,7 @@ function setFilterFromButton(button) {
 
   if (field === "categories") {
     activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
-    visibleSubgenreCount = 8;
+    visibleSubgenreCount = 10;
   }
 
   const existingIndex = activeFilters.findIndex((filter) => filter.field === field);
@@ -734,7 +755,7 @@ function removeFilter(field, value) {
 
   if (field === "categories") {
     activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
-    visibleSubgenreCount = 8;
+    visibleSubgenreCount = 10;
   }
 
   updateFilterSummary();
@@ -746,8 +767,8 @@ function removeFilter(field, value) {
 function clearFilters() {
   activeFilters = [];
   activeFilterSection = "";
-  genreShowAll = false;
-  visibleSubgenreCount = 8;
+  visibleGenreCount = 10;
+  visibleSubgenreCount = 10;
   updateFilterSummary();
   updateBrowseButtonStates();
   updateThemeClearButton();
@@ -847,31 +868,37 @@ function indexSongs(nextSongs) {
       const title = String(song.title || "").trim();
       const artist = String(song.artist || "").trim();
       const categories = String(song.categories || "").trim();
+      const vibes = String(song.vibes || "").trim();
       const socialSinging = String(song.socialSinging || "").trim();
+      const version = String(song.version || "").trim();
       const originalVocal = String(song.originalVocal || "").trim();
       const year = String(song.year || "").trim();
       const decade = String(song.decade || "").trim() || deriveDecadeFromYear(year);
       const themeTags = String(song.themeTags || "").trim();
       const themeLabels = String(song.themeLabels || "").trim();
       const rankingScore = parseRankingScore(song.rankingScore);
-      const searchPieces = getSearchPieces({ title, artist, categories, socialSinging, decade, year, originalVocal });
+      const searchPieces = getSearchPieces({ title, artist, categories, vibes, socialSinging, decade, year, originalVocal, version });
       const searchText = normalize(searchPieces.join(" "));
       const compactFields = [
         normalize(title).replace(/\s/g, ""),
         normalize(artist).replace(/\s/g, ""),
         ...getArtistAliases(artist).map((alias) => normalize(alias).replace(/\s/g, "")),
         normalize(categories).replace(/\s/g, ""),
+        normalize(vibes).replace(/\s/g, ""),
         normalize(socialSinging).replace(/\s/g, ""),
         normalize(decade).replace(/\s/g, ""),
         normalize(year).replace(/\s/g, ""),
-        normalize(originalVocal).replace(/\s/g, "")
+        normalize(originalVocal).replace(/\s/g, ""),
+        normalize(version).replace(/\s/g, "")
       ].filter(Boolean);
 
       return {
         title,
         artist,
         categories,
+        vibes,
         socialSinging,
+        version,
         decade,
         year,
         originalVocal,
@@ -917,11 +944,13 @@ function hydrateIndexedSongs(indexPayload) {
       const rankingScore = parseRankingScore(row[12]);
       const themeTags = String(row[13] || "").trim();
       const themeLabels = String(row[14] || "").trim();
-      const searchPieces = getSearchPieces({ title, artist, categories, socialSinging, decade, year, originalVocal });
+      const version = String(row[15] || "").trim();
+      const vibes = String(row[16] || "").trim();
+      const searchPieces = getSearchPieces({ title, artist, categories, vibes, socialSinging, decade, year, originalVocal, version });
       const searchText = String(row[3] || normalize(searchPieces.join(" ")));
       const compactFields = compactFieldSource
         ? compactFieldSource
-        : [normalize(title).replace(/\s/g, ""), normalize(artist).replace(/\s/g, ""), normalize(categories).replace(/\s/g, ""), normalize(socialSinging).replace(/\s/g, ""), normalize(decade).replace(/\s/g, ""), normalize(year).replace(/\s/g, ""), normalize(originalVocal).replace(/\s/g, "")].filter(Boolean);
+        : [normalize(title).replace(/\s/g, ""), normalize(artist).replace(/\s/g, ""), normalize(categories).replace(/\s/g, ""), normalize(vibes).replace(/\s/g, ""), normalize(socialSinging).replace(/\s/g, ""), normalize(decade).replace(/\s/g, ""), normalize(year).replace(/\s/g, ""), normalize(originalVocal).replace(/\s/g, ""), normalize(version).replace(/\s/g, "")].filter(Boolean);
       const fuzzyTerms = fuzzyTermSource
         ? fuzzyTermSource
         : Array.from(new Set(tokenize(searchPieces.join(" "))));
@@ -930,7 +959,9 @@ function hydrateIndexedSongs(indexPayload) {
         title,
         artist,
         categories,
+        vibes,
         socialSinging,
+        version,
         decade,
         year,
         originalVocal,
@@ -1193,12 +1224,16 @@ function renderSongRows(songList, query = "") {
     const themeLabelMarkup = themeLabel
       ? `<button class="song-theme-label song-theme-label-${getThemeLabelTone(themeLabel)}" type="button" data-theme-label="${escapeHtml(themeLabel)}">${escapeHtml(themeLabel)}</button>`
       : "";
+    const versionMarkup = song.version
+      ? `<span class="song-version-tile">${escapeHtml(song.version)}</span>`
+      : "";
 
     return `
     <tr>
       <td data-label="Title">
         <span class="song-cell-content">
           <span>${query ? highlight(song.title, query) : escapeHtml(song.title)}</span>
+          ${versionMarkup}
           ${themeLabelMarkup}
         </span>
       </td>
@@ -1549,6 +1584,8 @@ function parseCsv(csvText) {
   const artistIndex = headers.indexOf("artist");
   const categoriesIndex = headers.indexOf("categories");
   const socialSingingIndex = headers.indexOf("social singing");
+  const vibesIndex = getHeaderIndex(headers, ["vibes", "vibe", "vibe tags", "vibe tag"]);
+  const versionIndex = getHeaderIndex(headers, ["version", "song version", "specific version", "edition"]);
   const decadeIndex = headers.indexOf("decade");
   const yearIndex = headers.indexOf("year");
   const originalVocalIndex = headers.indexOf("original vocal");
@@ -1565,7 +1602,9 @@ function parseCsv(csvText) {
     title: items[titleIndex] || "",
     artist: items[artistIndex] || "",
     categories: categoriesIndex === -1 ? "" : items[categoriesIndex] || "",
+    vibes: vibesIndex === -1 ? "" : items[vibesIndex] || "",
     socialSinging: socialSingingIndex === -1 ? "" : items[socialSingingIndex] || "",
+    version: versionIndex === -1 ? "" : items[versionIndex] || "",
     decade: decadeIndex === -1 ? "" : items[decadeIndex] || "",
     year: yearIndex === -1 ? "" : items[yearIndex] || "",
     originalVocal: originalVocalIndex === -1 ? "" : items[originalVocalIndex] || "",
@@ -1685,11 +1724,31 @@ function getThemeRecordText(record, key) {
 }
 
 function getThemeRecordFilterType(record) {
-  return getThemeRecordText(record, "filter_type");
+  const explicitType = getThemeRecordText(record, "filter_type");
+
+  if (explicitType) {
+    return explicitType;
+  }
+
+  if (getThemeRecordText(record, "theme_tag") || getThemeRecordText(record, "theme_tags")) {
+    return "theme_tag";
+  }
+
+  if (getThemeRecordText(record, "vibe_tag") || getThemeRecordText(record, "vibe_tags") || getThemeRecordText(record, "vibes")) {
+    return "vibe_tag";
+  }
+
+  return "theme_tag";
 }
 
 function getThemeRecordFilterValue(record) {
-  return getThemeRecordText(record, "filter_value") || getThemeRecordText(record, "theme_slug");
+  return getThemeRecordText(record, "filter_value")
+    || getThemeRecordText(record, "theme_tag")
+    || getThemeRecordText(record, "theme_tags")
+    || getThemeRecordText(record, "vibe_tag")
+    || getThemeRecordText(record, "vibe_tags")
+    || getThemeRecordText(record, "vibes")
+    || getThemeRecordText(record, "theme_slug");
 }
 
 function getThemeRecordDisplayOrder(record) {
@@ -1787,7 +1846,18 @@ function sortThemes(a, b) {
 }
 
 function getThemeFilter(theme) {
-  if (theme.filterType !== "theme_tag") {
+  const filterType = normalize(theme.filterType).replace(/\s/g, "_");
+
+  if (filterType === "vibe_tag" || filterType === "vibe_tags" || filterType === "vibes") {
+    return {
+      field: "vibes",
+      value: theme.filterValue,
+      label: theme.name,
+      matcher: "vibeTag"
+    };
+  }
+
+  if (filterType !== "theme_tag" && filterType !== "theme_tags" && filterType !== "theme") {
     return null;
   }
 
@@ -1804,7 +1874,9 @@ function updateThemeClearButton() {
     return;
   }
 
-  themeClearButton.hidden = !activeFilters.some((filter) => filter.field === "themeTags");
+  themeClearButton.hidden = !activeFilters.some((filter) =>
+    filter.field === "themeTags" || filter.field === "vibes"
+  );
 }
 
 function applyThemeFilter(theme) {
@@ -1815,7 +1887,7 @@ function applyThemeFilter(theme) {
   }
 
   activeFilters = activeFilters.filter((item) =>
-    item.field !== "themeTags" && item.field !== "themeLabel"
+    item.field !== "themeTags" && item.field !== "vibes" && item.field !== "themeLabel"
   );
   activeFilters.push(filter);
   updateFilterSummary();
@@ -1827,7 +1899,7 @@ function applyThemeFilter(theme) {
 
 function clearThemeFilter() {
   activeFilters = activeFilters.filter((filter) =>
-    filter.field !== "themeTags" && filter.field !== "themeLabel"
+    filter.field !== "themeTags" && filter.field !== "vibes" && filter.field !== "themeLabel"
   );
   updateFilterSummary();
   updateBrowseButtonStates();
@@ -2091,7 +2163,7 @@ document.addEventListener("click", (event) => {
   const genreMoreButton = event.target.closest(".genre-more-button");
 
   if (genreMoreButton) {
-    genreShowAll = true;
+    visibleGenreCount = Math.min(genreOptions.length, visibleGenreCount + 10);
     updateBrowseButtonStates();
     return;
   }
@@ -2099,7 +2171,7 @@ document.addEventListener("click", (event) => {
   const subgenreMoreButton = event.target.closest(".subgenre-more-button");
 
   if (subgenreMoreButton) {
-    visibleSubgenreCount = Math.min(40, visibleSubgenreCount + 8);
+    visibleSubgenreCount = Math.min(40, visibleSubgenreCount + 10);
     updateBrowseButtonStates();
     return;
   }

@@ -132,7 +132,9 @@ foreach ($row in $rows) {
   $title = Get-Field $row @("title")
   $artist = Get-Field $row @("artist")
   $categories = Get-Field $row @("categories")
+  $vibes = Get-Field $row @("vibes", "vibe", "vibe_tags", "vibe_tag")
   $socialSinging = Get-Field $row @("social_singing")
+  $version = Get-Field $row @("version", "song_version", "specific_version", "edition")
   $decade = Get-Field $row @("decade")
   $year = Get-Field $row @("year")
   $originalVocal = Get-Field $row @("original_vocal")
@@ -150,7 +152,7 @@ foreach ($row in $rows) {
 
   $decadeAliases = Get-DecadeAliases $decade
   $artistAliases = Get-ArtistAliases $artist
-  $searchText = Normalize-SearchText "$title $artist $($artistAliases -join ' ') $categories $socialSinging $decade $($decadeAliases -join ' ') $year $originalVocal"
+  $searchText = Normalize-SearchText "$title $artist $($artistAliases -join ' ') $categories $vibes $socialSinging $decade $($decadeAliases -join ' ') $year $originalVocal $version"
   $titleStarts = Normalize-SearchText $title
   $artistStarts = Normalize-SearchText $artist
   $compactFieldsList = New-Object System.Collections.Generic.List[string]
@@ -158,12 +160,14 @@ foreach ($row in $rows) {
   $compactArtist = $artistStarts -replace "\s", ""
   $compactArtistAliases = $artistAliases | ForEach-Object { (Normalize-SearchText $_) -replace "\s", "" }
   $compactCategories = (Normalize-SearchText $categories) -replace "\s", ""
+  $compactVibes = (Normalize-SearchText $vibes) -replace "\s", ""
   $compactSocialSinging = (Normalize-SearchText $socialSinging) -replace "\s", ""
   $compactDecade = (Normalize-SearchText $decade) -replace "\s", ""
   $compactYear = (Normalize-SearchText $year) -replace "\s", ""
   $compactOriginalVocal = (Normalize-SearchText $originalVocal) -replace "\s", ""
+  $compactVersion = (Normalize-SearchText $version) -replace "\s", ""
 
-  foreach ($compactField in @($compactTitle, $compactArtist) + $compactArtistAliases + @($compactCategories, $compactSocialSinging, $compactDecade, $compactYear, $compactOriginalVocal)) {
+  foreach ($compactField in @($compactTitle, $compactArtist) + $compactArtistAliases + @($compactCategories, $compactVibes, $compactSocialSinging, $compactDecade, $compactYear, $compactOriginalVocal, $compactVersion)) {
     if (-not [string]::IsNullOrWhiteSpace($compactField)) {
       $compactFieldsList.Add($compactField)
     }
@@ -191,12 +195,14 @@ foreach ($row in $rows) {
     $socialSinging.Trim(),
     (Get-RankingScore $rankingScore),
     $themeTags.Trim(),
-    $themeLabels.Trim()
+    $themeLabels.Trim(),
+    $version.Trim(),
+    $vibes.Trim()
   ))
 }
 
 $payload = [ordered]@{
-  version = 1
+  version = 2
   generatedAt = (Get-Date).ToUniversalTime().ToString("o")
   source = (Split-Path -Leaf $resolvedCsvPath)
   songs = [object[]]$indexedRows
