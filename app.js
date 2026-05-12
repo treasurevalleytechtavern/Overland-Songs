@@ -125,6 +125,13 @@ function getTagValues(value) {
     .filter(Boolean);
 }
 
+function getVersionValues(value) {
+  return String(value || "")
+    .split(";")
+    .map((version) => version.trim())
+    .filter(Boolean);
+}
+
 function songHasThemeTag(song, slug) {
   return getTagValues(song.themeTags).some((tag) => tag === slug);
 }
@@ -1224,9 +1231,9 @@ function renderSongRows(songList, query = "") {
     const themeLabelMarkup = themeLabel
       ? `<button class="song-theme-label song-theme-label-${getThemeLabelTone(themeLabel)}" type="button" data-theme-label="${escapeHtml(themeLabel)}">${escapeHtml(themeLabel)}</button>`
       : "";
-    const versionMarkup = song.version
-      ? `<span class="song-version-tile">${escapeHtml(song.version)}</span>`
-      : "";
+    const versionMarkup = getVersionValues(song.version)
+      .map((version) => `<span class="song-version-tile">${escapeHtml(version)}</span>`)
+      .join("");
 
     return `
     <tr>
