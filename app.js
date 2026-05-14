@@ -13,6 +13,7 @@ let browseButtons = document.querySelectorAll(".browse-button");
 const filterCategoryButtons = document.querySelectorAll(".filter-category-button");
 const filterGroups = document.querySelectorAll("[data-filter-group]");
 const clearFiltersButton = document.querySelector("#clear-filters");
+const jumpResultsButton = document.querySelector("#jump-results");
 const filterSummary = document.querySelector("#filter-summary");
 const genreButtons = document.querySelector("#genre-buttons");
 const subgenrePanel = document.querySelector("#subgenre-panel");
@@ -49,7 +50,7 @@ let songs = [];
 let searchTimer = 0;
 let requestNavigationStarted = false;
 let activeFilters = [];
-let activeFilterSection = "";
+let activeFilterSection = "vocal";
 let visibleGenreCount = 10;
 let visibleSubgenreCount = 10;
 let currentSearchMatches = [];
@@ -564,6 +565,19 @@ function updateFilterSectionVisibility() {
   });
 }
 
+function updateJumpResultsButton(count = 0) {
+  if (!jumpResultsButton) {
+    return;
+  }
+
+  const hasResults = count > 0 && resultsSection && !resultsSection.hidden;
+  jumpResultsButton.hidden = !hasResults;
+
+  if (hasResults) {
+    jumpResultsButton.textContent = `View ${count.toLocaleString()} result${count === 1 ? "" : "s"}`;
+  }
+}
+
 function updateBrowseButtonStates() {
   const activeGenre = getActiveGenreFilter();
 
@@ -709,17 +723,6 @@ function setFilterFromButton(button) {
     return;
   }
 
-  const isDuetFilter = field === "socialSinging" && normalize(value).replace(/\s/g, "") === "duets";
-  const isOriginalVocalFilter = field === "originalVocal";
-
-  if (isDuetFilter) {
-    activeFilters = activeFilters.filter((filter) => filter.field !== "originalVocal");
-  } else if (isOriginalVocalFilter) {
-    activeFilters = activeFilters.filter((filter) =>
-      !(filter.field === "socialSinging" && normalize(filter.value).replace(/\s/g, "") === "duets")
-    );
-  }
-
   if (field === "categories") {
     activeFilters = activeFilters.filter((filter) => filter.field !== "categoryDetail");
     visibleSubgenreCount = 10;
@@ -773,7 +776,7 @@ function removeFilter(field, value) {
 
 function clearFilters() {
   activeFilters = [];
-  activeFilterSection = "";
+  activeFilterSection = "vocal";
   visibleGenreCount = 10;
   visibleSubgenreCount = 10;
   updateFilterSummary();
@@ -1100,6 +1103,7 @@ function renderRequestSong(query) {
   `;
   emptyState.hidden = false;
   resultCount.textContent = "0 songs";
+  updateJumpResultsButton(0);
 }
 
 function openRequestSong(url) {
@@ -1140,6 +1144,7 @@ function hideSearchResults() {
     loadMoreButton.hidden = true;
   }
   resultCount.textContent = songs.length ? `${songs.length.toLocaleString()} songs loaded` : "Loading songs...";
+  updateJumpResultsButton(0);
 
   if (similarPanel) {
     similarPanel.hidden = true;
@@ -1357,6 +1362,7 @@ function renderVisibleSearchResults(matchCount, usedTypoMatching) {
   const shownText = `, showing 1-${visibleCount.toLocaleString()} of ${currentSearchMatches.length.toLocaleString()}, page ${currentPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
   const typoText = usedTypoMatching ? " including close matches" : "";
   resultCount.textContent = `${matchCount.toLocaleString()} song${matchCount === 1 ? "" : "s"}${typoText}${shownText}`;
+  updateJumpResultsButton(matchCount);
 }
 
 function renderSimilarSongs(matches, query, queryTerms) {
@@ -1521,6 +1527,7 @@ function render() {
       emptyState.textContent = "No songs match those filters.";
       emptyState.hidden = false;
       resultCount.textContent = "0 songs";
+      updateJumpResultsButton(0);
       return;
     }
 
@@ -2227,6 +2234,14 @@ if (clearFiltersButton) {
     clearFilters();
     window.clearTimeout(searchTimer);
     render();
+  });
+}
+
+if (jumpResultsButton) {
+  jumpResultsButton.addEventListener("click", () => {
+    if (resultsSection) {
+      resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   });
 }
 

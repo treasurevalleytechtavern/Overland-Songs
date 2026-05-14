@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css?v=20260511-version-chips">
+    <link rel="stylesheet" href="styles.css?v=20260513-vocal-first">
   </head>
   <body>
     <header class="site-header" aria-label="Overland Bar site navigation">
@@ -57,13 +57,23 @@
         <section class="browse-panel" aria-label="Filter songs">
           <p class="filter-kicker">Filters</p>
           <div class="filter-category-row" role="toolbar" aria-label="Filter categories">
+            <button class="filter-category-button" type="button" data-filter-section="vocal" aria-expanded="true" aria-controls="vocal-filter-group">Vocal</button>
             <button class="filter-category-button" type="button" data-filter-section="genre" aria-expanded="false" aria-controls="genre-filter-group">Genre</button>
             <button class="filter-category-button" type="button" data-filter-section="decade" aria-expanded="false" aria-controls="decade-filter-group">Decade</button>
-            <button class="filter-category-button" type="button" data-filter-section="vocal" aria-expanded="false" aria-controls="vocal-filter-group">Vocal</button>
             <button class="filter-category-button" type="button" data-filter-section="social" aria-expanded="false" aria-controls="social-filter-group">Duets &amp; Groups</button>
             <button class="clear-filters-button" id="clear-filters" type="button" hidden>Clear All</button>
+            <button class="jump-results-button" id="jump-results" type="button" hidden>View Results</button>
           </div>
           <div class="filter-summary" id="filter-summary" aria-live="polite" hidden></div>
+
+          <div class="browse-group browse-vocal" id="vocal-filter-group" data-filter-group="vocal">
+            <p class="browse-label">Vocal</p>
+            <div class="browse-buttons">
+              <button class="browse-button" type="button" data-search="female" data-field="originalVocal">Female</button>
+              <button class="browse-button" type="button" data-search="male" data-field="originalVocal">Male</button>
+              <button class="browse-button" type="button" data-search="mixed" data-field="originalVocal">Mixed</button>
+            </div>
+          </div>
 
           <div class="browse-group browse-genre" id="genre-filter-group" data-filter-group="genre" hidden>
             <p class="browse-label">Genre</p>
@@ -84,15 +94,6 @@
               <button class="browse-button" type="button" data-search="2000s" data-field="decade">2000s</button>
               <button class="browse-button" type="button" data-search="2010s" data-field="decade">2010s</button>
               <button class="browse-button" type="button" data-search="2020s" data-field="decade">2020s</button>
-            </div>
-          </div>
-
-          <div class="browse-group browse-vocal" id="vocal-filter-group" data-filter-group="vocal" hidden>
-            <p class="browse-label">Vocal</p>
-            <div class="browse-buttons">
-              <button class="browse-button" type="button" data-search="male" data-field="originalVocal">Male</button>
-              <button class="browse-button" type="button" data-search="female" data-field="originalVocal">Female</button>
-              <button class="browse-button" type="button" data-search="mixed" data-field="originalVocal">Mixed</button>
             </div>
           </div>
 
@@ -220,6 +221,6 @@
       <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260511-version-chips"></script>
+    <script src="app.js?v=20260513-vocal-first"></script>
   </body>
 </html>
