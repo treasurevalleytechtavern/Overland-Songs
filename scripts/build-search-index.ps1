@@ -105,6 +105,21 @@ function Get-ArtistAliases {
   $normalizedArtist = Normalize-SearchText $Artist
   $aliases = New-Object System.Collections.Generic.List[string]
 
+  if ($normalizedArtist.Contains("p nk")) {
+    $aliases.Add("Pink")
+    $aliases.Add(([string]$Artist).Replace("P!nk", "Pink"))
+  }
+
+  if ($normalizedArtist.Contains("too hort")) {
+    $aliases.Add("Too Short")
+    $aliases.Add(([string]$Artist).Replace("Too `$hort", "Too Short"))
+  }
+
+  if ($normalizedArtist.Contains("ty dolla ign")) {
+    $aliases.Add("Ty Dolla Sign")
+    $aliases.Add(([string]$Artist).Replace("Ty Dolla `$ign", "Ty Dolla Sign"))
+  }
+
   if ($normalizedArtist.Contains("the chicks")) {
     $aliases.Add("Dixie Chicks")
   }

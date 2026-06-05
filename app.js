@@ -2,9 +2,9 @@ const maxRenderedRows = 15;
 const minimumSearchLength = 2;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
-const songIndexUrl = "songs.index.json?v=20260510-vibes-version";
-const songCsvUrl = "songs.csv?v=20260510-vibes-version";
-const themeDaysUrl = "theme_days.csv?v=20260510-vibes-version";
+const songIndexUrl = "songs.index.json?v=20260604-artist-aliases";
+const songCsvUrl = "songs.csv?v=20260604-artist-aliases";
+const themeDaysUrl = "theme_days.csv?v=20260604-artist-aliases";
 
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
@@ -48,6 +48,8 @@ const topSongsBody = document.querySelector("#top-songs-results");
 
 let songs = [];
 let searchTimer = 0;
+let analyticsSearchTimer = 0;
+let lastTrackedSearch = null;
 let requestNavigationStarted = false;
 let activeFilters = [];
 let activeFilterSection = "vocal";
@@ -269,6 +271,108 @@ function waitForPaint() {
   });
 }
 
+function getCleanAnalyticsSearchTerm(searchTerm) {
+  return String(searchTerm || "").trim().slice(0, 100);
+}
+
+function trackKaraokeSearch(searchTerm, resultCount) {
+  const cleanSearchTerm = getCleanAnalyticsSearchTerm(searchTerm);
+  if (cleanSearchTerm.length < minimumSearchLength) return;
+
+  const normalizedResultCount = Number(resultCount) || 0;
+  const hasResults = normalizedResultCount > 0;
+
+  sendAnalyticsEvent("karaoke_search", {
+    search_term: cleanSearchTerm,
+    result_count: normalizedResultCount,
+    has_results: hasResults,
+    page_location: window.location.href,
+    page_title: document.title || "Karaoke Song Search",
+    content_group: "karaoke"
+  });
+
+  if (!hasResults) {
+    sendAnalyticsEvent("karaoke_no_results", {
+      search_term: cleanSearchTerm,
+      result_count: 0,
+      page_location: window.location.href,
+      page_title: document.title || "Karaoke Song Search",
+      content_group: "karaoke"
+    });
+  }
+}
+
+function sendAnalyticsEvent(eventName, params) {
+  if (typeof gtag === "function") {
+    gtag("event", eventName, params);
+    return;
+  }
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", eventName, params);
+    return;
+  }
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(["event", eventName, params]);
+}
+
+function scheduleKaraokeSearchTracking(searchTerm, resultCount) {
+  const cleanSearchTerm = getCleanAnalyticsSearchTerm(searchTerm);
+
+  if (cleanSearchTerm.length < minimumSearchLength) {
+    window.clearTimeout(analyticsSearchTimer);
+    return;
+  }
+
+  const normalizedResultCount = Number(resultCount) || 0;
+  const nextSearch = {
+    searchTerm: cleanSearchTerm,
+    resultCount: normalizedResultCount
+  };
+
+  if (
+    lastTrackedSearch
+    && lastTrackedSearch.searchTerm === nextSearch.searchTerm
+    && lastTrackedSearch.resultCount === nextSearch.resultCount
+  ) {
+    return;
+  }
+
+  window.clearTimeout(analyticsSearchTimer);
+  analyticsSearchTimer = window.setTimeout(() => {
+    trackKaraokeSearch(nextSearch.searchTerm, nextSearch.resultCount);
+    lastTrackedSearch = nextSearch;
+  }, 1000);
+}
+
+function trackAnalyticsElement(trackedElement) {
+  if (!trackedElement) return;
+
+  const eventName = trackedElement.dataset.analyticsEvent || "";
+  if (!eventName) return;
+
+  if (eventName === "karaoke_result_click") {
+    sendAnalyticsEvent(eventName, {
+      song_title: trackedElement.dataset.songTitle || "",
+      artist_name: trackedElement.dataset.artistName || "",
+      search_term: getCleanAnalyticsSearchTerm(currentSearchQuery),
+      page_location: window.location.href,
+      content_group: "karaoke"
+    });
+    return;
+  }
+
+  sendAnalyticsEvent(eventName, {
+    event_category: trackedElement.dataset.analyticsCategory || "engagement",
+    event_label: trackedElement.dataset.analyticsLabel || trackedElement.textContent.trim(),
+    link_url: trackedElement.href || "",
+    page_location: window.location.href,
+    page_title: document.title || "Karaoke Song Search",
+    content_group: "karaoke"
+  });
+}
+
 function getDecadeAliases(value) {
   const decade = normalize(value);
   const aliases = new Set();
@@ -307,6 +411,21 @@ function deriveDecadeFromYear(value) {
 function getArtistAliases(artist) {
   const normalizedArtist = normalize(artist);
   const aliases = new Set();
+
+  if (normalizedArtist.includes("p nk")) {
+    aliases.add("Pink");
+    aliases.add(String(artist || "").replace(/P!nk/gi, "Pink"));
+  }
+
+  if (normalizedArtist.includes("too hort")) {
+    aliases.add("Too Short");
+    aliases.add(String(artist || "").replace(/Too \$hort/gi, "Too Short"));
+  }
+
+  if (normalizedArtist.includes("ty dolla ign")) {
+    aliases.add("Ty Dolla Sign");
+    aliases.add(String(artist || "").replace(/Ty Dolla \$ign/gi, "Ty Dolla Sign"));
+  }
 
   if (normalizedArtist.includes("the chicks")) {
     aliases.add("Dixie Chicks");
@@ -1104,6 +1223,7 @@ function renderRequestSong(query) {
   emptyState.hidden = false;
   resultCount.textContent = "0 songs";
   updateJumpResultsButton(0);
+  scheduleKaraokeSearchTracking(query, 0);
 }
 
 function openRequestSong(url) {
@@ -1234,7 +1354,7 @@ function renderSongRows(songList, query = "") {
   return songList.map((song) => {
     const themeLabel = getThemeLabelForSong(song, activeThemeSlug);
     const themeLabelMarkup = themeLabel
-      ? `<button class="song-theme-label song-theme-label-${getThemeLabelTone(themeLabel)}" type="button" data-theme-label="${escapeHtml(themeLabel)}">${escapeHtml(themeLabel)}</button>`
+      ? `<button class="song-theme-label song-theme-label-${getThemeLabelTone(themeLabel)}" type="button" data-theme-label="${escapeHtml(themeLabel)}" data-analytics-event="karaoke_result_click" data-song-title="${escapeHtml(song.title)}" data-artist-name="${escapeHtml(song.artist)}">${escapeHtml(themeLabel)}</button>`
       : "";
     const versionMarkup = getVersionValues(song.version)
       .map((version) => `<span class="song-version-tile">${escapeHtml(version)}</span>`)
@@ -1528,6 +1648,7 @@ function render() {
       emptyState.hidden = false;
       resultCount.textContent = "0 songs";
       updateJumpResultsButton(0);
+      scheduleKaraokeSearchTracking(query, 0);
       return;
     }
 
@@ -1547,6 +1668,7 @@ function render() {
 
   renderVisibleSearchResults(matchCount, usedTypoMatching);
   renderSimilarSongs(matchCount > 0 && matchCount < 5 ? currentSearchMatches : [], query, queryTerms);
+  scheduleKaraokeSearchTracking(query, matchCount);
 }
 
 function getHeaderIndex(headers, names) {
@@ -2156,6 +2278,12 @@ searchInput.addEventListener("input", () => {
 });
 
 document.addEventListener("click", (event) => {
+  const trackedElement = event.target.closest("[data-analytics-event]");
+
+  if (trackedElement) {
+    trackAnalyticsElement(trackedElement);
+  }
+
   const filterCategoryButton = event.target.closest(".filter-category-button");
 
   if (filterCategoryButton) {

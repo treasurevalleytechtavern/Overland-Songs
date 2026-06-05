@@ -4,6 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Good Times Karaoke Song Search</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TS0EGMSRPN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TS0EGMSRPN', {
+        page_title: 'Karaoke Song Search',
+        content_group: 'karaoke'
+      });
+    </script>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -18,7 +30,7 @@
         <a href="https://overlandbar.com/">Home</a>
         <a href="https://overlandbar.com/menu">Menu</a>
         <a href="https://overlandbar.com/review">Leave a Review</a>
-        <a href="https://overlandbar.com/song-issue">Report a Song Issue</a>
+        <a href="https://overlandbar.com/song-issue" data-analytics-event="feedback_click" data-analytics-category="karaoke" data-analytics-label="Report a Song Issue">Report a Song Issue</a>
       </nav>
     </header>
 
@@ -218,9 +230,9 @@
     <footer class="site-credit-footer">
       <p class="catalogue-note">Search the online list. Deep cuts? Ask the KJ.</p>
       <p class="powered-by">Powered by <a href="https://treasurevalleytechtavern.com/">Treasure Valley Tech Tavern</a></p>
-      <a class="footer-report-link" href="https://overlandbar.com/song-issue">Report a Song Issue</a>
+      <a class="footer-report-link" href="https://overlandbar.com/song-issue" data-analytics-event="feedback_click" data-analytics-category="karaoke" data-analytics-label="Report a Song Issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260513-vocal-first"></script>
+    <script src="app.js?v=20260604-artist-aliases"></script>
   </body>
 </html>
