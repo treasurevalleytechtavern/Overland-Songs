@@ -65,7 +65,7 @@
 500,I Choose You,Forest Blakk,2023,2020s,Male,"Pop, Adult Contemporary, Singer-Songwriter",,,,,,I Choose YouForest Blakk
 500,Juno,Sabrina Carpenter,2024,2020s,Female,"Pop, Dance-Pop, Electropop",,,,,,JunoSabrina Carpenter
 500,Lil Darlin,ZZ Ward,2012,2010s,Female,"Blues, R&B",,,,,,Lil DarlinZZ Ward
-500,Long Hot Summer Day,Turnpike Troubadours,2009,2000s,Male,"Country, Country Rock, Alt-Country, Americana, Red Dirt",,,,4th-of-july,"Summer Cookout, Country Roads",Long Hot Summer DayTurnpike Troubadours
+500,Long Hot Summer Day,Turnpike Troubadours,2009,2000s,Male,"Country, Country Rock, Alt-Country, Americana, Red Dirt",,,,4th-of-july,Summer Cookout,Long Hot Summer DayTurnpike Troubadours
 500,Lost,Bailey Zimmerman,2025,2020s,Male,"Country, Contemporary Country, Country Pop",,,,,,LostBailey Zimmerman
 500,Lost on You,LP,2015,2010s,Male,Pop,,,,,,Lost on YouLP
 500,Missin' You Like This,Post Malone,2024,2020s,Male,"R&B, Hip-Hop, Pop Rap, Trap, Country",,,,,,Missin' You Like ThisPost Malone
@@ -161,13 +161,13 @@
 253,Back to Black,Amy Winehouse,2006,2000s,Female,"Jazz, Soul, R&B, Contemporary R&B, Neo-Soul",,with vocals,Breakup Anthem,,,Back to BlackAmy Winehouse
 253,Whiskey Lullaby,Brad Paisley & Alison Krauss,2003,2000s,Mixed,"Country, Contemporary Country, Country Pop, Americana, Folk",Duets,,,,,Whiskey LullabyBrad Paisley & Alison Krauss
 252,In Color,Jamey Johnson,2008,2000s,Male,Country,,,,,,In ColorJamey Johnson
-321,Summer Nights,Olivia Newton-John & John Travolta,1978,70s,Mixed,"Pop, Rock & Roll, Musical Theatre, Show Tune, Soundtrack",Duets,Alt Version; Grease Soundtrack,,4th-of-july,"Summer Cookout, Block Party",Summer NightsOlivia Newton-John & John Travolta
+321,Summer Nights,Olivia Newton-John & John Travolta,1978,70s,Mixed,"Pop, Rock & Roll, Musical Theatre, Show Tune, Soundtrack",Duets,Alt Version; Grease Soundtrack,,4th-of-july,Block Party,Summer NightsOlivia Newton-John & John Travolta
 249,Walkin' After Midnight,Patsy Cline,1967,60s,Female,"Country, Americana, Outlaw Country, Gospel",,,,,,Walkin' After MidnightPatsy Cline
 248,I Am a Man of Constant Sorrow,The Soggy Bottom Boys,2003,2000s,Male,"Country, Alt-Country, Americana",,,,,,I Am a Man of Constant SorrowThe Soggy Bottom Boys
 1,Brown Eyed Girl,Reel Big Fish,2009,2000s,Male,"Rock, Punk, Ska, Reggae",Group Songs,,,,,Brown Eyed GirlReel Big Fish
 248,Stay,Rihanna,2013,2010s,Female,"Pop, Dance-Pop, Electropop, R&B, Hip-Hop",,,,,,StayRihanna
 247,Say It Ain't So,Weezer,1992,90s,Male,"Rock, Pop Rock, Alternative Rock, Emo",,,,,,Say It Ain't SoWeezer
-242,Chicken Fried,Zac Brown Band,2005,2000s,Male,"Country, Modern Country, Pop",,,,4th-of-july,"Country Roads, Summer Cookout",Chicken FriedZac Brown Band
+242,Chicken Fried,Zac Brown Band,2005,2000s,Male,"Country, Modern Country, Pop",,,,4th-of-july,Summer Cookout,Chicken FriedZac Brown Band
 240,Big Balls,AC/DC,1976,70s,Male,"Rock, Classic Rock, Hard Rock, Alternative Rock, Art Pop",,,,,,Big BallsAC/DC
 239,My Immortal,Evanescence,1998,90s,Female,"Rock, Alternative Rock, Pop",,,,,,My ImmortalEvanescence
 239,No Diggity,Blackstreet,1997,90s,Male,"R&B, Contemporary R&B, Hip-Hop",Duets,,,,,No DiggityBlackstreet
@@ -183,7 +183,7 @@
 229,Should've Been a Cowboy,Toby Keith,1993,90s,Male,"Country, Country Pop",,,,,,Should've Been a CowboyToby Keith
 229,Blue,LeAnn Rimes,1993,90s,Female,"Country, Country Pop, Pop Rock",,,,,,BlueLeAnn Rimes
 228,You Are My Sunshine,The Dead South,2021,2020s,Male,"Country, Alt-Country, Americana, Bluegrass, Folk",,,,,,You Are My SunshineThe Dead South
-227,Ring of Fire,Johnny Cash,1981,80s,Male,"Country, Americana, Outlaw Country, Blues, Folk",,,,4th-of-july,"Fireworks, Country Roads",Ring of FireJohnny Cash
+227,Ring of Fire,Johnny Cash,1981,80s,Male,"Country, Americana, Outlaw Country, Blues, Folk",,,,4th-of-july,Fireworks,Ring of FireJohnny Cash
 225,Like a Stone,Audioslave,2002,2000s,Male,"Rock, Hard Rock, Alternative Rock, Heavy Metal, Alternative Metal",,,,,,Like a StoneAudioslave
 224,Much Too Young (to Feel This Damn Old),Garth Brooks,1986,80s,Male,"Country, Country Pop",,,,,,Much Too Young (to Feel This Damn Old)Garth Brooks
 224,Pink Pony Club,Chappell Roan,2020,2020s,Female,"Pop, Dance-Pop, Synth-Pop",,,,,,Pink Pony ClubChappell Roan
@@ -274,7 +274,7 @@
 155,Flowers,Miley Cyrus,2023,2020s,Female,"Pop, Dance-Pop, Pop Rock, Funk",,,Breakup Anthem,,,FlowersMiley Cyrus
 155,Hit Me With Your Best Shot,Pat Benatar,1980,80s,Female,"Pop, Pop Rock, Classic Rock",,,,,,Hit Me With Your Best ShotPat Benatar
 155,My Heart Will Go On,Céline Dion,1996,90s,Female,"Pop, Dance-Pop, Soft Rock, Adult Contemporary, Folk Rock",,Club Mix,Diva Moment,,,My Heart Will Go OnCéline Dion
-154,Honky Tonk Badonkadonk,Trace Adkins,2005,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,Guilty Pleasure,4th-of-july,"Country Roads, Block Party",Honky Tonk BadonkadonkTrace Adkins
+154,Honky Tonk Badonkadonk,Trace Adkins,2005,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,Guilty Pleasure,4th-of-july,Block Party,Honky Tonk BadonkadonkTrace Adkins
 154,I Touch Myself,Divinyls,1990,90s,Female,"Pop, Rock, New Wave",,,"Guilty Pleasure, One-Hit Wonder",,,I Touch MyselfDivinyls
 154,Welcome to My World,Jim Reeves,1963,60s,Male,"Country, Country Pop",,,,,,Welcome to My WorldJim Reeves
 4,Fooled Around and Fell in Love,Miranda Lambert ft. Friends,2019,2010s,Female,"Country, Contemporary Country, Modern Country, Country Pop, Alt-Country",Group Songs,,,,,Fooled Around and Fell in LoveMiranda Lambert ft. Friends
@@ -289,13 +289,13 @@
 210,Free Fallin',Tom Petty & The Heartbreakers,1991,90s,Male,"Rock, Pop Rock, Classic Rock, Heartland Rock, Southern Rock",Group Songs,,Dad Rock,4th-of-july,Freedom Rock,Free Fallin'Tom Petty & The Heartbreakers
 146,Loud and Heavy,Cody Jinks,2015,2010s,Male,"Country, Americana, Outlaw Country",,,,,,Loud and HeavyCody Jinks
 145,Fuck You,Cee Lo Green,2010,2010s,Male,"Pop, Soul, R&B, Contemporary R&B, Hip-Hop",,Instrumental,,,,Fuck YouCee Lo Green
-145,Pour Some Sugar on Me,Def Leppard,1988,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock, Alternative Rock",,,Dad Rock,4th-of-july,"Block Party, Freedom Rock",Pour Some Sugar on MeDef Leppard
+145,Pour Some Sugar on Me,Def Leppard,1988,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock, Alternative Rock",,,Dad Rock,4th-of-july,Freedom Rock,Pour Some Sugar on MeDef Leppard
 145,Take These Chains From My Heart,Hank Williams,1970,70s,Male,"Country, Americana, Outlaw Country, Blues, Folk",,,,,,Take These Chains From My HeartHank Williams
 144,Stay,Sugarland,2006,2000s,Mixed,"Country, Contemporary Country, Modern Country, Folk, Rock",,,,,,StaySugarland
 144,Wanted Dead or Alive,Bon Jovi,1988,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock, Glam Metal",,,Dad Rock,,,Wanted Dead or AliveBon Jovi
 143,Brandy (You're a Fine Girl),Looking Glass,1972,70s,Male,"Pop, Pop Rock, Soft Rock",,,One-Hit Wonder,,,Brandy (You're a Fine Girl)Looking Glass
 143,Flagpole Sitta,Harvey Danger,1996,90s,Male,"Blues, Punk, Alternative Rock, Indie Rock",,,One-Hit Wonder,,,Flagpole SittaHarvey Danger
-560,Friends in Low Places,Garth Brooks,1990,90s,Male,"Country, Country Pop",Group Songs,,,4th-of-july,"Country Roads, Block Party",Friends in Low PlacesGarth Brooks
+560,Friends in Low Places,Garth Brooks,1990,90s,Male,"Country, Country Pop",Group Songs,,,4th-of-july,Block Party,Friends in Low PlacesGarth Brooks
 142,Cult of Personality,Living Colour,1988,80s,Male,"Rock, Hard Rock, Alternative Rock, Alternative Metal",,,,,,Cult of PersonalityLiving Colour
 142,Down Came a Blackbird,Lila McCann,1997,90s,Female,Country,,,,,,Down Came a BlackbirdLila McCann
 141,Make You Feel My Love,Adele,2008,2000s,Female,"Pop, Dance-Pop, Soul, R&B",,,,,,Make You Feel My LoveAdele
@@ -349,7 +349,7 @@
 127,Longview,Green Day,1994,90s,Male,"Rock, Alternative Rock, Punk, Punk Rock, Pop Punk",,,,,,LongviewGreen Day
 127,Roses Are Falling,Orville Peck,2019,2010s,Male,"Country, Alt-Country, Alternative Rock, Indie Rock",,,,,,Roses Are FallingOrville Peck
 126,1985,Bowling for Soup,2004,2000s,Male,"Punk, Punk Rock, Pop Punk, Emo, Alternative Rock",,,,,,1985Bowling for Soup
-126,God Bless the U.S.A.,Lee Greenwood,1998,90s,Male,"Country, Singer-Songwriter",,,,4th-of-july,Patriotic Staples,God Bless the U.S.A.Lee Greenwood
+126,God Bless the U.S.A.,Lee Greenwood,1998,90s,Male,"Country, Singer-Songwriter",,,,4th-of-july,"Red, White & Blue",God Bless the U.S.A.Lee Greenwood
 126,Who Knew,P!nk,2006,2000s,Female,"Pop, Dance-Pop, Electropop, Pop Rock",,Lead vocal,,,,Who KnewP!nk
 125,Hands on You,Ashley Monroe,2018,2010s,Female,"Country, Contemporary Country, Americana",,,,,,Hands on YouAshley Monroe
 125,My Church,Maren Morris,2015,2010s,Female,"Country, Country Pop",,,,,,My ChurchMaren Morris
@@ -379,7 +379,7 @@
 120,Mama Mia,ABBA,1999,90s,Female,"Pop, Dance-Pop, Disco",,DJ,,,,Mama MiaABBA
 120,Some of It,Eric Church,2018,2010s,Male,Country,,,,,,Some of ItEric Church
 120,Tequila,The Champs,1975,70s,Male,"Rock, Rock & Roll",,,,may-the-4th,,TequilaThe Champs
-119,Watermelon Crawl,Tracy Byrd,1994,90s,Male,"Country, Country Pop",,,,4th-of-july,"Summer Cookout, Country Roads",Watermelon CrawlTracy Byrd
+119,Watermelon Crawl,Tracy Byrd,1994,90s,Male,"Country, Country Pop",,,,4th-of-july,Summer Cookout,Watermelon CrawlTracy Byrd
 118,Betty Davis Eyes,Kim Carnes,2010,2010s,Female,"Pop, Pop Rock, Adult Contemporary, Country Pop",,,,,,Betty Davis EyesKim Carnes
 118,Don't You (Forget About Me),Simple Minds,1985,80s,Male,"Pop, Synth-Pop, Pop Rock, New Wave",,,,,,Don't You (Forget About Me)Simple Minds
 118,"Honey, I'm Home",Shania Twain,1997,90s,Female,"Country, Country Pop, Pop Rock",,,,,,"Honey, I'm HomeShania Twain"
@@ -398,7 +398,7 @@
 115,I Believe in a Thing Called Love,The Darkness,2004,2000s,Male,,,,,,,I Believe in a Thing Called LoveThe Darkness
 115,Landing in London,3 Doors Down ft. Bob Seger,2005,2000s,Male,Rock,,,,,,Landing in London3 Doors Down ft. Bob Seger
 115,No Rain,Blind Melon,1992,90s,Male,"Rock, Pop Rock, Grunge, Alternative Rock",,,One-Hit Wonder,,,No RainBlind Melon
-115,Summer of '69,Bryan Adams,1988,80s,Male,"Pop, Pop Rock, Classic Rock",,,Dad Rock,4th-of-july,"Summer Cookout, Freedom Rock",Summer of '69Bryan Adams
+115,Summer of '69,Bryan Adams,1988,80s,Male,"Pop, Pop Rock, Classic Rock",,,Dad Rock,4th-of-july,Freedom Rock,Summer of '69Bryan Adams
 115,The Gambler,Kenny Rogers,1978,70s,Male,"Country, Country Pop, Adult Contemporary, Rock",,,,,,The GamblerKenny Rogers
 115,When You Say Nothing at All,Alison Krauss & Union Station,1994,90s,Mixed,"Country, Alt-Country, Americana, Bluegrass",,,,,,When You Say Nothing at AllAlison Krauss & Union Station
 114,Can't You See,The Marshall Tucker Band,1994,90s,Male,"Pop, Pop Rock, Country, Country Rock, Blues Rock",,,,,,Can't You SeeThe Marshall Tucker Band
@@ -408,7 +408,7 @@
 114,Meet Virginia,Train,1996,90s,Male,"Pop, Pop Rock, Alternative Rock, Electronic",,,,,,Meet VirginiaTrain
 114,Something to Talk About,Bonnie Raitt,1991,90s,Female,"Pop, Blues, Country, Blues Rock",,,,,,Something to Talk AboutBonnie Raitt
 113,Collide,Howie Day,2003,2000s,Male,"Rock, Alternative Rock",,,,,,CollideHowie Day
-113,Dixieland Delight,Alabama,1983,80s,Male,"Country, Country Pop, Alt-Country",,,,4th-of-july,"Country Roads, Block Party",Dixieland DelightAlabama
+113,Dixieland Delight,Alabama,1983,80s,Male,"Country, Country Pop, Alt-Country",,,,4th-of-july,Block Party,Dixieland DelightAlabama
 113,The Freshman,Verve Pipe,1999,90s,Male,"Pop, Pop Rock, Post-Grunge, Alternative Rock, Indie Rock",,,,,,The FreshmanVerve Pipe
 113,The One I Loved Back Then,George Jones,1989,80s,Male,"Country, Americana, Outlaw Country",,,,,,The One I Loved Back ThenGeorge Jones
 113,The Ride,David Allan Coe,1983,80s,Male,"Country, Americana, Outlaw Country",,,,,,The RideDavid Allan Coe
@@ -428,7 +428,7 @@
 110,Chasing Cars,Snow Patrol,2005,2000s,Male,"Pop, Pop Rock, Alternative Rock, Indie Rock",,,,,,Chasing CarsSnow Patrol
 110,Don't Let Me Down,The Beatles,1987,80s,Male,"Pop, Pop Rock, Classic Rock, Britpop",,,,,,Don't Let Me DownThe Beatles
 110,Here Without You,3 Doors Down,2000,2000s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock, Alternative Metal",,,Dad Rock,,,Here Without You3 Doors Down
-110,Independence Day,Martina McBride,1993,90s,Female,"Country, Country Pop, Bluegrass",,,,4th-of-july,Patriotic Staples,Independence DayMartina McBride
+110,Independence Day,Martina McBride,1993,90s,Female,"Country, Country Pop, Bluegrass",,,,4th-of-july,"Red, White & Blue",Independence DayMartina McBride
 110,Into the Great Wide Open,Tom Petty,1996,90s,Male,"Rock, Pop Rock, Heartland Rock, Southern Rock",,,Dad Rock,,,Into the Great Wide OpenTom Petty
 110,Look at You Girl,Chris LeDoux,1992,90s,Male,Country,,,,,,Look at You GirlChris LeDoux
 110,Part of Your World,The Little Mermaid,1989,80s,Female,"Musical Theatre, Show Tune, Disney, Soundtrack",,Disney,,,,Part of Your WorldThe Little Mermaid
@@ -464,7 +464,7 @@
 107,Bruises,Train,2018,2010s,Male,"Rock, Pop Rock, Alternative Rock",,,,,,BruisesTrain
 107,Burning Down the House,Talking Heads,1983,80s,Male,Rock,,,,,,Burning Down the HouseTalking Heads
 107,Fat Bottomed Girls,Queen,1981,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,Dad Rock,,,Fat Bottomed GirlsQueen
-107,Fishin' in the Dark,The Nitty Gritty Dirt Band,1991,90s,Male,"Country, Country Rock, Bluegrass, Folk, Folk Rock",,,,4th-of-july,"Country Roads, Summer Cookout",Fishin' in the DarkThe Nitty Gritty Dirt Band
+107,Fishin' in the Dark,The Nitty Gritty Dirt Band,1991,90s,Male,"Country, Country Rock, Bluegrass, Folk, Folk Rock",,,,4th-of-july,Summer Cookout,Fishin' in the DarkThe Nitty Gritty Dirt Band
 107,Hurricane,Luke Combs,2015,2010s,Male,"Country, Contemporary Country, Country Pop",,,,,,HurricaneLuke Combs
 107,Shoop,Salt-N-Pepa,1993,90s,Female,"Pop, Hip-Hop, Pop Rap, Electronic",,,,,,ShoopSalt-N-Pepa
 107,The Way,Fastball,1998,90s,Male,"Pop, Pop Rock, Folk Rock, Alternative Rock",,,,,,The WayFastball
@@ -506,7 +506,7 @@
 103,More Than Words,Extreme,1991,90s,Male,"Pop, Pop Rock, Hard Rock, Glam Metal, Alternative Metal",,,,,,More Than WordsExtreme
 103,My Humps,The Black Eyed Peas,2005,2000s,Mixed,"Pop, Dance-Pop, Hip-Hop, Pop Rap, Electronic",,,Guilty Pleasure,,,My HumpsThe Black Eyed Peas
 103,Need You Now,Lady A (formerly Lady Antebellum),2009,2000s,Mixed,"Country, Contemporary Country, Country Pop",Duets,,,,,Need You NowLady A (formerly Lady Antebellum)
-103,Save a Horse (Ride a Cowboy),Big & Rich,2004,2000s,Male,"Country, Contemporary Country, Modern Country, Alt-Country, Rock",,,Guilty Pleasure,4th-of-july,"Country Roads, Block Party",Save a Horse (Ride a Cowboy)Big & Rich
+103,Save a Horse (Ride a Cowboy),Big & Rich,2004,2000s,Male,"Country, Contemporary Country, Modern Country, Alt-Country, Rock",,,Guilty Pleasure,4th-of-july,Block Party,Save a Horse (Ride a Cowboy)Big & Rich
 102,I Had Some Help,Post Malone & Morgan Wallen,2024,2020s,Male,"Country, Country Pop",Duets,,,,,I Had Some HelpPost Malone & Morgan Wallen
 102,If You Could Only See,Tonic,1996,90s,Male,"Rock, Pop Rock, Alternative Rock, Indie Rock",,,,,,If You Could Only SeeTonic
 102,I'll Be,Edwin McCain,1997,90s,Male,"Pop, Pop Rock, Singer-Songwriter, Alternative Rock",,,,,,I'll BeEdwin McCain
@@ -573,7 +573,7 @@
 97,Whiskey Glasses,Morgan Wallen,2016,2010s,Male,"Country, Contemporary Country, Country Pop",,,,,,Whiskey GlassesMorgan Wallen
 97,Why'd You Only Call Me When You're High?,Arctic Monkeys,2013,2010s,Male,"Rock, Alternative Rock, Indie Rock, Garage Rock, Pop",,,,,,Why'd You Only Call Me When You're High?Arctic Monkeys
 97,Wide Open Spaces,The Chicks (formerly The Dixie Chicks),1998,90s,Female,Country,,,,,,Wide Open SpacesThe Chicks (formerly The Dixie Chicks)
-97,"Wine, Beer, Whiskey",Little Big Town,2020,2020s,Female,Country,,,,4th-of-july,"Country Roads, Summer Cookout","Wine, Beer, WhiskeyLittle Big Town"
+97,"Wine, Beer, Whiskey",Little Big Town,2020,2020s,Female,Country,,,,4th-of-july,Summer Cookout,"Wine, Beer, WhiskeyLittle Big Town"
 96,Give It Away,Red Hot Chili Peppers,1991,90s,Male,"Rock, Pop Rock, Alternative Rock, Funk",,,,,,Give It AwayRed Hot Chili Peppers
 96,Longhaired Redneck,David Allan Coe,1976,70s,Male,"Country, Americana, Outlaw Country",,,,,,Longhaired RedneckDavid Allan Coe
 96,Man in the Box,Alice in Chains,1992,90s,Male,"Rock, Hard Rock, Alternative Rock, Glam Metal, Alternative Metal",,,,,,Man in the BoxAlice in Chains
@@ -668,10 +668,10 @@
 86,Cheap Sunglasses,ZZ Top,1979,70s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Southern Rock",,,Dad Rock,,,Cheap SunglassesZZ Top
 86,Life in the Fast Lane,The Eagles,1976,70s,Male,"Rock, Classic Rock",,,Dad Rock,,,Life in the Fast LaneThe Eagles
 86,Linger,The Cranberries,1994,90s,Female,"Pop, Folk, Alternative Rock",,,,,,LingerThe Cranberries
-86,Sex on Fire,Kings of Leon,2008,2000s,Male,"Pop, Pop Rock, Punk, Alternative Rock, Indie Rock, Garage Rock",,,,4th-of-july,"Fireworks, Block Party",Sex on FireKings of Leon
+86,Sex on Fire,Kings of Leon,2008,2000s,Male,"Pop, Pop Rock, Punk, Alternative Rock, Indie Rock, Garage Rock",,,,4th-of-july,Fireworks,Sex on FireKings of Leon
 86,She Talks to Angels,The Black Crowes,1991,90s,Male,"Rock, Hard Rock, Blues Rock, Southern Rock",,,,,,She Talks to AngelsThe Black Crowes
 86,Sick and Tired,Cross Canadian Ragweed,2004,2000s,Male,"Country, Alt-Country, Americana, Red Dirt, Folk",,,,,,Sick and TiredCross Canadian Ragweed
-86,The Fireman,George Strait,1984,80s,Male,"Country, Country Pop",,,,4th-of-july,"Fireworks, Country Roads",The FiremanGeorge Strait
+86,The Fireman,George Strait,1984,80s,Male,"Country, Country Pop",,,,4th-of-july,Fireworks,The FiremanGeorge Strait
 85,A Symptom of Being Human,Shinedown,2022,2020s,Male,Pop,,,,,,A Symptom of Being HumanShinedown
 85,Brain Stew,Green Day,1995,90s,Male,"Rock, Alternative Rock, Punk, Punk Rock",,,,,,Brain StewGreen Day
 85,Branded Man,Merle Haggard,1981,80s,Male,"Country, Americana, Outlaw Country, Singer-Songwriter",,,,,,Branded ManMerle Haggard
@@ -861,7 +861,7 @@
 62,One Last Breath,Creed,2001,2000s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock",,,Dad Rock,,,One Last BreathCreed
 61,Add It Up,Violent Femmes,1983,80s,Male,"Rock, Folk Rock, Alternative Rock, Indie Rock, New Wave",,,,,,Add It UpViolent Femmes
 61,Adventure of a Lifetime,Coldplay,2015,2010s,Male,"Pop, Pop Rock, Art Pop, Alternative Rock",,,,,,Adventure of a LifetimeColdplay
-61,American Honey,Lady A (formerly Lady Antebellum),2010,2010s,Mixed,"Country, Contemporary Country, Country Pop",,,,4th-of-july,"Red White & Blue, Country Roads",American HoneyLady A (formerly Lady Antebellum)
+61,American Honey,Lady A (formerly Lady Antebellum),2010,2010s,Mixed,"Country, Contemporary Country, Country Pop",,,,4th-of-july,Red White & Blue,American HoneyLady A (formerly Lady Antebellum)
 61,Big Iron,Marty Robbins,1959,50s,Male,"Country, Americana, Outlaw Country",,,,,,Big IronMarty Robbins
 3,I Love Rock 'n' Roll,Britney Spears,2001,2000s,Female,"Pop, Dance-Pop, Teen Pop",Group Songs,,,,,I Love Rock 'n' RollBritney Spears
 61,Gimme Three Steps,Lynyrd Skynyrd,1973,70s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Southern Rock",,,Dad Rock,,,Gimme Three StepsLynyrd Skynyrd
@@ -976,7 +976,7 @@
 42,50 Ways to Leave Your Lover,Paul Simon,1975,70s,Male,"Pop, Pop Rock, Folk, Classic Rock",,,,,,50 Ways to Leave Your LoverPaul Simon
 42,A Woman Like You,Lee Brice,2011,2010s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,,,,A Woman Like YouLee Brice
 42,Chasing Pavements,Adele,2007,2000s,Female,"Pop, Dance-Pop",,,,,,Chasing PavementsAdele
-42,Country Girl (Shake It for Me),Luke Bryan,2011,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,"Country Roads, Block Party",Country Girl (Shake It for Me)Luke Bryan
+42,Country Girl (Shake It for Me),Luke Bryan,2011,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,Block Party,Country Girl (Shake It for Me)Luke Bryan
 42,Hemorrhage (in My Hands),Fuel,2000,2000s,Male,"Rock, Alternative Rock",,,,,,Hemorrhage (in My Hands)Fuel
 42,Silent Lucidity,Queensrÿche,1991,90s,Male,"Metal, Heavy Metal",,,Power Ballad,,,Silent LucidityQueensrÿche
 41,Barbie Girl,Aqua,1997,90s,Mixed,"Pop, Dance-Pop, Electronic, Dance, House",,,"Guilty Pleasure, One-Hit Wonder",,,Barbie GirlAqua
@@ -997,7 +997,7 @@
 40,Girlfriend,Avril Lavigne,2007,2000s,Female,"Pop, Teen Pop, Pop Rock, Alternative Rock",,Radio,,,,GirlfriendAvril Lavigne
 40,Jessie's Girl,Rick Springfield,1980,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,,,,Jessie's GirlRick Springfield
 40,Maggie May,Rod Stewart,1977,70s,Male,"Pop, Pop Rock, Adult Contemporary, Blues Rock",,,,,,Maggie MayRod Stewart
-40,Pretty Good at Drinking Beer,Billy Currington,2010,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,"Country Roads, Summer Cookout",Pretty Good at Drinking BeerBilly Currington
+40,Pretty Good at Drinking Beer,Billy Currington,2010,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,Summer Cookout,Pretty Good at Drinking BeerBilly Currington
 40,Sk8er Boi,Avril Lavigne,2002,2000s,Female,"Pop, Teen Pop, Pop Rock, Alternative Rock",,,,,,Sk8er BoiAvril Lavigne
 40,Tennessee Whiskey,George Jones,1983,80s,Male,"Country, Americana, Outlaw Country",,,,,,Tennessee WhiskeyGeorge Jones
 40,The Battle of New Orleans,Johnny Horton,1959,50s,Male,"Country, Singer-Songwriter",,,,,,The Battle of New OrleansJohnny Horton
@@ -1030,7 +1030,7 @@
 39,Time Marches On,Tracy Lawrence,1996,90s,Male,"Country, Country Pop",,,,,,Time Marches OnTracy Lawrence
 39,What Kinda Gone,Chris Cagle,2007,2000s,Male,"Country, Modern Country, Country Pop",,,,,,What Kinda GoneChris Cagle
 39,You Are the Reason,Calum Scott,2017,2010s,Male,"Pop, Synth-Pop, Pop Rock, Electronic",,,,,,You Are the ReasonCalum Scott
-38,Beer Never Broke My Heart,Luke Combs,2019,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,"Country Roads, Summer Cookout",Beer Never Broke My HeartLuke Combs
+38,Beer Never Broke My Heart,Luke Combs,2019,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,Summer Cookout,Beer Never Broke My HeartLuke Combs
 38,Bluebird,Miranda Lambert,2019,2010s,Female,"Country, Country Rock, Alt-Country",,,,,,BluebirdMiranda Lambert
 38,Country Song,Seether,2011,2010s,Mixed,"Rock, Hard Rock, Alternative Rock, Heavy Metal, Alternative Metal",,,,,,Country SongSeether
 38,"December, 1963 (Oh, What a Night)",The Four Seasons,1975,70s,Male,"Pop, Pop Rock, Soul, Disco",,,,,,"December, 1963 (Oh, What a Night)The Four Seasons"
@@ -1043,7 +1043,7 @@
 38,Miss Independent,Kelly Clarkson,2003,2000s,Female,"Pop, Dance-Pop, Synth-Pop, Pop Rock, Electronic, Dance",,,,,,Miss IndependentKelly Clarkson
 38,My Baby Loves Me,Martina McBride,1993,90s,Female,"Country, Country Pop, Bluegrass",,,,,,My Baby Loves MeMartina McBride
 38,Only the Good Die Young,Billy Joel,1977,70s,Male,"Pop, Pop Rock, Soft Rock, Classic Rock",,,,,,Only the Good Die YoungBilly Joel
-38,Pink Houses,John Cougar Mellencamp,1983,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,Dad Rock,4th-of-july,"Country Roads, Red White & Blue",Pink HousesJohn Cougar Mellencamp
+38,Pink Houses,John Cougar Mellencamp,1983,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,Dad Rock,4th-of-july,Red White & Blue,Pink HousesJohn Cougar Mellencamp
 38,Respect,Aretha Franklin,1967,60s,Female,"Jazz, Soul, R&B, Motown, Gospel",,,Diva Moment,,,RespectAretha Franklin
 38,The Story,Brandi Carlile,2005,2000s,Female,"Country, Alt-Country, Americana, Folk Rock, Singer-Songwriter",,,,,,The StoryBrandi Carlile
 38,Whatever It Is,Zac Brown Band,2005,2000s,Male,"Country, Modern Country",,,,,,Whatever It IsZac Brown Band
@@ -1196,7 +1196,7 @@
 31,Say My Name,Destiny's Child,1999,90s,Female,"Pop, Dance-Pop, R&B, Hip-Hop",,,Girl Group,,,Say My NameDestiny's Child
 31,Sister Christian,Night Ranger,1984,80s,Male,"Rock, Hard Rock, Glam Metal",,,"Power Ballad, Dad Rock",,,Sister ChristianNight Ranger
 31,Somebody's Knockin',Terri Gibbs,1991,90s,Female,,,,,,,Somebody's Knockin'Terri Gibbs
-31,Sweet Home Alabama,Lynyrd Skynyrd,1980,80s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Southern Rock",,,Dad Rock,4th-of-july,"Country Roads, Freedom Rock",Sweet Home AlabamaLynyrd Skynyrd
+31,Sweet Home Alabama,Lynyrd Skynyrd,1980,80s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Southern Rock",,,Dad Rock,4th-of-july,Freedom Rock,Sweet Home AlabamaLynyrd Skynyrd
 31,Take on Me,a-ha,1984,80s,Male,"Pop, Dance-Pop, Pop Rock, Alternative Rock",,,One-Hit Wonder,,,Take on Mea-ha
 31,We Care a Lot,Faith No More,1990,90s,Male,"Rock, Alternative Rock",,,,,,We Care a LotFaith No More
 31,XXX's and OOO's (an American Girl),Trisha Yearwood,1995,90s,Female,"Country, Bluegrass",,,,,,XXX's and OOO's (an American Girl)Trisha Yearwood
@@ -1220,7 +1220,7 @@
 30,My Own Prison,Creed,1997,90s,Male,"Rock, Hard Rock, Grunge, Alternative Rock, Pop",,,Dad Rock,,,My Own PrisonCreed
 30,One Hundred and Two,The Judds,1990,90s,Female,Country,,,,,,One Hundred and TwoThe Judds
 30,People Are Strange,The Dead South,2022,2020s,Male,"Country, Alt-Country, Americana, Bluegrass, Folk",,,,,,People Are StrangeThe Dead South
-30,Red Solo Cup,Toby Keith,2011,2010s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,TeeleyBrewed; with vocals,Guilty Pleasure,4th-of-july,"Summer Cookout, Block Party",Red Solo CupToby Keith
+30,Red Solo Cup,Toby Keith,2011,2010s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,TeeleyBrewed; with vocals,Guilty Pleasure,4th-of-july,Block Party,Red Solo CupToby Keith
 30,She'll Leave You With a Smile,George Strait,1997,90s,Male,"Country, Country Pop",,,,,,She'll Leave You With a SmileGeorge Strait
 30,Snuff,Slipknot,2008,2000s,Male,"Rock, Hard Rock, Heavy Metal, Metal, Alternative Metal, Alternative Rock",,,,,,SnuffSlipknot
 30,Some Girls Do,Sawyer Brown,1992,90s,Male,"Country, Country Pop, Blues",,,,,,Some Girls DoSawyer Brown
@@ -1241,7 +1241,7 @@
 29,Hungry Like the Wolf,Duran Duran,1982,80s,Male,"Pop, Pop Rock, Alternative Rock, Dance",,,,,,Hungry Like the WolfDuran Duran
 29,I Stay Away,Alice in Chains,1994,90s,Male,"Rock, Hard Rock, Heavy Metal, Alternative Metal, Grunge, Alternative Rock",,,,,,I Stay AwayAlice in Chains
 29,I Will Follow You Into the Dark,Death Cab for Cutie,2006,2000s,Male,"Pop, Indie Pop, Indie Folk, Emo, Alternative Rock, Indie Rock",,,,,,I Will Follow You Into the DarkDeath Cab for Cutie
-29,I'm on Fire,Bruce Springsteen,1985,80s,Male,"Rock, Pop Rock, Americana, Folk, Singer-Songwriter",,,Dad Rock,4th-of-july,"Fireworks, Freedom Rock",I'm on FireBruce Springsteen
+29,I'm on Fire,Bruce Springsteen,1985,80s,Male,"Rock, Pop Rock, Americana, Folk, Singer-Songwriter",,,Dad Rock,4th-of-july,Fireworks,I'm on FireBruce Springsteen
 29,Imagine,John Lennon,1986,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,,,,ImagineJohn Lennon
 29,L.A. Woman,The Doors,1971,70s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Psychedelic Rock",,,Dad Rock,,,L.A. WomanThe Doors
 29,Little Black Submarines,The Black Keys,2011,2010s,Male,"Blues, Blues Rock, Alternative Rock, Indie Rock, Garage Rock",,,,,,Little Black SubmarinesThe Black Keys
@@ -1325,7 +1325,7 @@
 26,A Lesson in Leavin',Jo Dee Messina,1999,90s,Female,"Country, Country Pop",,,,,,A Lesson in Leavin'Jo Dee Messina
 26,Aenema,Tool,2008,2000s,Male,"Rock, Hard Rock, Metal, Alternative Metal, Alternative Rock, Electronic",,,,,,AenemaTool
 26,Alabama,Cross Canadian Ragweed,2001,2000s,Male,"Country, Alt-Country, Americana, Red Dirt, Folk",,,,,,AlabamaCross Canadian Ragweed
-26,American Honky-Tonk Bar Association,Garth Brooks,1993,90s,Male,"Country, Country Pop",,,,4th-of-july,"Red White & Blue, Country Roads",American Honky-Tonk Bar AssociationGarth Brooks
+26,American Honky-Tonk Bar Association,Garth Brooks,1993,90s,Male,"Country, Country Pop",,,,4th-of-july,Red White & Blue,American Honky-Tonk Bar AssociationGarth Brooks
 26,Amish Paradise,"""Weird Al"" Yankovic",1996,90s,Male,"Comedy, Novelty",,,Guilty Pleasure,,,"Amish Paradise""Weird Al"" Yankovic"
 26,Break Up With Him,Old Dominion,2014,2010s,Male,"Country, Contemporary Country",,,,,,Break Up With HimOld Dominion
 26,Careless Whisper,George Michael,1984,80s,Male,"Pop, Dance-Pop, Adult Contemporary, Soul, Rock",,,,,,Careless WhisperGeorge Michael
@@ -1350,7 +1350,7 @@
 26,Secret Agent Man,Johnny Rivers,1966,60s,Male,Pop,,,,,,Secret Agent ManJohnny Rivers
 26,Shameless,Garth Brooks,1991,90s,Male,"Country, Country Pop",,,,,,ShamelessGarth Brooks
 26,She Got the Best of Me,Luke Combs,2016,2010s,Male,"Country, Contemporary Country, Country Pop",,,,,,She Got the Best of MeLuke Combs
-26,Small Town,John Cougar Mellencamp,1985,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,Dad Rock,4th-of-july,"Country Roads, Red White & Blue",Small TownJohn Cougar Mellencamp
+26,Small Town,John Cougar Mellencamp,1985,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,Dad Rock,4th-of-july,Red White & Blue,Small TownJohn Cougar Mellencamp
 26,Sunglasses at Night,Corey Hart,1983,80s,Male,"Pop, Adult Contemporary, Rock, New Wave, Electronic",,,,,,Sunglasses at NightCorey Hart
 26,The Distance,Cake,1996,90s,Male,"Rock, Alternative Rock, Pop",,,,,,The DistanceCake
 26,Time for Me to Ride,Toby Keith,2003,2000s,Male,"Country, Contemporary Country, Country Pop, Country Rock",,,,,,Time for Me to RideToby Keith
@@ -1393,7 +1393,7 @@
 25,You're the One That I Want,John Travolta & Olivia Newton-John,1978,70s,Mixed,"Pop, Musical Theatre, Show Tune, Soundtrack",Duets,,,,,You're the One That I WantJohn Travolta & Olivia Newton-John
 25,(You Make Me Feel Like) a Natural Woman,Aretha Franklin,1967,60s,Female,"Soul, R&B, Motown, Gospel",,,Diva Moment,,,(You Make Me Feel Like) a Natural WomanAretha Franklin
 24,Ain't Goin' Down ('til the Sun Comes Up),Garth Brooks,1998,90s,Male,"Country, Country Pop",,,,,,Ain't Goin' Down ('til the Sun Comes Up)Garth Brooks
-24,American Girl,Tom Petty & The Heartbreakers,1978,70s,Male,"Rock, Pop Rock, Classic Rock, Heartland Rock, Southern Rock",,,Dad Rock,4th-of-july,"Red White & Blue, Freedom Rock",American GirlTom Petty & The Heartbreakers
+24,American Girl,Tom Petty & The Heartbreakers,1978,70s,Male,"Rock, Pop Rock, Classic Rock, Heartland Rock, Southern Rock",,,Dad Rock,4th-of-july,Red White & Blue,American GirlTom Petty & The Heartbreakers
 24,Bathwater,No Doubt,2000,2000s,Female,"Pop, Pop Rock, Post-Grunge, Alternative Rock, Ska, Reggae",,,,,,BathwaterNo Doubt
 24,Beelzeboss (the Final Showdown),Tenacious D,2006,2000s,Male,"Comedy, Novelty",,,,,,Beelzeboss (the Final Showdown)Tenacious D
 24,Bye Bye Bye,*NSYNC,2000,2000s,Male,"Pop, Dance-Pop, Teen Pop, Hip-Hop",,,Boy Band,,,Bye Bye Bye*NSYNC
@@ -1576,7 +1576,7 @@
 20,Doses and Mimosas,Cherub,2012,2010s,Male,"Electronic, Dance",,,,,,Doses and MimosasCherub
 20,Down in a Hole,Alice in Chains,1992,90s,Male,"Rock, Hard Rock, Grunge, Alternative Rock, Alternative Metal",,,,,,Down in a HoleAlice in Chains
 20,Dr. Feelgood,Mötley Crüe,1989,80s,Male,"Rock, Classic Rock, Hard Rock, Glam Metal, Heavy Metal, Metal",,,Dad Rock,,,Dr. FeelgoodMötley Crüe
-20,Drink in My Hand,Eric Church,2011,2010s,Male,"Country, Contemporary Country, Country Pop, Country Rock",,,,4th-of-july,"Country Roads, Summer Cookout",Drink in My HandEric Church
+20,Drink in My Hand,Eric Church,2011,2010s,Male,"Country, Contemporary Country, Country Pop, Country Rock",,,,4th-of-july,Summer Cookout,Drink in My HandEric Church
 20,Fortunate Son,Creedence Clearwater Revival,1972,70s,Male,"Rock, Pop Rock, Classic Rock, Rock & Roll, Southern Rock",,,Dad Rock,4th-of-july,Freedom Rock,Fortunate SonCreedence Clearwater Revival
 20,Get Low,Lil Jon & the East Side Boyz,2005,2000s,Male,Hip-Hop,,,,,,Get LowLil Jon & the East Side Boyz
 20,Heartache Tonight,Eagles,1989,80s,Male,"Pop, Pop Rock, Classic Rock",,,Dad Rock,,,Heartache TonightEagles
@@ -1597,7 +1597,7 @@
 20,La bamba,Richie Valens,1997,90s,Male,"Pop, Rock, Rock & Roll",,,,,,La bambaRichie Valens
 20,Lady Down on Love,Alabama,1983,80s,Male,"Country, Country Pop, Rock",,,,,,Lady Down on LoveAlabama
 20,Let Me Down Easy,Billy Currington,2010,2010s,Male,"Country, Contemporary Country, Country Pop",,,,,,Let Me Down EasyBilly Currington
-20,Light My Fire,The Doors,1968,60s,Male,"Rock, Classic Rock, Psychedelic Rock",,,Dad Rock,4th-of-july,"Fireworks, Freedom Rock",Light My FireThe Doors
+20,Light My Fire,The Doors,1968,60s,Male,"Rock, Classic Rock, Psychedelic Rock",,,Dad Rock,4th-of-july,Fireworks,Light My FireThe Doors
 20,Long Haired Country Boy,The Charlie Daniels Band,1974,70s,Male,"Country, Country Rock, Southern Rock",,,,,,Long Haired Country BoyThe Charlie Daniels Band
 20,Long Time Gone,The Chicks (formerly The Dixie Chicks),2002,2000s,Female,Country,,,,,,Long Time GoneThe Chicks (formerly The Dixie Chicks)
 20,"Lovin', Touchin', Squeezin'",Journey,1979,70s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,Dad Rock,,,"Lovin', Touchin', Squeezin'Journey"
@@ -2081,7 +2081,7 @@
 13,A Thousand Miles From Nowhere,Dwight Yoakam,1993,90s,Male,"Country, Country Rock",,,,,,A Thousand Miles From NowhereDwight Yoakam
 13,Against All Odds (Take a Look at Me Now),Phil Collins,1984,80s,Male,"Pop, Dance-Pop, Pop Rock, Adult Contemporary, Electronic",,,Power Ballad,,,Against All Odds (Take a Look at Me Now)Phil Collins
 13,All Shook Up,Elvis Presley,1981,80s,Male,"Pop, Pop Rock, Country, Rock & Roll",,,,,,All Shook UpElvis Presley
-13,American Woman,Lenny Kravitz,1998,90s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock",,,,4th-of-july,"Red White & Blue, Freedom Rock",American WomanLenny Kravitz
+13,American Woman,Lenny Kravitz,1998,90s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock",,,,4th-of-july,Red White & Blue,American WomanLenny Kravitz
 13,Are the Good Times Really Over,Merle Haggard,1985,80s,Male,"Country, Americana, Outlaw Country, Singer-Songwriter",,,,,,Are the Good Times Really OverMerle Haggard
 13,Baby Got Back,Richard Cheese,2011,2010s,Male,Jazz,,,Guilty Pleasure,,,Baby Got BackRichard Cheese
 13,Barefoot Blue Jean Night,Jake Owen,2011,2010s,Male,Country,,,,,,Barefoot Blue Jean NightJake Owen
@@ -2159,7 +2159,7 @@
 12,Ain't Even Done With the Night,John Cougar Mellencamp,1990,90s,Male,"Pop, Pop Rock, Americana, Folk Rock",,,,,,Ain't Even Done With the NightJohn Cougar Mellencamp
 12,Alive,Pearl Jam,1993,90s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock",,,,,,AlivePearl Jam
 12,All I Want for Christmas Is You,Mariah Carey,1994,90s,Female,"Pop, Dance-Pop, Soul, R&B, Holiday, Christmas",,,Diva Moment,,,All I Want for Christmas Is YouMariah Carey
-12,America,Neil Diamond,1980,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,,4th-of-july,Patriotic Staples,AmericaNeil Diamond
+12,America,Neil Diamond,1980,80s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,,4th-of-july,"Red, White & Blue",AmericaNeil Diamond
 12,Bad Company,Bad Company,1974,70s,Male,"Rock, Classic Rock, Hard Rock",,,Dad Rock,,,Bad CompanyBad Company
 12,Black Magic Woman,Santana,1989,80s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock, Blues Rock",,,,,,Black Magic WomanSantana
 12,Black Water,The Doobie Brothers,1974,70s,Male,"Pop, Soul, Country, Classic Rock",,,,,,Black WaterThe Doobie Brothers
@@ -2195,7 +2195,7 @@
 12,Hello Mary Lou,Ricky Nelson,1988,80s,Male,"Pop, Teen Pop, Country Pop, Country Rock",,,,,,Hello Mary LouRicky Nelson
 12,Hicktown,Jason Aldean,2005,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,Radio,,,,HicktownJason Aldean
 12,"Honey, Honey",ABBA,1974,70s,Female,"Pop, Dance-Pop, Pop Rock, Disco, Electronic",,,,,,"Honey, HoneyABBA"
-12,Hot in Here,Nelly,2002,2000s,Male,"Pop, R&B, Contemporary R&B, Hip-Hop, Pop Rap",,,,4th-of-july,"Summer Cookout, Block Party",Hot in HereNelly
+12,Hot in Here,Nelly,2002,2000s,Male,"Pop, R&B, Contemporary R&B, Hip-Hop, Pop Rap",,,,4th-of-july,Block Party,Hot in HereNelly
 12,How Far We've Come,Matchbox Twenty,2007,2000s,Male,"Rock, Pop Rock, Post-Grunge, Alternative Rock",,,,,,How Far We've ComeMatchbox Twenty
 12,Hypnotize,System Of A Down,2005,2000s,Male,"Rock, Hard Rock, Heavy Metal, Metal, Alternative Metal, Nu Metal",,,,,,HypnotizeSystem Of A Down
 12,I Thank You,ZZ Top,1979,70s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Southern Rock",,,Dad Rock,,,I Thank YouZZ Top
@@ -2292,7 +2292,7 @@
 11,Come Undone,Duran Duran,1993,90s,Male,"Pop, Pop Rock, Alternative Rock, Dance",,,,,,Come UndoneDuran Duran
 11,Crawling,Linkin Park,2003,2000s,Male,"Rock, Alternative Rock, Metal, Alternative Metal, Nu Metal",,,,,,CrawlingLinkin Park
 11,Crazy Women,Brandy Clark,2013,2010s,Female,Country,,,,,,Crazy WomenBrandy Clark
-11,Cruel Summer,Ace of Base,1994,90s,Female,"Pop, Dance-Pop, Electronic, Ska, Reggae",,,,4th-of-july,"Summer Cookout, Block Party",Cruel SummerAce of Base
+11,Cruel Summer,Ace of Base,1994,90s,Female,"Pop, Dance-Pop, Electronic, Ska, Reggae",,,,4th-of-july,Block Party,Cruel SummerAce of Base
 11,Dance the Night Away,The Mavericks,1998,90s,Male,"Country, Alt-Country, Americana, Pop, Rock",,,,,,Dance the Night AwayThe Mavericks
 11,Dancing With the Devil,Demi Lovato,2021,2020s,Female,"Pop, Dance-Pop, Electropop, Teen Pop, Pop Rock",,,,,,Dancing With the DevilDemi Lovato
 11,Diamonds & Gasoline,Turnpike Troubadours,2009,2000s,Male,"Country, Country Rock, Alt-Country, Americana, Red Dirt",,,,,,Diamonds & GasolineTurnpike Troubadours
@@ -2363,7 +2363,7 @@
 11,Sharing the Night Together,Dr. Hook,1978,70s,Male,"Pop, Pop Rock, Country Rock, Classic Rock",,,,,,Sharing the Night TogetherDr. Hook
 11,Show Me How to Live,Audioslave,2002,2000s,Male,"Rock, Pop Rock, Hard Rock, Alternative Rock",,,,,,Show Me How to LiveAudioslave
 11,Silent Running,Mike & the Mechanics,1986,80s,Male,"Rock, Pop Rock, Soft Rock, New Wave",,,,,,Silent RunningMike & the Mechanics
-11,Small Town USA,Justin Moore,2009,2000s,Male,"Country, Contemporary Country, Modern Country",,,,4th-of-july,"Country Roads, Red White & Blue",Small Town USAJustin Moore
+11,Small Town USA,Justin Moore,2009,2000s,Male,"Country, Contemporary Country, Modern Country",,,,4th-of-july,Red White & Blue,Small Town USAJustin Moore
 11,Somebody Like You,Keith Urban,2002,2000s,Male,"Country, Contemporary Country, Country Pop, Pop Rock",,,,,,Somebody Like YouKeith Urban
 11,Suddenly Seymour,Little Shop of Horrors,2019,2010s,Mixed,"Musical Theatre, Show Tune, Soundtrack",Duets,New Broadway Cast,,,,Suddenly SeymourLittle Shop of Horrors
 11,The Sign,Ace of Base,1993,90s,Female,"Pop, Dance-Pop, Adult Contemporary, Disco, Dance",,,,,,The SignAce of Base
@@ -2391,9 +2391,9 @@
 10,Again,Alice in Chains,1995,90s,Male,"Metal, Alternative Metal, Alternative Rock",,,,,,AgainAlice in Chains
 10,Almost Goodbye,Mark Chesnutt,1993,90s,Male,Country,,,,,,Almost GoodbyeMark Chesnutt
 10,Amber,311,2001,2000s,Male,"Metal, Heavy Metal, Punk Rock, Alternative Rock, Ska, Reggae",,,,,,Amber311
-10,American Kids,Kenny Chesney,2014,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,"Red White & Blue, Summer Cookout",American KidsKenny Chesney
+10,American Kids,Kenny Chesney,2014,2010s,Male,"Country, Contemporary Country, Country Pop",,,,4th-of-july,Red White & Blue,American KidsKenny Chesney
 10,American Pie,Madonna,2000,2000s,Female,"Pop, Dance-Pop, Pop Rock, Adult Contemporary, Disco",,,,,,American PieMadonna
-10,American Woman,The Guess Who,1965,60s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,,4th-of-july,"Red White & Blue, Freedom Rock",American WomanThe Guess Who
+10,American Woman,The Guess Who,1965,60s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,,4th-of-july,Red White & Blue,American WomanThe Guess Who
 10,Annie's Song,John Denver,1974,70s,Male,"Pop, Country, Folk, Singer-Songwriter, Rock",,,,,,Annie's SongJohn Denver
 10,Anyway,Martina McBride,2007,2000s,Female,"Country, Contemporary Country, Modern Country, Country Pop",,,,,,AnywayMartina McBride
 10,B.y.o.b.,System Of A Down,2005,2000s,Male,"Rock, Hard Rock, Heavy Metal, Metal, Alternative Metal",,,,,,B.y.o.b.System Of A Down
@@ -2428,7 +2428,7 @@
 10,Fly Love,Jamie Foxx,2011,2010s,Male,Soul,,,,,,Fly LoveJamie Foxx
 10,Follow Me Down,The Pretty Reckless,2014,2010s,Female,"Rock, Hard Rock, Alternative Rock",,,,,,Follow Me DownThe Pretty Reckless
 10,Foxy Lady,Jimi Hendrix,1973,70s,Male,"Rock, Classic Rock, Hard Rock, Blues Rock, Psychedelic Rock",,,Dad Rock,,,Foxy LadyJimi Hendrix
-10,Freedom 90,George Michael,1990,90s,Male,"Pop, Dance-Pop, Pop Rock, Adult Contemporary",,,,4th-of-july,"Freedom Rock, Block Party",Freedom 90George Michael
+10,Freedom 90,George Michael,1990,90s,Male,"Pop, Dance-Pop, Pop Rock, Adult Contemporary",,,,4th-of-july,Freedom Rock,Freedom 90George Michael
 10,"Going, Going, Gone",Luke Combs,2022,2020s,Male,"Country, Contemporary Country, Country Pop",,,,,,"Going, Going, GoneLuke Combs"
 10,Good Ride Cowboy,Garth Brooks,2005,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,,,,Good Ride CowboyGarth Brooks
 10,Gorilla,Bruno Mars,2012,2010s,Male,"Pop, Dance-Pop, Pop Rock, Contemporary R&B",,Clean,,,,GorillaBruno Mars
@@ -2756,7 +2756,7 @@
 8,Good Times Bad Times,Led Zeppelin,1969,60s,Male,"Blues, Blues Rock, Classic Rock, Hard Rock",,,Dad Rock,,,Good Times Bad TimesLed Zeppelin
 8,Grand Theft Autumn,Fall Out Boy,2003,2000s,Male,"Pop, Electropop, Pop Rock, Pop Punk, Emo, Alternative Rock",,Acoustic,,,,Grand Theft AutumnFall Out Boy
 8,Guitar Town,Steve Earle & The Dukes,1987,80s,Male,"Country, Country Rock",,,,,,Guitar TownSteve Earle & The Dukes
-67,Party in the USA,Miley Cyrus,2010,2010s,Female,"Pop, Dance-Pop, Pop Rock, Country",Group Songs,,,4th-of-july,"Patriotic Staples, Block Party",Party in the USAMiley Cyrus
+67,Party in the USA,Miley Cyrus,2010,2010s,Female,"Pop, Dance-Pop, Pop Rock, Country",Group Songs,,,4th-of-july,"Red, White & Blue",Party in the USAMiley Cyrus
 8,Happier Than Ever,Billie Eilish,2021,2020s,Female,"Pop, Dance-Pop, Electropop, Indie Pop, Pop Rock, Contemporary R&B",,,Breakup Anthem,,,Happier Than EverBillie Eilish
 8,Heartland,George Strait,1987,80s,Male,"Country, Country Pop",,,,,,HeartlandGeorge Strait
 8,Here,Alessia Cara,2015,2010s,Female,"Pop, Indie Pop, Contemporary R&B, Dance",,,,,,HereAlessia Cara
@@ -2890,7 +2890,7 @@
 7,Blow Me (karaoke mix),Red Peters,2005,2000s,Male,Comedy,,Karaoke Mix,,,,Blow Me (karaoke mix)Red Peters
 7,Boys From the South,Pistol Annies,2011,2010s,Female,"Country, Contemporary Country, Americana",,,,,,Boys From the SouthPistol Annies
 7,Bulletproof,La Roux,2009,2000s,Female,"Pop, Electropop, Indie Pop, Indie Rock",,,One-Hit Wonder,,,BulletproofLa Roux
-7,California Gurls,Katy Perry feat. Snoop Dogg,2010; 2011,2010s,Mixed,"Pop, Dance-Pop, Electropop, Teen Pop, Pop Rock",,,,4th-of-july,"Summer Cookout, Block Party",California GurlsKaty Perry feat. Snoop Dogg
+7,California Gurls,Katy Perry feat. Snoop Dogg,2010; 2011,2010s,Mixed,"Pop, Dance-Pop, Electropop, Teen Pop, Pop Rock",,,,4th-of-july,Block Party,California GurlsKaty Perry feat. Snoop Dogg
 7,Calling You,Blue October,2003,2000s,Male,"Pop, Pop Rock, Alternative Rock",,,,,,Calling YouBlue October
 7,Castle on the Hill,Ed Sheeran,2017,2010s,Male,"Pop, Dance-Pop, Folk Pop, Folk, Singer-Songwriter",,,,,,Castle on the HillEd Sheeran
 7,Chances Are,Johnny Mathis,1978,70s,Male,"Pop, Jazz, Soul, Disco",,,,,,Chances AreJohnny Mathis
@@ -2919,7 +2919,7 @@
 7,Dynamite,Taio Cruz,2010,2010s,Male,"Pop, Dance-Pop, Electropop, R&B, Contemporary R&B",,,,,,DynamiteTaio Cruz
 7,Even If It Breaks Your Heart,Eli Young Band,2011,2010s,Male,"Country, Contemporary Country, Modern Country, Alt-Country",,Instrumental,,,,Even If It Breaks Your HeartEli Young Band
 7,Everytime You Go Away,Paul Young,1986,80s,Male,"Pop, Pop Rock, Soft Rock, Soul",,,,,,Everytime You Go AwayPaul Young
-7,Fast Cars and Freedom,Rascal Flatts,2003,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,,4th-of-july,"Freedom Rock, Country Roads",Fast Cars and FreedomRascal Flatts
+7,Fast Cars and Freedom,Rascal Flatts,2003,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,,4th-of-july,Freedom Rock,Fast Cars and FreedomRascal Flatts
 7,Feels Like the First Time,Foreigner,1998,90s,Male,"Rock, Classic Rock, Hard Rock, Pop",,,Dad Rock,,,Feels Like the First TimeForeigner
 7,Flake,Jack Johnson,2001,2000s,Male,"Pop, Indie Pop, Folk, Singer-Songwriter, Rock",,,,,,FlakeJack Johnson
 7,Flavor of the Weak,American Hi-Fi,2000,2000s,Male,"Rock, Pop Rock, Post-Grunge, Alternative Rock, Pop Punk",,,One-Hit Wonder,,,Flavor of the WeakAmerican Hi-Fi
@@ -3097,7 +3097,7 @@
 6,Bible and a .44,Ashley McBryde,2016,2010s,Female,"Country, Contemporary Country, Country Pop, Country Rock",,,,,,Bible and a .44Ashley McBryde
 6,Black Velvet Band,The Dubliners,1967,60s,Male,"Folk, Punk Rock",,,,,,Black Velvet BandThe Dubliners
 6,Blind,Korn,1993,90s,Male,"Rock, Hard Rock, Alternative Rock, Metal, Nu Metal",,,,,,BlindKorn
-6,Born in the U.S.A.,Bruce Springsteen,1984,80s,Male,"Rock, Pop Rock, Americana, Folk, Singer-Songwriter",,,Dad Rock,4th-of-july,"Patriotic Staples, Freedom Rock",Born in the U.S.A.Bruce Springsteen
+6,Born in the U.S.A.,Bruce Springsteen,1984,80s,Male,"Rock, Pop Rock, Americana, Folk, Singer-Songwriter",,,Dad Rock,4th-of-july,"Red, White & Blue",Born in the U.S.A.Bruce Springsteen
 6,Bust Your Windows,Jazmine Sullivan,2008,2000s,Female,"Soul, R&B",,with Vocals,,,,Bust Your WindowsJazmine Sullivan
 6,Buy U a Drank,T-Pain,2008,2000s,Male,"Pop, Electropop, R&B, Hip-Hop, Pop Rap",,,,,,Buy U a DrankT-Pain
 6,Captain Jack,Billy Joel,1975,70s,Male,"Pop, Pop Rock, Americana, Classic Rock",,,,,,Captain JackBilly Joel
@@ -4482,7 +4482,7 @@
 3,Just Friends,Amy Winehouse,2006,2000s,Female,"Blues, Soul, R&B, Contemporary R&B, Neo-Soul",,,,,,Just FriendsAmy Winehouse
 3,Just the Girl,The Click Five,2005,2000s,Male,"Pop, Pop Rock, Emo",,,,,,Just the GirlThe Click Five
 3,Kids,MGMT,2005,2000s,Male,"Pop, Electropop, Pop Rock, Alternative Rock, Indie Rock, Garage Rock",,,,,,KidsMGMT
-3,Kids in America,Kim Wilde,1981,80s,Female,"Pop, Dance-Pop, Pop Rock, Dance",,,,4th-of-july,"Red White & Blue, Block Party",Kids in AmericaKim Wilde
+3,Kids in America,Kim Wilde,1981,80s,Female,"Pop, Dance-Pop, Pop Rock, Dance",,,,4th-of-july,Red White & Blue,Kids in AmericaKim Wilde
 3,Killin' Time,Clint Black,1989,80s,Male,Country,,,,,,Killin' TimeClint Black
 3,Kind & Generous,Natalie Merchant,1998,90s,Female,"Pop, Singer-Songwriter, Alternative Rock, Indie Rock",,,,,,Kind & GenerousNatalie Merchant
 3,Kung Fu Fighting,Carl Douglas,1987,80s,Male,"Soul, Disco",,,"Guilty Pleasure, One-Hit Wonder",,,Kung Fu FightingCarl Douglas
@@ -4503,7 +4503,7 @@
 3,Life's What You Make It,Talk Talk,1986,80s,Male,"Pop, Art Pop, Classic Rock, Alternative Rock",,,,,,Life's What You Make ItTalk Talk
 3,Little Goodbyes,SHeDAISY,1999,90s,Female,Country,,,,,,Little GoodbyesSHeDAISY
 3,Little Saint Nick,The Beach Boys,1963,60s,Male,"Pop, Pop Rock, Classic Rock",,,,,,Little Saint NickThe Beach Boys
-3,Living in America,James Brown,1985,80s,Male,"Blues, Soul, R&B, Funk, Disco",,,,4th-of-july,"Patriotic Staples, Block Party",Living in AmericaJames Brown
+3,Living in America,James Brown,1985,80s,Male,"Blues, Soul, R&B, Funk, Disco",,,,4th-of-july,"Red, White & Blue",Living in AmericaJames Brown
 3,Lonely Is the Night,Billy Squier,1981,80s,Male,"Rock, Classic Rock, Hard Rock",,,,,,Lonely Is the NightBilly Squier
 3,"Look Heart, No Hands",Randy Travis,1992,90s,Male,"Country, Country Pop",,,,,,"Look Heart, No HandsRandy Travis"
 3,Look What You've Done,Jet,2003,2000s,Male,"Rock, Hard Rock, Alternative Rock",,,,,,Look What You've DoneJet
@@ -4753,7 +4753,7 @@
 3,Vertigo,U2,2004,2000s,Male,"Rock, Pop Rock, Alternative Rock, Indie Rock, Electronic",,,,,,VertigoU2
 3,Violent Pornography,System Of A Down,2005,2000s,Male,"Rock, Hard Rock, Heavy Metal, Metal, Alternative Metal, Alternative Rock",,,,,,Violent PornographySystem Of A Down
 3,Walk Softly on This Heart of Mine,The Kentucky Headhunters,1989,80s,Male,"Country, Country Pop, Americana, Bluegrass, Rock",,,,,,Walk Softly on This Heart of MineThe Kentucky Headhunters
-3,Walkin' on Sunshine,Katrina & the Waves,1995,90s,Female,"Rock, Pop Rock, New Wave",,,,4th-of-july,"Summer Cookout, Block Party",Walkin' on SunshineKatrina & the Waves
+3,Walkin' on Sunshine,Katrina & the Waves,1995,90s,Female,"Rock, Pop Rock, New Wave",,,,4th-of-july,Block Party,Walkin' on SunshineKatrina & the Waves
 3,Wasted Days & Wasted Nights,Freddy Fender,1959,50s,Male,"Country, Rock",,,,,,Wasted Days & Wasted NightsFreddy Fender
 3,Watermelon Moonshine,Lainey Wilson,2022,2020s,Female,"Country, Contemporary Country, Country Pop",,,,,,Watermelon MoonshineLainey Wilson
 3,We Shall Be Free,Garth Brooks,1992,90s,Male,"Country, Country Pop, Country Rock",,,,,,We Shall Be FreeGarth Brooks
@@ -5688,7 +5688,7 @@
 2,Pump Up the Jam,Technotronic,1990,90s,Female,"Electronic, House",,,,,,Pump Up the JamTechnotronic
 2,Pussy Control,Prince,1995,90s,Male,"Pop, Dance-Pop, Pop Rock, Adult Contemporary, R&B",,,,,,Pussy ControlPrince
 2,Put Your Money Where Your Mouth Is,Jet,2006,2000s,Male,"Rock, Hard Rock, Alternative Rock, Garage Rock",,,,,,Put Your Money Where Your Mouth IsJet
-2,R.O.C.K. in the U.S.A.,John Cougar Mellencamp,2018,2010s,Male,"Pop, Pop Rock, Americana, Folk Rock",,,Dad Rock,4th-of-july,"Patriotic Staples, Freedom Rock",R.O.C.K. in the U.S.A.John Cougar Mellencamp
+2,R.O.C.K. in the U.S.A.,John Cougar Mellencamp,2018,2010s,Male,"Pop, Pop Rock, Americana, Folk Rock",,,Dad Rock,4th-of-july,"Red, White & Blue",R.O.C.K. in the U.S.A.John Cougar Mellencamp
 2,Radio Message,R. Kelly,2010,2010s,Male,"Pop, Soul, R&B, Contemporary R&B",,,,,,Radio MessageR. Kelly
 2,Rainbow Stew,Merle Haggard,1981,80s,Male,"Country, Americana, Outlaw Country, Singer-Songwriter",,,,,,Rainbow StewMerle Haggard
 2,Ramblin' Fever,Merle Haggard,1977,70s,Male,"Country, Americana, Outlaw Country, Singer-Songwriter",,,,,,Ramblin' FeverMerle Haggard
@@ -5919,7 +5919,7 @@
 2,The Race Is On,Sawyer Brown,1989,80s,Male,"Country, Country Pop, Country Rock",,,,,,The Race Is OnSawyer Brown
 2,The Shake,Neal McCoy,1997,90s,Male,Country,,,,,,The ShakeNeal McCoy
 2,The Sky Is Cryin',Gary Moore,1990,90s,Male,,,,,,,The Sky Is Cryin'Gary Moore
-2,The Star-Spangled Banner,Standard,1814,1810s,,,,,,4th-of-july,Patriotic Staples,The Star-Spangled BannerStandard
+2,The Star-Spangled Banner,Standard,1814,1810s,,,,,,4th-of-july,"Red, White & Blue",The Star-Spangled BannerStandard
 2,The Star-Spangled Banner (National Anthem),Traditional,1993,90s,Mixed,Folk,,,,,,The Star-Spangled Banner (National Anthem)Traditional
 2,The Sweetest Taboo,Sade,1985,80s,Female,"Jazz, Soul, R&B, Contemporary R&B, Quiet Storm",,,,,,The Sweetest TabooSade
 2,The Time (Dirty Bit),The Black Eyed Peas,2010,2010s,Mixed,,,,,,,The Time (Dirty Bit)The Black Eyed Peas
@@ -6203,7 +6203,7 @@
 1,American Made,The Oak Ridge Boys,1983,80s,Male,"Pop, Country",,,,,,American MadeThe Oak Ridge Boys
 1,American Music,Violent Femmes,1991,90s,Male,"Rock, Alternative Rock",,,,,,American MusicViolent Femmes
 1,American Ride,Toby Keith,2009,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop",,,,,,American RideToby Keith
-1,American Saturday Night,Brad Paisley,2009,2000s,Male,"Country, Contemporary Country, Country Pop, Country Rock",,,,4th-of-july,"Red White & Blue, Block Party",American Saturday NightBrad Paisley
+1,American Saturday Night,Brad Paisley,2009,2000s,Male,"Country, Contemporary Country, Country Pop, Country Rock",,,,4th-of-july,Red White & Blue,American Saturday NightBrad Paisley
 1,American Scandal,Ashley McBryde,2018,2010s,Female,"Country, Contemporary Country, Country Pop, Country Rock",,,,,,American ScandalAshley McBryde
 1,American You,Yelawolf,2015,2010s,Male,,,,,,,American YouYelawolf
 1,Amor a la mexicana,Thalía,1997,90s,Female,"Latin, Latin Pop",,,,,,Amor a la mexicanaThalía
@@ -7357,7 +7357,7 @@
 1,Red Light,David Nail,2006,2000s,Male,Country,,,,,,Red LightDavid Nail
 1,Red Ragtop,Tim McGraw,2002,2000s,Male,"Country, Contemporary Country, Modern Country, Country Pop, Adult Contemporary",,,,,,Red RagtopTim McGraw
 1,Redneck Girl,The Bellamy Brothers,1982,80s,Male,Country,,,,,,Redneck GirlThe Bellamy Brothers
-1,"Rednecks, White Socks and Blue Ribbon Beer",Johnny Russell,1973,70s,Male,,,,,4th-of-july,"Red White & Blue, Summer Cookout","Rednecks, White Socks and Blue Ribbon BeerJohnny Russell"
+1,"Rednecks, White Socks and Blue Ribbon Beer",Johnny Russell,1973,70s,Male,,,,,4th-of-july,Red White & Blue,"Rednecks, White Socks and Blue Ribbon BeerJohnny Russell"
 1,Release Me,Engelbert Humperdinck,1967,60s,Male,"Pop, Jazz",,,,,,Release MeEngelbert Humperdinck
 1,Remember the Time,Michael Jackson,1991,90s,Male,"Pop, Dance-Pop, Adult Contemporary, R&B",,,,,,Remember the TimeMichael Jackson
 1,Rescue,Uncle Kracker,2004,2000s,Male,Pop,,,,,,RescueUncle Kracker
@@ -7655,7 +7655,7 @@
 1,The Show Must Go On,Queen,1991,90s,Male,"Rock, Pop Rock, Classic Rock, Hard Rock",,,,,,The Show Must Go OnQueen
 1,The Sky Is Crying,Stevie Ray Vaughan,1992,90s,Male,"Blues, Blues Rock",,,,,,The Sky Is CryingStevie Ray Vaughan
 1,The South's Gonna Do It Again,Charlie Daniels,2017,2010s,Male,"Country, Country Rock, Bluegrass, Blues Rock",,,,,,The South's Gonna Do It AgainCharlie Daniels
-1,The Star Spangled Banner,Whitney Houston,1991,90s,Female,"Pop, Dance-Pop, Adult Contemporary, Contemporary R&B, Rock",,,Diva Moment,4th-of-july,Patriotic Staples,The Star Spangled BannerWhitney Houston
+1,The Star Spangled Banner,Whitney Houston,1991,90s,Female,"Pop, Dance-Pop, Adult Contemporary, Contemporary R&B, Rock",,,Diva Moment,4th-of-july,"Red, White & Blue",The Star Spangled BannerWhitney Houston
 1,The Stranger,Billy Joel,1977,70s,Male,"Pop, Pop Rock, Singer-Songwriter, Classic Rock",,,,,,The StrangerBilly Joel
 1,The Streak,Ray Stevens,1974,70s,Male,"Comedy, Novelty",,,Guilty Pleasure,,,The StreakRay Stevens
 1,The Thrill Is Gone,B.B. King,1989,80s,Male,"Blues, Blues Rock, Soul",,,,,,The Thrill Is GoneB.B. King
