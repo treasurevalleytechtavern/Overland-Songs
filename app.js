@@ -237,6 +237,9 @@ function renderThemeLabelButtons() {
   }
 
   const activeThemeSlug = getActiveThemeSlug();
+  if (themeSection) {
+    themeSection.classList.toggle("theme-band--fourth-of-july", activeThemeSlug === "4th-of-july");
+  }
 
   if (!activeThemeSlug) {
     themeLabelPanel.hidden = true;
@@ -2095,13 +2098,13 @@ function applyUrlFilters() {
   const themeLabel = getQueryValue(params, ["themeLabel", "theme_label", "subtheme", "sub_theme"]);
 
   if (!themeSlug) {
-    return;
+    return null;
   }
 
   const theme = getThemeBySlug(themeSlug);
 
   if (!theme) {
-    return;
+    return null;
   }
 
   applyThemeFilter(theme);
@@ -2109,6 +2112,17 @@ function applyUrlFilters() {
   if (themeLabel) {
     setThemeLabelFilter(themeLabel);
   }
+
+  return theme;
+}
+
+async function scrollToThemeSection() {
+  if (!themeSection || themeSection.hidden) {
+    return;
+  }
+
+  await waitForPaint();
+  themeSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderThemeButton(button, theme) {
@@ -2416,7 +2430,11 @@ async function initializePage() {
     loadInitialSongs(),
     loadThemeDays()
   ]);
-  applyUrlFilters();
+  const urlTheme = applyUrlFilters();
+
+  if (urlTheme) {
+    await scrollToThemeSection();
+  }
 }
 
 initializePage();

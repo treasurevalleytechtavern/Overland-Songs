@@ -341,6 +341,50 @@ form {
   outline-offset: 2px;
 }
 
+.theme-band--fourth-of-july {
+  border-color: rgba(255, 255, 255, 0.18);
+  background:
+    radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 82% 12%, rgba(49, 232, 255, 0.16), transparent 24%),
+    linear-gradient(135deg, rgba(191, 10, 48, 0.22), rgba(5, 5, 5, 0.94) 46%, rgba(0, 40, 104, 0.26));
+}
+
+.theme-band--fourth-of-july .theme-label-panel .browse-label {
+  color: var(--white);
+  text-shadow:
+    0 0 10px rgba(191, 10, 48, 0.65),
+    0 0 16px rgba(49, 232, 255, 0.36);
+}
+
+.theme-band--fourth-of-july .theme-filter-chip {
+  border-color: rgba(255, 255, 255, 0.78);
+  background:
+    linear-gradient(135deg, rgba(191, 10, 48, 0.9) 0 33%, rgba(255, 255, 255, 0.16) 33% 66%, rgba(0, 40, 104, 0.92) 66%);
+  color: var(--white);
+  box-shadow:
+    0 0 14px rgba(191, 10, 48, 0.26),
+    0 0 18px rgba(49, 232, 255, 0.18);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.78);
+}
+
+.theme-band--fourth-of-july .theme-filter-chip:hover,
+.theme-band--fourth-of-july .theme-filter-chip:focus-visible,
+.theme-band--fourth-of-july .theme-filter-chip.is-active {
+  border-color: rgba(255, 255, 255, 0.96);
+  background:
+    linear-gradient(135deg, #bf0a30 0 33%, #f8f8f8 33% 66%, #002868 66%);
+  color: var(--white);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.18),
+    0 0 22px rgba(191, 10, 48, 0.38),
+    0 0 26px rgba(49, 232, 255, 0.24);
+}
+
+.theme-band--fourth-of-july .theme-chip-count {
+  background: rgba(255, 255, 255, 0.92);
+  color: #002868;
+}
+
 .theme-chip-count {
   display: inline-flex;
   align-items: center;
@@ -546,7 +590,8 @@ button:hover {
 }
 
 .filter-category-button,
-.clear-filters-button {
+.clear-filters-button,
+.jump-results-button {
   min-height: 44px;
   border-color: rgba(255, 255, 255, 0.2);
   padding: 0 12px;
@@ -576,6 +621,19 @@ button:hover {
 .clear-filters-button {
   border-color: rgba(255, 70, 98, 0.68);
   background: rgba(255, 70, 98, 0.12);
+}
+
+.jump-results-button {
+  border-color: rgba(255, 209, 42, 0.74);
+  background: rgba(255, 209, 42, 0.14);
+  color: var(--gold);
+  box-shadow: 0 0 16px rgba(255, 209, 42, 0.14);
+}
+
+.jump-results-button:hover,
+.jump-results-button:focus-visible {
+  background: rgba(255, 209, 42, 0.24);
+  color: var(--white);
 }
 
 .browse-label {
