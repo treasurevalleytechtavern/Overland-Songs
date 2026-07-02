@@ -237,6 +237,8 @@ function renderThemeLabelButtons() {
   }
 
   const activeThemeSlug = getActiveThemeSlug();
+  document.body.classList.toggle("theme-active--fourth-of-july", activeThemeSlug === "4th-of-july");
+
   if (themeSection) {
     themeSection.classList.toggle("theme-band--fourth-of-july", activeThemeSlug === "4th-of-july");
   }
