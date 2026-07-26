@@ -19,7 +19,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css?v=20260513-vocal-first">
+    <link rel="stylesheet" href="styles.css?v=20260726-usability-pass">
   </head>
   <body>
     <header class="site-header" aria-label="Overland Bar site navigation">
@@ -59,12 +59,46 @@
               aria-describedby="result-count"
             >
             <button id="clear-search" type="button">Clear</button>
-            <button class="dice-button dice-button-inline" id="top-dice-button" type="button">
+            <button class="dice-button dice-button-inline" id="top-dice-button" type="button" aria-expanded="false" aria-controls="dice-panel">
               <img class="dice-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cfilter id='g' x='-60%25' y='-60%25' width='220%25' height='220%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='6' flood-color='%2331e8ff' flood-opacity='.9'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='9' flood-color='%23ff4662' flood-opacity='.55'/%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-14 40 40)' filter='url(%23g)'%3E%3Crect x='15' y='15' width='50' height='50' rx='9' fill='%23f2f2f2'/%3E%3Crect x='18' y='18' width='44' height='44' rx='7' fill='%23ffffff'/%3E%3Ccircle cx='29' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='40' cy='40' r='4.5' fill='%23050505'/%3E%3Ccircle cx='29' cy='51' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='51' r='4.5' fill='%23050505'/%3E%3C/g%3E%3C/svg%3E" alt="">
               <span>Let Chance Decide</span>
             </button>
           </div>
         </form>
+
+        <section class="dice-panel dice-panel-inline" id="dice-panel" aria-labelledby="dice-title" hidden>
+          <div class="popular-heading">
+            <p class="eyebrow">Let chance decide</p>
+            <h2 id="dice-title">Roll for a song</h2>
+          </div>
+          <p class="dice-copy">Fresh karaoke ideas for tonight. Pick one, then show it to the KJ by the stage.</p>
+          <div class="dice-actions">
+            <button class="dice-button" id="dice-button" type="button">
+              <img class="dice-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cfilter id='g' x='-60%25' y='-60%25' width='220%25' height='220%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='6' flood-color='%2331e8ff' flood-opacity='.9'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='9' flood-color='%23ff4662' flood-opacity='.55'/%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-14 40 40)' filter='url(%23g)'%3E%3Crect x='15' y='15' width='50' height='50' rx='9' fill='%23f2f2f2'/%3E%3Crect x='18' y='18' width='44' height='44' rx='7' fill='%23ffffff'/%3E%3Ccircle cx='29' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='40' cy='40' r='4.5' fill='%23050505'/%3E%3Ccircle cx='29' cy='51' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='51' r='4.5' fill='%23050505'/%3E%3C/g%3E%3C/svg%3E" alt="">
+              <span>Roll Again</span>
+            </button>
+            <button class="dice-close-button" id="dice-close-button" type="button">Close</button>
+          </div>
+
+          <div class="dice-results" id="dice-results" hidden>
+            <div class="dice-column dice-ladies">
+              <h3>Ladies</h3>
+              <ul id="dice-female-results" class="dice-list"></ul>
+            </div>
+            <div class="dice-column dice-men">
+              <h3>Men</h3>
+              <ul id="dice-male-results" class="dice-list"></ul>
+            </div>
+            <div class="dice-column dice-duets">
+              <h3>Duets</h3>
+              <ul id="dice-duet-results" class="dice-list"></ul>
+            </div>
+            <div class="dice-column dice-groups">
+              <h3>Groups</h3>
+              <ul id="dice-group-results" class="dice-list"></ul>
+            </div>
+          </div>
+        </section>
 
         <section class="browse-panel" aria-label="Filter songs">
           <p class="filter-kicker">Filters</p>
@@ -74,6 +108,7 @@
             <button class="filter-category-button" type="button" data-filter-section="decade" aria-expanded="false" aria-controls="decade-filter-group">Decade</button>
             <button class="filter-category-button" type="button" data-filter-section="social" aria-expanded="false" aria-controls="social-filter-group">Duets &amp; Groups</button>
             <button class="clear-filters-button" id="clear-filters" type="button" hidden>Clear All</button>
+            <button class="browse-all-button" id="browse-all" type="button" aria-pressed="false">Browse All Songs</button>
             <button class="jump-results-button" id="jump-results" type="button" hidden>View Results</button>
           </div>
           <div class="filter-summary" id="filter-summary" aria-live="polite" hidden></div>
@@ -201,31 +236,21 @@
             </table>
           </div>
         </div>
-
-        <div class="dice-panel" id="dice-panel" hidden>
-          <div class="popular-heading">
-            <p class="eyebrow">Let chance decide</p>
-            <h2 id="dice-title">Roll for a song</h2>
-          </div>
-          <p class="dice-copy">Tap for a fresh handful of karaoke ideas.</p>
-          <button class="dice-button" id="dice-button" type="button">
-            <img class="dice-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cfilter id='g' x='-60%25' y='-60%25' width='220%25' height='220%25'%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='6' flood-color='%2331e8ff' flood-opacity='.9'/%3E%3CfeDropShadow dx='0' dy='0' stdDeviation='9' flood-color='%23ff4662' flood-opacity='.55'/%3E%3C/filter%3E%3C/defs%3E%3Cg transform='rotate(-14 40 40)' filter='url(%23g)'%3E%3Crect x='15' y='15' width='50' height='50' rx='9' fill='%23f2f2f2'/%3E%3Crect x='18' y='18' width='44' height='44' rx='7' fill='%23ffffff'/%3E%3Ccircle cx='29' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='29' r='4.5' fill='%23050505'/%3E%3Ccircle cx='40' cy='40' r='4.5' fill='%23050505'/%3E%3Ccircle cx='29' cy='51' r='4.5' fill='%23050505'/%3E%3Ccircle cx='51' cy='51' r='4.5' fill='%23050505'/%3E%3C/g%3E%3C/svg%3E" alt="">
-            <span>Roll Again</span>
-          </button>
-
-          <div class="dice-results" id="dice-results" hidden>
-            <div class="dice-column dice-ladies">
-              <h3>Ladies</h3>
-              <ul id="dice-female-results" class="dice-list"></ul>
-            </div>
-            <div class="dice-column dice-men">
-              <h3>Men</h3>
-              <ul id="dice-male-results" class="dice-list"></ul>
-            </div>
-          </div>
-        </div>
       </section>
     </main>
+
+    <button class="return-search-button" id="return-search" type="button" hidden>Back to Search</button>
+
+    <dialog class="song-dialog" id="song-dialog" aria-labelledby="song-dialog-title">
+      <form method="dialog" class="song-dialog-panel">
+        <button class="song-dialog-close" type="submit" aria-label="Close song details">&times;</button>
+        <p class="eyebrow">Song selected</p>
+        <h2 id="song-dialog-title"></h2>
+        <p class="song-dialog-artist" id="song-dialog-artist"></p>
+        <p class="song-dialog-meta" id="song-dialog-meta"></p>
+        <p class="song-dialog-instruction">Show this selection to the KJ by the stage.</p>
+      </form>
+    </dialog>
 
     <footer class="site-credit-footer">
       <p class="catalogue-note">Search the online list. Deep cuts? Ask the KJ.</p>
@@ -233,6 +258,6 @@
       <a class="footer-report-link" href="https://overlandbar.com/song-issue" data-analytics-event="feedback_click" data-analytics-category="karaoke" data-analytics-label="Report a Song Issue">Report a Song Issue</a>
     </footer>
 
-    <script src="app.js?v=20260604-artist-aliases"></script>
+    <script src="app.js?v=20260726-usability-pass"></script>
   </body>
 </html>
