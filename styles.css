@@ -1,6 +1,7 @@
 :root {
   color-scheme: dark;
   --header-height: 58px;
+  --search-height: 100px;
   --bottom-bar-height: 104px;
   --black: #050505;
   --charcoal: #121212;
@@ -24,8 +25,8 @@
 
 body {
   margin: 0;
-  min-width: 320px;
   padding-bottom: var(--bottom-bar-height);
+  overflow-x: hidden;
   background: var(--black);
   color: var(--white);
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -504,12 +505,12 @@ h2 {
 
 h1 {
   max-width: 780px;
-  font-size: clamp(2rem, 7vw, 4.4rem);
+  font-size: 2.5rem;
   text-shadow: 0 0 14px rgba(255, 255, 255, 0.36);
 }
 
 h2 {
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-size: 1.75rem;
 }
 
 .search-panel {
@@ -594,6 +595,14 @@ button:hover {
   background: rgba(255, 70, 98, 0.26);
 }
 
+button:focus-visible,
+a:focus-visible,
+.song-row:focus-visible,
+.song-dialog:focus-visible {
+  outline: 3px solid rgba(49, 232, 255, 0.75);
+  outline-offset: 3px;
+}
+
 #clear-search {
   min-width: 96px;
 }
@@ -629,6 +638,7 @@ button:hover {
 
 .filter-category-button,
 .clear-filters-button,
+.browse-all-button,
 .jump-results-button {
   min-height: 44px;
   border-color: rgba(255, 255, 255, 0.2);
@@ -659,6 +669,18 @@ button:hover {
 .clear-filters-button {
   border-color: rgba(255, 70, 98, 0.68);
   background: rgba(255, 70, 98, 0.12);
+}
+
+.browse-all-button {
+  border-color: rgba(49, 232, 255, 0.68);
+  background: rgba(49, 232, 255, 0.12);
+  color: var(--cyan);
+}
+
+.browse-all-button.is-active {
+  border-color: rgba(255, 209, 42, 0.86);
+  background: rgba(255, 209, 42, 0.18);
+  color: var(--gold);
 }
 
 .jump-results-button {
@@ -774,10 +796,28 @@ button:hover {
   max-width: 1040px;
 }
 
+.dice-panel-inline {
+  max-width: 920px;
+  border: 1px solid rgba(255, 209, 42, 0.34);
+  border-radius: 8px;
+  padding: 14px;
+  background:
+    linear-gradient(135deg, rgba(255, 209, 42, 0.1), rgba(49, 232, 255, 0.06)),
+    rgba(14, 14, 14, 0.96);
+  box-shadow: var(--shadow);
+}
+
 .dice-copy {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
+}
+
+.dice-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .dice-button {
@@ -807,6 +847,17 @@ button:hover {
   background: rgba(255, 209, 42, 0.22);
 }
 
+.dice-close-button {
+  min-height: 50px;
+  border-color: rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+}
+
+.dice-close-button-bottom {
+  justify-self: center;
+}
+
 .dice-button:disabled {
   cursor: wait;
   opacity: 0.58;
@@ -814,7 +865,7 @@ button:hover {
 
 .dice-results {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -837,6 +888,10 @@ button:hover {
 
 .dice-ladies h3 {
   color: var(--red);
+}
+
+.dice-duets h3 {
+  color: var(--gold);
 }
 
 .dice-list {
@@ -878,6 +933,15 @@ button:hover {
   display: grid;
   gap: 30px;
   padding: 22px max(18px, calc((100vw - 1120px) / 2)) 48px;
+}
+
+.popular-band:not(:has(.popular-panel:not([hidden]))) {
+  display: none;
+}
+
+body.has-active-results .theme-band.is-discovery-muted,
+body.has-active-results .top-songs-panel {
+  display: none;
 }
 
 .popular-heading h2 {
@@ -1090,6 +1154,15 @@ tbody tr:hover {
   background: rgba(49, 232, 255, 0.08);
 }
 
+.song-row {
+  cursor: pointer;
+}
+
+.song-row:hover,
+.song-row:focus-visible {
+  background: rgba(49, 232, 255, 0.11);
+}
+
 td:first-child {
   color: #ffffff;
   font-weight: 700;
@@ -1231,11 +1304,376 @@ td:first-child {
   background: rgba(49, 232, 255, 0.2);
 }
 
+.load-more-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.return-search-button {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: calc(var(--bottom-bar-height) + 12px + env(safe-area-inset-bottom));
+  z-index: 40;
+  min-height: 46px;
+  border-color: rgba(255, 209, 42, 0.84);
+  background: rgba(5, 5, 5, 0.94);
+  color: var(--gold);
+  box-shadow:
+    0 0 18px rgba(255, 209, 42, 0.22),
+    var(--shadow);
+}
+
+.song-dialog {
+  width: min(480px, calc(100vw - 28px));
+  border: 1px solid rgba(49, 232, 255, 0.5);
+  border-radius: 8px;
+  padding: 0;
+  background: rgba(12, 12, 12, 0.98);
+  color: var(--white);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.72);
+}
+
+.song-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.song-dialog-panel {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+}
+
+.song-dialog-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.song-dialog h2 {
+  padding-right: 36px;
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.song-dialog-artist,
+.song-dialog-meta,
+.song-dialog-instruction {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.song-dialog-artist {
+  color: var(--cyan);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.song-dialog-meta {
+  color: var(--muted);
+}
+
+.song-dialog-instruction {
+  border: 1px solid rgba(255, 209, 42, 0.42);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(255, 209, 42, 0.1);
+  color: var(--gold);
+  font-weight: 700;
+}
+
 mark {
   border-radius: 4px;
   padding: 0 2px;
   background: rgba(255, 209, 42, 0.35);
   color: inherit;
+}
+
+.songbook-page {
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  overflow-x: clip;
+}
+
+.songbook-page .sticky-helper-bar {
+  position: static;
+  font-size: 0.875rem;
+  padding: 9px 16px;
+  box-shadow: none;
+}
+
+.songbook-page .site-credit-footer {
+  position: static;
+  min-height: 0;
+  padding: 20px 16px;
+  box-shadow: none;
+}
+
+.songbook-page .footer-report-link {
+  position: static;
+  padding: 12px;
+  font-size: 0.8rem;
+}
+
+.songbook-page .catalogue-note,
+.songbook-page .powered-by {
+  font-size: 0.8rem;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.songbook-page .brand-mark {
+  width: 100px;
+  height: 72px;
+}
+
+.songbook-page .search-panel,
+.songbook-page .browse-panel {
+  min-width: 0;
+  max-width: none;
+}
+
+.songbook-page .brand-band {
+  padding: 20px max(16px, calc((100vw - 1120px) / 2)) 12px;
+}
+
+.songbook-page .search-panel {
+  position: sticky;
+  top: var(--header-height);
+  z-index: 28;
+  width: 100%;
+  padding: 10px max(16px, calc((100vw - 1120px) / 2));
+  gap: 6px;
+  border-bottom: 1px solid var(--line);
+  background: var(--black);
+}
+
+.songbook-page .search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.search-field {
+  position: relative;
+  min-width: 0;
+}
+
+.songbook-page #song-search {
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 48px 0 12px;
+  font-size: 16px;
+}
+
+.songbook-page #clear-search {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  min-width: 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 1.5rem;
+}
+
+.songbook-page #clear-search:disabled {
+  visibility: hidden;
+}
+
+#submit-search {
+  padding: 0 14px;
+  border-color: var(--cyan);
+  color: var(--black);
+  background: var(--cyan);
+  text-transform: none;
+}
+
+.catalog-status {
+  min-height: 18px;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.discovery-actions,
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.discovery-actions > button {
+  min-width: 0;
+  min-height: 48px;
+  flex: 1;
+  font-size: 0.875rem;
+  text-transform: none;
+  padding: 8px 12px;
+  white-space: normal;
+}
+
+.songbook-page .dice-icon {
+  width: 24px;
+  height: 24px;
+}
+
+#filter-details summary {
+  padding: 12px 0;
+  min-height: 48px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+#filter-details summary:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+#filter-details .filter-category-row {
+  margin: 0 0 12px;
+}
+
+.songbook-page .active-filter-chip,
+.songbook-page .browse-button,
+.songbook-page .song-theme-label {
+  min-height: 44px;
+  white-space: normal;
+  line-height: 1.3;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.songbook-page .dice-panel-inline {
+  min-width: 0;
+  max-width: none;
+  gap: 10px;
+}
+
+.songbook-page .dice-results {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.songbook-page .dice-column h3 {
+  padding: 12px;
+  font-size: 1rem;
+  text-transform: none;
+}
+
+.songbook-page .dice-actions {
+  position: sticky;
+  top: calc(var(--header-height) + var(--search-height) + 8px);
+  z-index: 2;
+  background: var(--panel);
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.songbook-page .dice-close-button-bottom {
+  width: 100%;
+  text-transform: none;
+}
+
+.songbook-page .dice-copy {
+  display: none;
+}
+
+.song-select-button {
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 3px;
+  padding: 4px 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--white);
+  line-height: 1.35;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.song-select-button:hover {
+  background: transparent;
+  color: var(--cyan);
+}
+
+.song-row:focus-within {
+  background: rgba(49, 232, 255, 0.1);
+}
+
+.songbook-page td {
+  padding: 8px 18px;
+  vertical-align: middle;
+}
+
+.songbook-page .dice-list li {
+  display: block;
+  padding: 0;
+}
+
+.dice-song-row .song-select-button {
+  display: grid;
+  justify-content: stretch;
+  align-items: start;
+  gap: 4px;
+  width: 100%;
+  padding: 12px;
+}
+
+.songbook-page .return-search-button {
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  left: auto;
+  right: max(12px, env(safe-area-inset-right));
+  width: auto;
+  text-transform: none;
+}
+
+.songbook-page .song-dialog {
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+}
+
+.songbook-page .results-band {
+  min-height: calc(100svh - var(--header-height) - var(--search-height));
+}
+
+#results-title:focus {
+  outline: none;
+}
+
+.songbook-page .song-dialog-close {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.song-dialog-artist,
+.song-dialog-meta {
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 @media (min-width: 761px) {
@@ -1244,16 +1682,34 @@ mark {
   }
 }
 
+@media (min-width: 980px) {
+  .songbook-page .search-band {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    column-gap: 40px;
+  }
+
+  .songbook-page .discovery-actions,
+  .songbook-page .dice-panel-inline {
+    grid-column: 1;
+  }
+
+  .songbook-page .browse-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+}
+
 @media (max-width: 760px) {
   body {
-    --header-height: 96px;
-    --bottom-bar-height: 96px;
+    --header-height: 62px;
+    --bottom-bar-height: 84px;
   }
 
   .site-header {
     align-items: center;
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    gap: 10px;
     padding-top: 4px;
     padding-bottom: 5px;
   }
@@ -1264,13 +1720,61 @@ mark {
   }
 
   .site-nav {
-    justify-content: center;
-    gap: 8px 14px;
+    justify-content: flex-end;
+    gap: 8px;
   }
 
   .site-nav a {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     letter-spacing: 0.06em;
+  }
+
+  .site-nav a:nth-child(-n + 3) {
+    display: none;
+  }
+
+  .songbook-page .site-header {
+    min-height: 56px;
+    padding: 4px 16px;
+  }
+
+  .songbook-page .site-logo {
+    width: 156px;
+    height: 42px;
+  }
+
+  .songbook-page .nav-toggle {
+    display: inline-flex;
+    min-height: 44px;
+    padding: 0 12px;
+    background: transparent;
+    border-color: var(--line);
+    box-shadow: none;
+    text-transform: none;
+  }
+
+  .songbook-page .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    padding: 8px 16px;
+    background: var(--charcoal);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-toggle[aria-expanded="true"] + .site-nav {
+    display: grid;
+  }
+
+  .songbook-page .site-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.875rem;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   .sticky-helper-bar {
@@ -1283,6 +1787,59 @@ mark {
     background:
       linear-gradient(180deg, rgba(5, 5, 5, 0.9), rgba(5, 5, 5, 0.96)),
       url("assets/good-times-karaoke.jpg") right 18px top 18px / 112px auto no-repeat;
+  }
+
+  .songbook-page .search-band {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .songbook-page .brand-band {
+    padding: 12px 16px 6px;
+  }
+
+  .songbook-page .brand-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .songbook-page .brand-row > div {
+    min-width: 0;
+  }
+
+  .songbook-page .brand-mark {
+    width: 64px;
+    height: 56px;
+    flex: 0 0 64px;
+  }
+
+  .songbook-page h1 {
+    font-size: 1.5rem;
+    line-height: 1.15;
+    text-transform: none;
+  }
+
+  .songbook-page h2 {
+    font-size: 1.4rem;
+    line-height: 1.2;
+    text-transform: none;
+  }
+
+  .songbook-page .eyebrow {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+  }
+
+  .songbook-page .search-panel label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .theme-band {
@@ -1327,9 +1884,38 @@ mark {
 
   #clear-search,
   .dice-button-inline,
+  .browse-all-button,
   .result-count {
     width: 100%;
     text-align: left;
+  }
+
+  .filter-category-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .songbook-page .filter-category-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .songbook-page .filter-actions button {
+    width: auto;
+    flex: 1;
+  }
+
+  .filter-category-button,
+  .clear-filters-button,
+  .browse-all-button,
+  .jump-results-button {
+    width: 100%;
+    min-height: 48px;
+    white-space: normal;
+  }
+
+  #song-search {
+    min-height: 56px;
+    font-size: 16px;
   }
 
   table {
@@ -1353,6 +1939,74 @@ mark {
     font-size: 0.68rem;
   }
 
+  .songbook-page .results-band,
+  .songbook-page .popular-band {
+    padding: 20px 16px 28px;
+  }
+
+  .songbook-page .summary-row {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .songbook-page .result-count {
+    min-width: 0;
+    font-size: 0.875rem;
+    text-align: left;
+  }
+
+  .songbook-page table,
+  .songbook-page tbody {
+    display: block;
+    min-width: 0;
+  }
+
+  .songbook-page thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .songbook-page tbody tr {
+    display: block;
+    padding: 8px 12px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .songbook-page tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .songbook-page td {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+  }
+
+  .songbook-page td:nth-child(2) {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  .songbook-page .song-cell-content {
+    gap: 4px;
+  }
+
+  .songbook-page td .song-select-button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .songbook-page .load-more-button {
+    width: 100%;
+    min-height: 48px;
+    text-transform: none;
+  }
+
   td:nth-child(1),
   td:nth-child(2) {
     min-width: 0;
@@ -1365,8 +2019,23 @@ mark {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .dice-button {
+  .dice-results {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dice-button,
+  .dice-close-button {
     width: 100%;
+  }
+
+  .dice-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .songbook-page .dice-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .dice-list li {
@@ -1417,4 +2086,28 @@ mark {
     font-size: 0.63rem;
   }
 
+  .return-search-button {
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+}
+
+@media (max-width: 430px) {
+  .brand-mark {
+    width: min(220px, 68vw);
+  }
+
+  h1 {
+    font-size: 1.85rem;
+  }
+
+  .filter-category-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-credit-footer {
+    min-height: var(--bottom-bar-height);
+  }
 }

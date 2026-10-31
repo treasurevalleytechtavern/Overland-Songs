@@ -140,7 +140,11 @@ var songCsvUrl = "https://raw.githubusercontent.com/treasurevalleytechtavern/Ove
 
 The CSV should be on the same website/domain when possible. Some file hosts block browser fetches from embedded code.
 
-For large lists, the search waits until someone types at least 2 characters and renders only the first 100 matches. The dice button can show 5 randomized Female original-vocal suggestions and 5 randomized Male original-vocal suggestions when someone wants quick ideas.
+Search starts after the first character. Results load in batches of 15 on phones,
+24 on tablets, and 30 on wider screens. Let Chance Decide shows four random picks
+in each category. Ladies and Men appear together immediately, with Duets and
+Groups below. Closing and reopening preserves the picks; Roll Again refreshes
+all four categories.
 
 Available Songs uses strict matches first. If there are 1 to 4 strict matches, a Similar Songs section appears underneath. Similar Songs uses the same artist when the search looks like a song title, and shared categories when the search looks like an artist/category/decade/year search. Typo matching is only used when there are zero strict matches.
 
@@ -156,6 +160,26 @@ Social singing: Duet, Group Songs
 ```
 
 ## Preview It
+
+Typing automatically moves to the live results while keeping the search bar
+visible and the keyboard open. Press **Search** or the phone keyboard's
+**Search/Enter** key to dismiss the keyboard and browse the results.
+**View Results** applies the same navigation after choosing filters. **Search &
+Filters** returns to the controls without clearing the query or loaded songs.
+On phones, filters start collapsed. Random picks show Ladies and Men together,
+followed by Duets and Groups, without a category picker.
+
+The browser regression check uses Playwright with installed Chrome and a running
+local server. It checks mobile/tablet/desktop reflow, search navigation, append
+behavior, state preservation, keyboard controls, slow loading, retry, and long
+song names:
+
+```text
+node scripts/check-mobile-songbook.cjs http://127.0.0.1:4183/
+```
+
+Playwright must be available to Node (through a local installation or NODE_PATH).
+Screenshots go to the system temporary directory, or SONGBOOK_QA_DIR when set.
 
 Because the songs are loaded from a CSV file, serve the folder locally:
 

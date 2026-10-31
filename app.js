@@ -1,5 +1,5 @@
 const maxRenderedRows = 15;
-const minimumSearchLength = 2;
+const minimumSearchLength = 1;
 const fuzzyResultLimit = 80;
 const requestSongUrl = "https://overlandbar.com/request-a-song";
 const songIndexUrl = "songs.index.json?v=20260604-artist-aliases";
@@ -9,10 +9,19 @@ const themeDaysUrl = "theme_days.csv?v=20260604-artist-aliases";
 const searchForm = document.querySelector("#song-search-form");
 const searchInput = document.querySelector("#song-search");
 const clearButton = document.querySelector("#clear-search");
+const searchControls = document.querySelector("#search-controls");
+const resultsTitle = document.querySelector("#results-title");
+const catalogStatus = document.querySelector("#catalog-status");
+const retrySongsButton = document.querySelector("#retry-songs");
+const filterDetails = document.querySelector("#filter-details");
+const filterTotal = document.querySelector("#filter-total");
+const navToggle = document.querySelector("#nav-toggle");
+const siteNav = document.querySelector("#site-nav");
 let browseButtons = document.querySelectorAll(".browse-button");
 const filterCategoryButtons = document.querySelectorAll(".filter-category-button");
 const filterGroups = document.querySelectorAll("[data-filter-group]");
 const clearFiltersButton = document.querySelector("#clear-filters");
+const browseAllButton = document.querySelector("#browse-all");
 const jumpResultsButton = document.querySelector("#jump-results");
 const filterSummary = document.querySelector("#filter-summary");
 const genreButtons = document.querySelector("#genre-buttons");
@@ -29,9 +38,12 @@ const similarTitle = document.querySelector("#similar-title");
 const dicePanel = document.querySelector("#dice-panel");
 const topDiceButton = document.querySelector("#top-dice-button");
 const diceButton = document.querySelector("#dice-button");
+const diceCloseButtons = document.querySelectorAll("[data-dice-close]");
 const diceResults = document.querySelector("#dice-results");
 const diceFemaleResults = document.querySelector("#dice-female-results");
 const diceMaleResults = document.querySelector("#dice-male-results");
+const diceDuetResults = document.querySelector("#dice-duet-results");
+const diceGroupResults = document.querySelector("#dice-group-results");
 const themeSection = document.querySelector("#theme-section");
 const themeKicker = document.querySelector("#theme-kicker");
 const themeTitle = document.querySelector("#theme-title");
@@ -45,6 +57,12 @@ const upcomingThemes = document.querySelector("#upcoming-themes");
 const upcomingThemeList = document.querySelector("#upcoming-theme-list");
 const topSongsPanel = document.querySelector("#top-songs-panel");
 const topSongsBody = document.querySelector("#top-songs-results");
+const popularBand = document.querySelector(".popular-band");
+const returnSearchButton = document.querySelector("#return-search");
+const songDialog = document.querySelector("#song-dialog");
+const songDialogTitle = document.querySelector("#song-dialog-title");
+const songDialogArtist = document.querySelector("#song-dialog-artist");
+const songDialogMeta = document.querySelector("#song-dialog-meta");
 
 let songs = [];
 let searchTimer = 0;
@@ -60,6 +78,17 @@ let currentSearchQuery = "";
 let visibleResultCount = maxRenderedRows;
 let currentUsedTypoMatching = false;
 let themesLoaded = [];
+let isBrowseAllActive = false;
+let lastResultSignature = "";
+let lastDialogTrigger = null;
+let hasRolledDice = false;
+let catalogState = "loading";
+let pendingResultsJump = false;
+let resultsJumpTimer = 0;
+
+if (filterDetails) {
+  filterDetails.open = window.matchMedia("(min-width: 980px)").matches;
+}
 
 const diceButtons = [topDiceButton, diceButton].filter(Boolean);
 diceButtons.forEach((button) => {
@@ -68,10 +97,132 @@ diceButtons.forEach((button) => {
 
 function updateHeaderScrollState() {
   document.body.classList.toggle("is-scrolled", window.scrollY > 4);
+  updateReturnSearchButton();
 }
 
 window.addEventListener("scroll", updateHeaderScrollState, { passive: true });
 updateHeaderScrollState();
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function getScrollBehavior() {
+  return prefersReducedMotion() ? "auto" : "smooth";
+}
+
+function getStickyOffset() {
+  const headerHeight = document.querySelector(".site-header")?.offsetHeight || 0;
+  const helper = document.querySelector(".sticky-helper-bar");
+  const helperHeight = helper && getComputedStyle(helper).position === "sticky" ? helper.offsetHeight : 0;
+  const searchHeight = getComputedStyle(searchForm).position === "sticky" ? searchForm.offsetHeight : 0;
+
+  return headerHeight + helperHeight + searchHeight + 12;
+}
+
+function showResults({ keepTyping = false } = {}) {
+  window.clearTimeout(searchTimer);
+  window.clearTimeout(resultsJumpTimer);
+  render();
+
+  if (!resultsSection || resultsSection.hidden) {
+    return;
+  }
+
+  setDicePanelOpen(false);
+  if (!keepTyping) {
+    searchInput.blur();
+  }
+  pendingResultsJump = catalogState === "loading" ? (keepTyping ? "typing" : "submitted") : false;
+  // Let the phone keyboard start closing before measuring the results position.
+  resultsJumpTimer = window.setTimeout(() => {
+    if (!keepTyping) {
+      resultsTitle?.focus({ preventScroll: true });
+    }
+    scrollElementIntoSafeView(resultsSection, keepTyping ? "auto" : getScrollBehavior());
+  }, !keepTyping && window.matchMedia("(max-width: 760px)").matches ? 180 : 0);
+}
+
+function scrollElementIntoSafeView(element, behavior = getScrollBehavior()) {
+  if (!element) {
+    return;
+  }
+
+  const top = element.getBoundingClientRect().top + window.scrollY - getStickyOffset();
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior
+  });
+}
+
+function getResultBatchSize() {
+  if (window.matchMedia("(min-width: 1180px)").matches) {
+    return 30;
+  }
+
+  if (window.matchMedia("(min-width: 760px)").matches) {
+    return 24;
+  }
+
+  return maxRenderedRows;
+}
+
+function getSongKey(song) {
+  return `${normalize(song.title)}\u0000${normalize(song.artist)}\u0000${normalize(song.version)}`;
+}
+
+function dedupeSongs(songList) {
+  const seen = new Set();
+
+  return songList.filter((song) => {
+    const key = getSongKey(song);
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function getResultSignature(query, hasTextQuery, hasFilters) {
+  return JSON.stringify({
+    query: hasTextQuery ? normalize(query) : "",
+    filters: activeFilters.map((filter) => ({
+      field: filter.field,
+      value: normalize(filter.value),
+      matcher: filter.matcher || ""
+    })),
+    browseAll: Boolean(isBrowseAllActive && !hasTextQuery && !hasFilters)
+  });
+}
+
+function setDiscoveryVisibility(isActiveResults) {
+  document.body.classList.toggle("has-active-results", isActiveResults);
+  document.body.classList.toggle("is-browsing-all", isBrowseAllActive);
+
+  if (popularBand) {
+    popularBand.hidden = false;
+  }
+
+  if (themeSection) {
+    const hasThemeFilter = activeFilters.some((filter) =>
+      filter.field === "themeTags" || filter.field === "vibes" || filter.field === "themeLabel"
+    );
+    themeSection.classList.toggle("is-discovery-muted", isActiveResults && !hasThemeFilter);
+  }
+}
+
+function setBrowseAllActive(isActive) {
+  isBrowseAllActive = isActive;
+
+  if (browseAllButton) {
+    browseAllButton.classList.toggle("is-active", isBrowseAllActive);
+    browseAllButton.setAttribute("aria-pressed", isBrowseAllActive ? "true" : "false");
+    browseAllButton.textContent = isBrowseAllActive ? "Browsing All Songs" : "Browse All Songs";
+  }
+}
 
 const filterFieldLabels = {
   categories: "Genre",
@@ -644,6 +795,9 @@ function songMatchesActiveFilters(song) {
 }
 
 function updateFilterSummary() {
+  if (filterTotal) {
+    filterTotal.textContent = activeFilters.length ? `(${activeFilters.length})` : "";
+  }
   if (!filterSummary) {
     return;
   }
@@ -694,12 +848,24 @@ function updateJumpResultsButton(count = 0) {
     return;
   }
 
-  const hasResults = count > 0 && resultsSection && !resultsSection.hidden;
+  const hasResults = resultsSection && !resultsSection.hidden;
   jumpResultsButton.hidden = !hasResults;
 
   if (hasResults) {
-    jumpResultsButton.textContent = `View ${count.toLocaleString()} result${count === 1 ? "" : "s"}`;
+    jumpResultsButton.textContent = count > 0 ? `View ${count.toLocaleString()} songs` : "View Results";
   }
+}
+
+function updateReturnSearchButton() {
+  if (!returnSearchButton || !resultsSection || resultsSection.hidden) {
+    if (returnSearchButton) {
+      returnSearchButton.hidden = true;
+    }
+    return;
+  }
+
+  const controlsBottom = searchControls?.getBoundingClientRect().bottom || 0;
+  returnSearchButton.hidden = controlsBottom > getStickyOffset() + 20;
 }
 
 function updateBrowseButtonStates() {
@@ -827,6 +993,7 @@ function renderSubgenreButtons(activeGenre) {
 }
 
 function setFilterFromButton(button) {
+  setBrowseAllActive(false);
   const clearField = button.dataset.clearField || "";
   const field = button.dataset.field || "";
   const value = button.dataset.search || "";
@@ -1212,10 +1379,14 @@ function renderRequestSong(query) {
   if (resultsSection) {
     resultsSection.hidden = false;
   }
+  setDiscoveryVisibility(true);
   resultsBody.innerHTML = "";
+  resultsBody.closest("table").hidden = true;
+  resultsTitle.textContent = "Search results";
   currentSearchMatches = [];
   currentSearchQuery = "";
   visibleResultCount = maxRenderedRows;
+  lastResultSignature = "";
   if (loadMoreButton) {
     loadMoreButton.hidden = true;
   }
@@ -1228,6 +1399,7 @@ function renderRequestSong(query) {
   emptyState.hidden = false;
   resultCount.textContent = "0 songs";
   updateJumpResultsButton(0);
+  updateReturnSearchButton();
   scheduleKaraokeSearchTracking(query, 0);
 }
 
@@ -1260,11 +1432,13 @@ function hideSearchResults() {
     resultsSection.hidden = true;
   }
 
+  setDiscoveryVisibility(false);
   resultsBody.innerHTML = "";
   emptyState.hidden = true;
   currentSearchMatches = [];
   currentSearchQuery = "";
   visibleResultCount = maxRenderedRows;
+  lastResultSignature = "";
   if (loadMoreButton) {
     loadMoreButton.hidden = true;
   }
@@ -1274,6 +1448,7 @@ function hideSearchResults() {
   if (similarPanel) {
     similarPanel.hidden = true;
   }
+  updateReturnSearchButton();
 }
 
 function escapeHtml(value) {
@@ -1309,7 +1484,11 @@ function highlight(value, query) {
 
 function getRandomSongsByVocal(vocal, limit) {
   const vocalKey = normalize(vocal);
-  const candidates = songs.filter((song) => normalize(song.originalVocal) === vocalKey);
+  return getRandomSongsWhere((song) => normalize(song.originalVocal) === vocalKey, limit);
+}
+
+function getRandomSongsWhere(predicate, limit) {
+  const candidates = songs.filter(predicate);
 
   for (let index = candidates.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
@@ -1321,17 +1500,76 @@ function getRandomSongsByVocal(vocal, limit) {
   return candidates.slice(0, limit);
 }
 
+function getRandomSongsBySocial(term, limit) {
+  const target = normalize(term);
+  return getRandomSongsWhere((song) => normalize(song.socialSinging).includes(target), limit);
+}
+
 function renderDiceList(target, songList) {
   if (!target) {
     return;
   }
 
   target.innerHTML = songList.map((song) => `
-    <li>
+    <li class="song-row dice-song-row"
+      data-song-title="${escapeHtml(song.title)}"
+      data-song-artist="${escapeHtml(song.artist)}"
+      data-song-meta="${escapeHtml([song.originalVocal ? `Original vocal: ${song.originalVocal}` : "", song.socialSinging || "", song.version || ""].filter(Boolean).join(" | "))}"
+    >
+      <button class="song-select-button" type="button" aria-label="Select ${escapeHtml(song.title)} by ${escapeHtml(song.artist)}">
       <span class="dice-song-title">${escapeHtml(song.title)}</span>
       <span class="dice-song-artist">${escapeHtml(song.artist)}</span>
+      </button>
     </li>
   `).join("");
+}
+
+function setDicePanelOpen(isOpen, options = {}) {
+  if (!dicePanel) {
+    return;
+  }
+
+  dicePanel.hidden = !isOpen;
+  topDiceButton?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  const topDiceLabel = topDiceButton?.querySelector("span");
+
+  if (topDiceLabel) {
+    topDiceLabel.textContent = isOpen ? "Close Random Picks" : "Let Chance Decide";
+  }
+
+  if (!isOpen) {
+    if (options.restoreFocus) {
+      topDiceButton?.focus({ preventScroll: true });
+    }
+    return;
+  }
+
+  if (options.focusPanel) {
+    dicePanel.focus({ preventScroll: true });
+  }
+
+  window.requestAnimationFrame(() => {
+    if (dicePanel.hidden) {
+      return;
+    }
+    const rect = dicePanel.getBoundingClientRect();
+
+    if (rect.top < getStickyOffset() || rect.top > window.innerHeight - 120) {
+      scrollElementIntoSafeView(dicePanel);
+    }
+  });
+}
+
+function rollDiceSuggestions() {
+  renderDiceList(diceFemaleResults, getRandomSongsByVocal("female", 4));
+  renderDiceList(diceMaleResults, getRandomSongsByVocal("male", 4));
+  renderDiceList(diceDuetResults, getRandomSongsBySocial("duet", 4));
+  renderDiceList(diceGroupResults, getRandomSongsBySocial("group", 4));
+  hasRolledDice = true;
+
+  if (diceResults) {
+    diceResults.hidden = false;
+  }
 }
 
 function getCategoryTerms(song) {
@@ -1364,12 +1602,22 @@ function renderSongRows(songList, query = "") {
     const versionMarkup = getVersionValues(song.version)
       .map((version) => `<span class="song-version-tile">${escapeHtml(version)}</span>`)
       .join("");
+    const meta = [
+      song.originalVocal ? `Original vocal: ${song.originalVocal}` : "",
+      song.socialSinging || "",
+      song.version || ""
+    ].filter(Boolean).join(" | ");
 
     return `
-    <tr>
+    <tr
+      class="song-row"
+      data-song-title="${escapeHtml(song.title)}"
+      data-song-artist="${escapeHtml(song.artist)}"
+      data-song-meta="${escapeHtml(meta)}"
+    >
       <td data-label="Title">
         <span class="song-cell-content">
-          <span>${query ? highlight(song.title, query) : escapeHtml(song.title)}</span>
+          <button class="song-select-button" type="button" aria-label="Select ${escapeHtml(song.title)} by ${escapeHtml(song.artist)}">${query ? highlight(song.title, query) : escapeHtml(song.title)}</button>
           ${versionMarkup}
           ${themeLabelMarkup}
         </span>
@@ -1382,6 +1630,32 @@ function renderSongRows(songList, query = "") {
     </tr>
   `;
   }).join("");
+}
+
+function openSongDialog(row) {
+  if (!songDialog || !songDialogTitle || !songDialogArtist || !songDialogMeta || !row) {
+    return;
+  }
+
+  lastDialogTrigger = row.classList.contains("dice-song-row") ? topDiceButton : row.querySelector(".song-select-button");
+  songDialogTitle.textContent = row.dataset.songTitle || "Selected song";
+  songDialogArtist.textContent = row.dataset.songArtist || "";
+  songDialogMeta.textContent = row.dataset.songMeta || "";
+  songDialogMeta.hidden = !songDialogMeta.textContent;
+
+  if (typeof songDialog.showModal === "function") {
+    songDialog.showModal();
+    return;
+  }
+
+  songDialog.setAttribute("open", "");
+}
+
+function restoreDialogFocus() {
+  if (lastDialogTrigger && typeof lastDialogTrigger.focus === "function") {
+    lastDialogTrigger.focus({ preventScroll: true });
+  }
+  lastDialogTrigger = null;
 }
 
 function mixThemeLabelGroups(sortedSongs) {
@@ -1469,25 +1743,32 @@ function renderTopSongs() {
   topSongsBody.innerHTML = renderSongRows(topSongs);
 }
 
-function renderVisibleSearchResults(matchCount, usedTypoMatching) {
+function renderVisibleSearchResults(matchCount, usedTypoMatching, append = false) {
   currentUsedTypoMatching = usedTypoMatching;
   const visibleMatches = currentSearchMatches.slice(0, visibleResultCount);
   const visibleCount = visibleMatches.length;
-  const totalPages = Math.max(1, Math.ceil(currentSearchMatches.length / maxRenderedRows));
-  const currentPage = Math.max(1, Math.ceil(visibleCount / maxRenderedRows));
-
-  resultsBody.innerHTML = renderSongRows(visibleMatches, currentSearchQuery);
+  const batchSize = getResultBatchSize();
+  if (append) {
+    const renderedCount = resultsBody.children.length;
+    resultsBody.insertAdjacentHTML("beforeend", renderSongRows(visibleMatches.slice(renderedCount), currentSearchQuery));
+  } else {
+    resultsBody.innerHTML = renderSongRows(visibleMatches, currentSearchQuery);
+  }
+  resultsBody.closest("table").hidden = false;
 
   if (loadMoreButton) {
     loadMoreButton.hidden = visibleResultCount >= currentSearchMatches.length;
-    loadMoreButton.textContent = `Show next ${Math.min(maxRenderedRows, Math.max(0, currentSearchMatches.length - visibleResultCount)).toLocaleString()}`;
+    loadMoreButton.disabled = false;
+    loadMoreButton.textContent = `Show ${Math.min(batchSize, Math.max(0, currentSearchMatches.length - visibleResultCount)).toLocaleString()} more songs`;
   }
 
   emptyState.hidden = true;
-  const shownText = `, showing 1-${visibleCount.toLocaleString()} of ${currentSearchMatches.length.toLocaleString()}, page ${currentPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+  const total = currentSearchMatches.length;
+  const shownText = visibleCount < total ? `Showing ${visibleCount.toLocaleString()} of ${total.toLocaleString()} songs` : `${total.toLocaleString()} song${total === 1 ? "" : "s"}`;
   const typoText = usedTypoMatching ? " including close matches" : "";
-  resultCount.textContent = `${matchCount.toLocaleString()} song${matchCount === 1 ? "" : "s"}${typoText}${shownText}`;
-  updateJumpResultsButton(matchCount);
+  resultCount.textContent = `${shownText}${typoText}`;
+  updateJumpResultsButton(total);
+  updateReturnSearchButton();
 }
 
 function renderSimilarSongs(matches, query, queryTerms) {
@@ -1565,12 +1846,21 @@ function renderSimilarSongs(matches, query, queryTerms) {
 }
 
 function render() {
+  clearButton.disabled = searchInput.value.length === 0;
+  if (catalogState !== "ready") {
+    renderCatalogStatus();
+    return;
+  }
+  retrySongsButton.hidden = true;
+  resultsSection.setAttribute("aria-busy", "false");
   const query = searchInput.value.trim();
   const normalizedQuery = normalize(query);
   const hasTextQuery = normalizedQuery.length >= minimumSearchLength;
   const hasFilters = activeFilters.length > 0;
+  const isBrowseAllResults = isBrowseAllActive && !hasTextQuery && !hasFilters;
+  const resultSignature = getResultSignature(query, hasTextQuery, hasFilters);
 
-  if (!hasTextQuery && !hasFilters) {
+  if (!hasTextQuery && !hasFilters && !isBrowseAllResults) {
     hideSearchResults();
     return;
   }
@@ -1639,10 +1929,14 @@ function render() {
       if (resultsSection) {
         resultsSection.hidden = false;
       }
+      setDiscoveryVisibility(true);
       resultsBody.innerHTML = "";
+      resultsBody.closest("table").hidden = true;
+      resultsTitle.textContent = "Filtered songs";
       currentSearchMatches = [];
       currentSearchQuery = "";
       visibleResultCount = maxRenderedRows;
+      lastResultSignature = resultSignature;
       if (loadMoreButton) {
         loadMoreButton.hidden = true;
       }
@@ -1653,6 +1947,7 @@ function render() {
       emptyState.hidden = false;
       resultCount.textContent = "0 songs";
       updateJumpResultsButton(0);
+      updateReturnSearchButton();
       scheduleKaraokeSearchTracking(query, 0);
       return;
     }
@@ -1665,11 +1960,28 @@ function render() {
     resultsSection.hidden = false;
   }
 
+  setDiscoveryVisibility(true);
   currentSearchQuery = query;
-  visibleResultCount = maxRenderedRows;
-  currentSearchMatches = mixThemeLabelGroups(rankedMatches
+  const nextMatches = dedupeSongs(mixThemeLabelGroups(rankedMatches
     .sort((a, b) => a.rank - b.rank || getRankingScore(b.song) - getRankingScore(a.song) || a.song.title.localeCompare(b.song.title) || a.song.artist.localeCompare(b.song.artist))
-    .map((match) => match.song));
+    .map((match) => match.song)));
+  const signatureChanged = resultSignature !== lastResultSignature;
+  currentSearchMatches = nextMatches;
+
+  if (signatureChanged) {
+    visibleResultCount = getResultBatchSize();
+    lastResultSignature = resultSignature;
+  } else {
+    visibleResultCount = Math.min(
+      Math.max(visibleResultCount, getResultBatchSize()),
+      currentSearchMatches.length
+    );
+  }
+
+  const resultHeading = document.querySelector("#results-title");
+  if (resultHeading) {
+    resultHeading.textContent = isBrowseAllResults ? "All songs" : hasTextQuery ? "Search results" : "Filtered songs";
+  }
 
   renderVisibleSearchResults(matchCount, usedTypoMatching);
   renderSimilarSongs(matchCount > 0 && matchCount < 5 ? currentSearchMatches : [], query, queryTerms);
@@ -2030,6 +2342,7 @@ function applyThemeFilter(theme) {
   activeFilters = activeFilters.filter((item) =>
     item.field !== "themeTags" && item.field !== "vibes" && item.field !== "themeLabel"
   );
+  setBrowseAllActive(false);
   activeFilters.push(filter);
   updateFilterSummary();
   updateBrowseButtonStates();
@@ -2056,6 +2369,7 @@ function setThemeLabelFilter(label) {
 
   const existingFilter = getActiveThemeLabelFilter();
 
+  setBrowseAllActive(false);
   activeFilters = activeFilters.filter((filter) => filter.field !== "themeLabel");
 
   if (!existingFilter || normalize(existingFilter.value) !== normalize(label)) {
@@ -2124,7 +2438,7 @@ async function scrollToThemeSection() {
   }
 
   await waitForPaint();
-  themeSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollElementIntoSafeView(themeSection);
 }
 
 function renderThemeButton(button, theme) {
@@ -2234,64 +2548,94 @@ function setPreparedSongs(nextSongs) {
   });
   renderTopSongs();
   updateBrowseButtonStates();
-  hideSearchResults();
+  catalogState = "ready";
+  catalogStatus.textContent = `${songs.length.toLocaleString()} songs in the book`;
+  render();
   renderThemeLabelButtons();
+  const shouldJump = pendingResultsJump;
+  pendingResultsJump = false;
+  if (shouldJump) {
+    showResults({ keepTyping: shouldJump === "typing" });
+  }
 }
 
-function renderDiceSuggestions() {
-  if (!dicePanel || !diceResults) {
-    return;
-  }
-
-  renderDiceList(diceFemaleResults, getRandomSongsByVocal("female", 5));
-  renderDiceList(diceMaleResults, getRandomSongsByVocal("male", 5));
-  dicePanel.hidden = false;
-  diceResults.hidden = false;
-  dicePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+function renderCatalogStatus() {
+  const isLoading = catalogState === "loading";
+  const hasIntent = searchInput.value.trim() || activeFilters.length || isBrowseAllActive;
+  resultsSection.hidden = isLoading && !hasIntent;
+  resultsSection.setAttribute("aria-busy", isLoading ? "true" : "false");
+  resultsTitle.textContent = isLoading ? "Loading songs" : "Song book unavailable";
+  resultsBody.innerHTML = "";
+  resultsBody.closest("table").hidden = true;
+  emptyState.textContent = isLoading ? "Loading the song book..." : "The song book couldn't load. Check your connection and try again.";
+  emptyState.hidden = false;
+  resultCount.textContent = "";
+  loadMoreButton.hidden = true;
+  retrySongsButton.hidden = isLoading;
+  similarPanel.hidden = true;
+  topSongsPanel.hidden = true;
+  setDiscoveryVisibility(!resultsSection.hidden);
+  updateJumpResultsButton();
 }
 
 async function loadInitialSongs() {
+  catalogState = "loading";
+  catalogStatus.textContent = "Loading the song book...";
+  renderCatalogStatus();
   try {
-    let response = await fetch(songIndexUrl);
-
-    if (response.ok) {
-      await waitForPaint();
-      setPreparedSongs(hydrateIndexedSongs(await response.json()));
-      return songs;
+    for (const url of [songIndexUrl, songCsvUrl, "data/songs.csv"]) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          continue;
+        }
+        await waitForPaint();
+        const prepared = url === songIndexUrl
+          ? hydrateIndexedSongs(await response.json())
+          : indexSongs(parseCsv(await response.text()));
+        if (!prepared.length) {
+          continue;
+        }
+        setPreparedSongs(prepared);
+        return songs;
+      } catch {
+        // A failed index still permits the existing CSV fallback.
+      }
     }
-
-    response = await fetch(songCsvUrl);
-
-    if (!response.ok) {
-      response = await fetch("data/songs.csv");
-    }
-
-    if (!response.ok) {
-      throw new Error("Song CSV was not available.");
-    }
-
-    setSongs(parseCsv(await response.text()));
-    return songs;
+    throw new Error("Song catalog unavailable.");
   } catch {
+    catalogState = "error";
     songs = [];
     diceButtons.forEach((button) => {
       button.disabled = true;
     });
-    if (resultsSection) {
-      resultsSection.hidden = false;
-    }
-    resultsBody.innerHTML = "";
-    emptyState.textContent = "Song list unavailable. Check songs.csv.";
-    emptyState.hidden = false;
-    resultCount.textContent = "0 songs";
+    catalogStatus.textContent = "Song book unavailable. Please try again.";
+    renderCatalogStatus();
     return [];
   }
 }
 
-searchInput.addEventListener("input", () => {
+function handleSearchInput(event) {
+  window.clearTimeout(resultsJumpTimer);
+  pendingResultsJump = false;
+  if (searchInput.value.trim()) {
+    setBrowseAllActive(false);
+  }
   window.clearTimeout(searchTimer);
-  searchTimer = window.setTimeout(render, 80);
-});
+  if (event?.isComposing) {
+    return;
+  }
+  searchTimer = window.setTimeout(() => {
+    if (normalize(searchInput.value)) {
+      showResults({ keepTyping: true });
+    } else {
+      render();
+    }
+  }, 80);
+}
+
+searchInput.addEventListener("input", handleSearchInput);
+searchInput.addEventListener("compositionend", handleSearchInput);
 
 document.addEventListener("click", (event) => {
   const trackedElement = event.target.closest("[data-analytics-event]");
@@ -2342,6 +2686,15 @@ document.addEventListener("click", (event) => {
     render();
   }
 
+  const songRow = event.target.closest(".song-row");
+
+  if (songRow && !event.target.closest(".song-theme-label")) {
+    openSongDialog(songRow);
+    if (songRow.classList.contains("dice-song-row")) {
+      setDicePanelOpen(false);
+    }
+  }
+
   const themeMiniButton = event.target.closest(".theme-mini-button");
 
   if (themeMiniButton) {
@@ -2381,51 +2734,151 @@ if (clearFiltersButton) {
   });
 }
 
+if (browseAllButton) {
+  browseAllButton.addEventListener("click", () => {
+    searchInput.value = "";
+    clearFilters();
+    setBrowseAllActive(!isBrowseAllActive);
+    window.clearTimeout(searchTimer);
+    showResults();
+  });
+}
+
 if (jumpResultsButton) {
   jumpResultsButton.addEventListener("click", () => {
-    if (resultsSection) {
-      resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    showResults();
   });
 }
 
 searchInput.addEventListener("search", () => {
   render();
 });
-searchInput.addEventListener("keyup", (event) => {
-  if (event.key === "Enter") {
-    render();
-  }
-});
-
 emptyState.addEventListener("pointerdown", handleRequestSongActivation);
 emptyState.addEventListener("click", handleRequestSongActivation);
 
 if (searchForm) {
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    window.clearTimeout(searchTimer);
-    render();
+    if (event.isComposing) {
+      return;
+    }
+    showResults();
   });
 }
 
 clearButton.addEventListener("click", () => {
+  window.clearTimeout(resultsJumpTimer);
+  pendingResultsJump = false;
+  window.clearTimeout(searchTimer);
   searchInput.value = "";
-  clearFilters();
   searchInput.focus();
   render();
 });
 
 if (loadMoreButton) {
   loadMoreButton.addEventListener("click", () => {
-    visibleResultCount += maxRenderedRows;
-    renderVisibleSearchResults(currentSearchMatches.length, currentUsedTypoMatching);
+    if (loadMoreButton.disabled || visibleResultCount >= currentSearchMatches.length) {
+      return;
+    }
+
+    const previousScrollY = window.scrollY;
+    loadMoreButton.disabled = true;
+    visibleResultCount = Math.min(currentSearchMatches.length, visibleResultCount + getResultBatchSize());
+    renderVisibleSearchResults(currentSearchMatches.length, currentUsedTypoMatching, true);
+    if (loadMoreButton.hidden) {
+      resultsBody.lastElementChild?.querySelector(".song-select-button")?.focus({ preventScroll: true });
+    }
+    window.scrollTo({ top: previousScrollY, behavior: "auto" });
   });
 }
 
-diceButtons.forEach((button) => {
-  button.addEventListener("click", renderDiceSuggestions);
+if (topDiceButton) {
+  topDiceButton.addEventListener("click", () => {
+    const willOpen = dicePanel?.hidden;
+
+    if (!willOpen) {
+      setDicePanelOpen(false, { restoreFocus: true });
+      return;
+    }
+
+    if (!hasRolledDice) {
+      rollDiceSuggestions();
+    }
+
+    setDicePanelOpen(true);
+  });
+}
+
+if (diceButton) {
+  diceButton.addEventListener("click", () => {
+    rollDiceSuggestions();
+    setDicePanelOpen(true);
+  });
+}
+
+diceCloseButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    setDicePanelOpen(false, { restoreFocus: true });
+  });
 });
+
+if (returnSearchButton) {
+  returnSearchButton.addEventListener("click", () => {
+    window.clearTimeout(resultsJumpTimer);
+    scrollElementIntoSafeView(searchControls);
+    searchInput.focus({ preventScroll: true });
+  });
+}
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && songDialog?.open) {
+    return;
+  }
+  if (event.key === "Escape" && dicePanel && !dicePanel.hidden) {
+    setDicePanelOpen(false, { restoreFocus: true });
+    return;
+  }
+
+  if (event.key === "Escape" && navToggle?.getAttribute("aria-expanded") === "true") {
+    navToggle.setAttribute("aria-expanded", "false");
+    navToggle.focus({ preventScroll: true });
+  }
+});
+
+retrySongsButton?.addEventListener("click", () => {
+  pendingResultsJump = true;
+  loadInitialSongs();
+});
+navToggle?.addEventListener("click", () => {
+  const open = navToggle.getAttribute("aria-expanded") !== "true";
+  navToggle.setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".site-header")) {
+    navToggle?.setAttribute("aria-expanded", "false");
+  }
+});
+
+if (songDialog) {
+  songDialog.addEventListener("close", restoreDialogFocus);
+  songDialog.addEventListener("click", (event) => {
+    if (event.target === songDialog) {
+      songDialog.close();
+    }
+  });
+}
+
+window.addEventListener("resize", updateReturnSearchButton);
+
+if (typeof ResizeObserver === "function") {
+  const header = document.querySelector(".site-header");
+  const stickyObserver = new ResizeObserver(() => {
+    document.body.style.setProperty("--header-height", `${header.offsetHeight}px`);
+    document.body.style.setProperty("--search-height", `${searchForm.offsetHeight}px`);
+  });
+  stickyObserver.observe(header);
+  stickyObserver.observe(searchForm);
+}
 
 async function initializePage() {
   await Promise.all([
