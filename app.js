@@ -2872,12 +2872,17 @@ window.addEventListener("resize", updateReturnSearchButton);
 
 if (typeof ResizeObserver === "function") {
   const header = document.querySelector(".site-header");
+  const helper = document.querySelector(".sticky-helper-bar");
   const stickyObserver = new ResizeObserver(() => {
     document.body.style.setProperty("--header-height", `${header.offsetHeight}px`);
+    document.body.style.setProperty("--helper-height", `${helper?.offsetHeight || 0}px`);
     document.body.style.setProperty("--search-height", `${searchForm.offsetHeight}px`);
   });
   stickyObserver.observe(header);
   stickyObserver.observe(searchForm);
+  if (helper) {
+    stickyObserver.observe(helper);
+  }
 }
 
 async function initializePage() {
